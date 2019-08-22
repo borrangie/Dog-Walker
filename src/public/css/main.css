@@ -1,0 +1,98 @@
+body{
+
+    padding-top: 70px;
+   
+background: #43C6AC;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #191654, #43C6AC);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #191654, #43C6AC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+
+.notas{
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+
+.nombreColumna{
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+}
+
+.nombreColumna:hover{
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+}
+
+.icono{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.trash{
+    color: #c62828;
+}
+
+.trash:hover{
+    color: #8e0000;
+}
+
+.navstyle{
+    align-items: center;
+}
+
+
+/* Estilos de dropdown con efecto */
+
+@media (min-width: 992px) {
+    .animate {
+      animation-duration: 0.3s;
+      -webkit-animation-duration: 0.3s;
+      animation-fill-mode: both;
+      -webkit-animation-fill-mode: both;
+    }
+  }
+  
+  @keyframes slideIn {
+    0% {
+      transform: translateY(1rem);
+      opacity: 0;
+    }
+    100% {
+      transform:translateY(0rem);
+      opacity: 1;
+    }
+    0% {
+      transform: translateY(1rem);
+      opacity: 0;
+    }
+  }
+  
+  @-webkit-keyframes slideIn {
+    0% {
+      -webkit-transform: transform;
+      -webkit-opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateY(0);
+      -webkit-opacity: 1;
+    }
+    0% {
+      -webkit-transform: translateY(1rem);
+      -webkit-opacity: 0;
+    }
+  }
+  
+  .slideIn {
+    -webkit-animation-name: slideIn;
+    animation-name: slideIn;
+  }
+
+  /* Banner Images CSS */
+
+  .imgBanner{
+      object-fit: cover;
+      height: 85vh;
+  }
