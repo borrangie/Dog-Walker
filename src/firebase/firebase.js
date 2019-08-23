@@ -10,12 +10,13 @@ let USER_TYPE = {
 let ERRORS = {
     INSUFFICIENT_PRIVILEGES: new Error('Insufficient privileges'),
     INVALID_USER_TYPE: new Error('Invalid user type or not specified'),
-    USER_NOT_AUTHENTICATED: new Error('User not authenticated')
+    USER_NOT_AUTHENTICATED: new Error('User not authenticated'),
+    RESOURCE_DOESNT_EXIST: new Error('The resource you are trying to access doesn\'t exist')
 }
 
 let COLLECTIONS = {
     HOSPITALS: 'hospitals',
-
+    DOCTORS: 'doctors'
 }
 
 export default {
@@ -28,6 +29,9 @@ export default {
     signOut: signOut,
 
     getUserType: getUserType,
+    createHospital: createHospital,
+    createDoctor: createDoctor,
+    registerDoctor: registerDoctor
 
     USER_TYPE: USER_TYPE,
     ERRORS: ERRORS
@@ -42,6 +46,7 @@ let config = {
     messagingSenderId: "937460384289",
     appId: "1:937460384289:web:73a568a6d029ea91"
 }
+
 var database = null
 
 // Must be called before using any other method.
@@ -118,6 +123,7 @@ async function getUserType() {
 
 // -------- Hospital --------
 
+// Creates a hospital with basic inforamtion
 // Returns a promise
 async function createHospital(name, address, phones) {
     let userType = await getUserType();
@@ -135,10 +141,102 @@ async function createHospital(name, address, phones) {
     }
 
     let hospital = {
-        'name': name,
-        'address': address,
-        'phones': phones
+        name: name,
+        address: address,
+        phones: phones
     }
 
     return database.collection(COLLECTIONS.HOSPITALS).add(hospital)
+}
+
+// Creates a doctor. MUST have a unique set of Country and License number.
+// Returns a promise
+async function createDoctor(name, phones, country, license) {
+    let userType = await getUserType();
+    if (userType !== USER_TYPE.SUPER_ADMIN || userType !== USER_TYPE.ADMIN)
+        throw ERRORS.INSUFFICIENT_PRIVILEGES
+
+    if (!validator.validateString(name, validator.LOCALE.ARGENTINA)) {
+        throw new Error('"name" must be a (non empty) string')
+    }
+    if (!validator.validateString(country, validator.LOCALE.ARGENTINA)) {
+        throw new Error('"country" must be a (non empty) string')
+    }
+    if (!validator.validateString(license, validator.LOCALE.ARGENTINA)) {
+        throw new Error('"license" must be a (non empty) string')
+    }
+    if (!validator.validateArray(phones, validator.LOCALE.ARGENTINA, validator.validatePhoneNumber)) {
+        throw new Error('"phones" must be a (non empty) array, and every phone number must be a valid string')
+    }
+
+    let doctor = {
+        name: name,
+        country: country,
+        phones: phones,
+        license: license
+    }
+
+    // We need to check for uniqueness. This MUST be done inside a transaction
+    // to ensure we don't encounter a race condition
+    let id = license + '_' + country
+    let docRef = database.collection(COLLECTIONS.DOCTORS).doc(id)
+
+    return database.runTransaction(async transaction => {
+        let doc = await transaction.get(docRef)
+        // Already created
+        if (doc.exists)
+            return id
+
+        transaction.set(docRef, doctor)
+    })
+}
+
+// Associates a doctor with a hospital.
+// Returns a promise
+async function registerDoctor(doctorsId, hospitalId) {
+    let userType = await getUserType();
+    if (userType !== USER_TYPE.SUPER_ADMIN || userType !== USER_TYPE.ADMIN)
+        throw ERRORS.INSUFFICIENT_PRIVILEGES
+
+    if (!validator.validateString(hospitalId, validator.LOCALE.ARGENTINA)) {
+        throw new Error('"name" must be a (non empty) string')
+    }
+    if (!validator.validateArray(doctorsId, validator.LOCALE.ARGENTINA, validator.validateString)) {
+        throw new Error('"doctorsId" must be a (non empty) array, and every doctorId must be a valid string')
+    }
+
+    // We need to make sure the doctor(s) aren't already associated. This MUST be done inside a transaction
+    // to ensure we don't encounter a race condition
+    let docRef = database.collection(COLLECTIONS.HOSPITALS).doc(hospitalId)
+    return database.runTransaction(async transaction => {
+        let doc = await transaction.get(docRef)
+        // Already created
+        if (!doc.exists)
+            throw ERRORS.RESOURCE_DOESNT_EXIST
+
+        let doctors = []
+        let data = doc.data()
+        if ('doctors' in data) {
+            for (let doctor of data.doctors) {
+                doctors.push(doctor)
+
+                // Use getId as 'doctor' is of type DocumentReference
+                let savedDoctorIdIndex = doctorsId.indexOf(doctor.getId())
+                if (savedDoctorIdIndex !== -1) {
+                    doctorsId = doctorsId.slice(savedDoctorIdIndex, 1)
+                }
+            }
+        }
+
+        var save = false;
+        for (let doctorId of doctorsId) {
+            // We need to save the DocumentReference, not the ID
+            doctors.push(database.collection(COLLECTIONS.DOCTORS).doc(doctorId))
+            if (!save)
+                save = true
+        }
+
+        if (save)
+            transaction.set(docRef, {doctors: doctors})
+    })
 }
