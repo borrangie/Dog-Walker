@@ -19,7 +19,7 @@ export default {
 }
 
 // Returns true if string is valid, else false.
-function validateString(string, locale) {
+function validateString(string) {
     return !(!(string instanceof String) || string.length === 0)
 }
 
@@ -45,9 +45,18 @@ function validateArray(array, locale, validator) {
     if (!(array instanceof Array) || array.length === 0) {
         return false
     }
-    for (let a of array) {
-        if (!validator(a, locale))
-            return false
+    if (validator === validator.validateString) {
+        for (let a of array) {
+            if (!validator(a))
+                return false
+        }
+    } else if (validator === validator.validatePhoneNumber) {
+        for (let a of array) {
+            if (!validator(a, locale))
+                return false
+        }
+    } else {
+        return false
     }
 
     return true

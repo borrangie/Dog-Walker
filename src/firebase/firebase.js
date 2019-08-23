@@ -130,10 +130,10 @@ async function createHospital(name, address, phones) {
     if (userType !== USER_TYPE.SUPER_ADMIN)
         throw ERRORS.INSUFFICIENT_PRIVILEGES;
 
-    if (!validator.validateString(name, validator.LOCALE.ARGENTINA)) {
+    if (!validator.validateString(name)) {
         throw new Error('"name" must be a (non empty) string')
     }
-    if (!validator.validateString(address, validator.LOCALE.ARGENTINA)) {
+    if (!validator.validateString(address)) {
         throw new Error('"address" must be a (non empty) string')
     }
     if (!validator.validateArray(phones, validator.LOCALE.ARGENTINA, validator.validatePhoneNumber)) {
@@ -156,13 +156,13 @@ async function createDoctor(name, phones, country, license) {
     if (userType !== USER_TYPE.SUPER_ADMIN || userType !== USER_TYPE.ADMIN)
         throw ERRORS.INSUFFICIENT_PRIVILEGES;
 
-    if (!validator.validateString(name, validator.LOCALE.ARGENTINA)) {
+    if (!validator.validateString(name)) {
         throw new Error('"name" must be a (non empty) string')
     }
-    if (!validator.validateString(country, validator.LOCALE.ARGENTINA)) {
+    if (!validator.validateString(country)) {
         throw new Error('"country" must be a (non empty) string')
     }
-    if (!validator.validateString(license, validator.LOCALE.ARGENTINA)) {
+    if (!validator.validateString(license)) {
         throw new Error('"license" must be a (non empty) string')
     }
     if (!validator.validateArray(phones, validator.LOCALE.ARGENTINA, validator.validatePhoneNumber)) {
@@ -198,7 +198,7 @@ async function registerDoctor(doctorsId, hospitalId) {
     if (userType !== USER_TYPE.SUPER_ADMIN || userType !== USER_TYPE.ADMIN)
         throw ERRORS.INSUFFICIENT_PRIVILEGES;
 
-    if (!validator.validateString(hospitalId, validator.LOCALE.ARGENTINA)) {
+    if (!validator.validateString(hospitalId)) {
         throw new Error('"name" must be a (non empty) string')
     }
     if (!validator.validateArray(doctorsId, validator.LOCALE.ARGENTINA, validator.validateString)) {
