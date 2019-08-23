@@ -8,7 +8,7 @@ let LOCALE = {
             }
         }
     }
-}
+};
 
 export default {
     validateString: validateString,
@@ -26,7 +26,7 @@ function validateString(string, locale) {
 // Returns true if phone number is valid, else false.
 function validatePhoneNumber(phoneNumber, locale) {
     if (locale === LOCALE.ARGENTINA) {
-        let stringPhoneNumber = String(phoneNumber)
+        let stringPhoneNumber = String(phoneNumber);
         if (stringPhoneNumber.startsWith('0') || stringPhoneNumber.startsWith('+')) {
             for (let prefix of locale.phoneNumber.prefixes) {
                 if (!stringPhoneNumber.startsWith(prefix)) {

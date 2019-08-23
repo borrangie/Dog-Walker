@@ -5,19 +5,19 @@ let USER_TYPE = {
     SUPER_ADMIN: 'superadmin',
     ADMIN: 'admin',
     CLIENT: 'client'
-}
+};
 
 let ERRORS = {
     INSUFFICIENT_PRIVILEGES: new Error('Insufficient privileges'),
     INVALID_USER_TYPE: new Error('Invalid user type or not specified'),
     USER_NOT_AUTHENTICATED: new Error('User not authenticated'),
     RESOURCE_DOESNT_EXIST: new Error('The resource you are trying to access doesn\'t exist')
-}
+};
 
 let COLLECTIONS = {
     HOSPITALS: 'hospitals',
     DOCTORS: 'doctors'
-}
+};
 
 export default {
     init: init,
@@ -31,7 +31,7 @@ export default {
     getUserType: getUserType,
     createHospital: createHospital,
     createDoctor: createDoctor,
-    registerDoctor: registerDoctor
+    registerDoctor: registerDoctor,
 
     USER_TYPE: USER_TYPE,
     ERRORS: ERRORS
@@ -45,13 +45,13 @@ let config = {
     storageBucket: "hospoint-itba.appspot.com",
     messagingSenderId: "937460384289",
     appId: "1:937460384289:web:73a568a6d029ea91"
-}
+};
 
-var database = null
+var database = null;
 
 // Must be called before using any other method.
 function init() {
-    firebase.initializeApp(config)
+    firebase.initializeApp(config);
     database = firebase.firestore()
 }
 
@@ -80,7 +80,7 @@ function createUserWithEmailAndPassword(email, password) {
 
 // Returns a promise
 function prepareGoogleSignIn() {
-    let provider = new firebase.auth.GoogleAuthProvider()
+    let provider = new firebase.auth.GoogleAuthProvider();
     return firebase.auth().signInWithPopup(provider)
 }
 
@@ -108,7 +108,7 @@ function signOut() {
 //      USER_TYPE.CLIENT if user is a patient.
 // Throws ERRORS.INVALID_USER_TYPE if user type is invalid or not specified
 async function getUserType() {
-    let idTokenResult = await firebase.auth().currentUser.getIdTokenResult(true)
+    let idTokenResult = await firebase.auth().currentUser.getIdTokenResult(true);
     if (idTokenResult.claims.userType === 'superadmin') {
         return USER_TYPE.SUPER_ADMIN
     } else if (idTokenResult.claims.userType === 'admin') {
@@ -128,7 +128,7 @@ async function getUserType() {
 async function createHospital(name, address, phones) {
     let userType = await getUserType();
     if (userType !== USER_TYPE.SUPER_ADMIN)
-        throw ERRORS.INSUFFICIENT_PRIVILEGES
+        throw ERRORS.INSUFFICIENT_PRIVILEGES;
 
     if (!validator.validateString(name, validator.LOCALE.ARGENTINA)) {
         throw new Error('"name" must be a (non empty) string')
@@ -144,7 +144,7 @@ async function createHospital(name, address, phones) {
         name: name,
         address: address,
         phones: phones
-    }
+    };
 
     return database.collection(COLLECTIONS.HOSPITALS).add(hospital)
 }
@@ -154,7 +154,7 @@ async function createHospital(name, address, phones) {
 async function createDoctor(name, phones, country, license) {
     let userType = await getUserType();
     if (userType !== USER_TYPE.SUPER_ADMIN || userType !== USER_TYPE.ADMIN)
-        throw ERRORS.INSUFFICIENT_PRIVILEGES
+        throw ERRORS.INSUFFICIENT_PRIVILEGES;
 
     if (!validator.validateString(name, validator.LOCALE.ARGENTINA)) {
         throw new Error('"name" must be a (non empty) string')
@@ -174,18 +174,18 @@ async function createDoctor(name, phones, country, license) {
         country: country,
         phones: phones,
         license: license
-    }
+    };
 
     // We need to check for uniqueness. This MUST be done inside a transaction
     // to ensure we don't encounter a race condition
-    let id = license + '_' + country
-    let docRef = database.collection(COLLECTIONS.DOCTORS).doc(id)
+    let id = license + '_' + country;
+    let docRef = database.collection(COLLECTIONS.DOCTORS).doc(id);
 
     return database.runTransaction(async transaction => {
-        let doc = await transaction.get(docRef)
+        let doc = await transaction.get(docRef);
         // Already created
         if (doc.exists)
-            return id
+            return id;
 
         transaction.set(docRef, doctor)
     })
@@ -196,7 +196,7 @@ async function createDoctor(name, phones, country, license) {
 async function registerDoctor(doctorsId, hospitalId) {
     let userType = await getUserType();
     if (userType !== USER_TYPE.SUPER_ADMIN || userType !== USER_TYPE.ADMIN)
-        throw ERRORS.INSUFFICIENT_PRIVILEGES
+        throw ERRORS.INSUFFICIENT_PRIVILEGES;
 
     if (!validator.validateString(hospitalId, validator.LOCALE.ARGENTINA)) {
         throw new Error('"name" must be a (non empty) string')
@@ -207,21 +207,21 @@ async function registerDoctor(doctorsId, hospitalId) {
 
     // We need to make sure the doctor(s) aren't already associated. This MUST be done inside a transaction
     // to ensure we don't encounter a race condition
-    let docRef = database.collection(COLLECTIONS.HOSPITALS).doc(hospitalId)
+    let docRef = database.collection(COLLECTIONS.HOSPITALS).doc(hospitalId);
     return database.runTransaction(async transaction => {
-        let doc = await transaction.get(docRef)
+        let doc = await transaction.get(docRef);
         // Already created
         if (!doc.exists)
-            throw ERRORS.RESOURCE_DOESNT_EXIST
+            throw ERRORS.RESOURCE_DOESNT_EXIST;
 
-        let doctors = []
-        let data = doc.data()
+        let doctors = [];
+        let data = doc.data();
         if ('doctors' in data) {
             for (let doctor of data.doctors) {
-                doctors.push(doctor)
+                doctors.push(doctor);
 
                 // Use getId as 'doctor' is of type DocumentReference
-                let savedDoctorIdIndex = doctorsId.indexOf(doctor.getId())
+                let savedDoctorIdIndex = doctorsId.indexOf(doctor.getId());
                 if (savedDoctorIdIndex !== -1) {
                     doctorsId = doctorsId.slice(savedDoctorIdIndex, 1)
                 }
@@ -231,7 +231,7 @@ async function registerDoctor(doctorsId, hospitalId) {
         var save = false;
         for (let doctorId of doctorsId) {
             // We need to save the DocumentReference, not the ID
-            doctors.push(database.collection(COLLECTIONS.DOCTORS).doc(doctorId))
+            doctors.push(database.collection(COLLECTIONS.DOCTORS).doc(doctorId));
             if (!save)
                 save = true
         }
