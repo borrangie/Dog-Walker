@@ -1,15 +1,24 @@
 const router = require('express').Router();
 
+const User = require("../models/User");
+
+const passport = require('passport');
+
 router.get('/users/signin', (req,res)=>{
     res.render('users/signin')
 });
+
+router.post('/users/signin', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/users/signin',
+    failureFlash: true
+}));
 
 router.get('/users/signup', (req,res)=>{
     res.render('users/signup')
 });
 
-router.post('/users/signup', (req,res)=>{
-    console.log(req.body);
+router.post('/users/signup', async (req,res)=>{
     const {name, lastname, mail, phone, password, confirm_password, healphInsurance} = req.body;
     const errors = [];
     const health = 'Obra Social o Prepaga';
@@ -25,8 +34,24 @@ router.post('/users/signup', (req,res)=>{
     if(errors.length > 0){
         res.render('users/signup', {errors, name, lastname, mail, phone, password, confirm_password, healphInsurance});
     }else{
-        res.send('ok');
+        // Ask DB if user exist and return an user
+        const mailUser = await User.findOne({mail: mail});
+        if(mailUser){
+            req.flash('error_msg', 'El mail ya fue usado');
+            res.redirect('/users/signup');
+        }
+        const newUser = new User({name, lastname, mail, phone, password});
+        newUser.password = await newUser.encryptPassword(password);
+        // Save user on DB
+        await newUser.save();
+        req.flash('success_msg', 'Registrado Correctamente');
+        res.redirect('/users/signin');
     }
+});
+
+router.get('/users/logout', (req,res)=>{
+    req.logout();
+    res.redirect('/');
 });
 
 module.exports = router;

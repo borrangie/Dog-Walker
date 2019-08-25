@@ -1,5 +1,6 @@
 <main class="container">
   {{> errors}}
+  {{> messages}}
   <div class="container">
     <div class="row">
       <div class="col-sm-9 col-md-9 col-lg-9 mx-auto">
@@ -35,7 +36,7 @@
                 </div>
                 <div class="col">
                   <div class="form-label-group">
-                    <input type="number" id="inputPhone" class="form-control" name="phone" value="{{phone}}" placeholder="Telefono"
+                    <input type="text" id="inputPhone" class="form-control" name="phone" value="{{phone}}" placeholder="Telefono"
                       required>
                     <label for="inputPhone">Telefono</label>
                   </div>

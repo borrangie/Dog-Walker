@@ -231,3 +231,17 @@ background: linear-gradient(to right, #191654, #43C6AC); /* W3C, IE 10+/ Edge, F
       color: #777;
     }
   }
+
+
+    /* Logo css */
+
+
+    .logo{
+      width: 50%;
+    }
+  
+    .logo2{
+      padding: 0;
+      margin: 0;
+      width: 55%;
+    }
