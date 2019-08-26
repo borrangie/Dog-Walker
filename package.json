@@ -2,6 +2,10 @@
   "name": "Hospoint",
   "version": "1.0.0",
   "dependencies": {
-    "firebase": "latest"
+    "firebase": "latest",
+    "mocha": "latest"
+  },
+  "scripts": {
+    "test": "mocha %NODE_DEBUG_OPTION%"
   }
 }

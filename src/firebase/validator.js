@@ -10,13 +10,13 @@ let LOCALE = {
     }
 };
 
-export default {
+module.exports = {
     validateString: validateString,
     validatePhoneNumber: validatePhoneNumber,
     validateArray: validateArray,
 
     LOCALE: LOCALE
-}
+};
 
 // Returns true if string is valid, else false.
 function validateString(string) {
