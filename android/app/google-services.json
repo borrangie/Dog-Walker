@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "390369284202",
+    "firebase_url": "https://dog-walker-itba.firebaseio.com",
+    "project_id": "dog-walker-itba",
+    "storage_bucket": "dog-walker-itba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390369284202:android:ce8acdea71baaabfa5ba13",
+        "android_client_info": {
+          "package_name": "com.example.dogwalker2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "390369284202-ktihkb11fnejqf4o5sod3ds5l476se2u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dogwalker2",
+            "certificate_hash": "2dd8095ba05e800372cfc54d8e66495a6836dd1d"
+          }
+        },
+        {
+          "client_id": "390369284202-fsems05keebfrq172a2r4mb0eu9054v3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHiyLdxIPj5OBU3lwa69GYuktGoGiPs_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "390369284202-fsems05keebfrq172a2r4mb0eu9054v3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
