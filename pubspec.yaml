@@ -54,6 +54,11 @@ flutter:
   assets:
     - assets/images/dwlogo.svg
     - assets/images/dwlogo.png
+    - assets/images/nd.jpeg
+    - assets/images/nb.jpeg
+    - assets/images/a.jpeg
+    - assets/images/g.jpeg
+    - assets/images/m.jpeg
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

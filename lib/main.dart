@@ -8,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'screens/homeScreen2.dart';
+
 void main() => runApp(MyApp2());
 
 class MyApp extends StatefulWidget {
@@ -27,7 +29,8 @@ class _MyAppState extends State<MyApp> {
         future: _firebaseRepository.getCurrentUser(),
         builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen();
+            _firebaseRepository.getUserInfo();
+            return HomeScreen2();
           } else {
             return LoginPage2();
           }

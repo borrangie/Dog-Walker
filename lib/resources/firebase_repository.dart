@@ -17,4 +17,8 @@ class FirebaseRepository{
   Future<AuthResult> normalSignUp(String mail, String password)=> _firebaseMethods.normalSignUp(mail, password);
 
   bool resetPassword(String mail) => _firebaseMethods.resetPassword(mail);
+
+  getUserInfo() async{
+    return  await _firebaseMethods.getUserInfo();
+  }
 }

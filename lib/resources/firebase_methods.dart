@@ -65,7 +65,23 @@ class FirebaseMethods{
     return user;
   }
 
+
+  getUserInfo() async {
+    FirebaseUser user = await getCurrentUser();
+    return await firestore.collection('u').document(user.uid).get().then((snapshot){
+      if(snapshot.exists){
+        var userInfo =  snapshot.data;
+        // print(userInfo);
+        return userInfo;
+      }else{
+        print('No such element');
+      }
+    });
+  }
+
+
+    
+  }
   // Future<void> addDataToDB(FirebaseUser user) async{
     
   // }
-}
