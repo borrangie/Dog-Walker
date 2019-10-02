@@ -1,12 +1,9 @@
 import 'dart:async';
 
 import 'package:dogwalker2/resources/firebase_repository.dart';
-import 'package:dogwalker2/screens/homeScreen.dart';
-import 'package:dogwalker2/screens/loginScreen.dart';
 import 'package:dogwalker2/screens/loginScreen2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'screens/homeScreen2.dart';
 
