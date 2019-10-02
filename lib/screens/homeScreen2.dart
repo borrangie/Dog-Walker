@@ -35,6 +35,7 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
     Firestore.instance.collection('u').getDocuments().then((QuerySnapshot docs){
       if(docs.documents.isNotEmpty){
         // nombre = docs.documents[0].data['n'];
+        print(docs.documents[0].data);
         print(docs.documents[0].data['n']);
         nombre = docs.documents[0].data['n'];
       }
