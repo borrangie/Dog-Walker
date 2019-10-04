@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogwalker2/resources/firebase_repository.dart';
 import 'package:dogwalker2/screens/loginScreen2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -23,21 +24,39 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
   FirebaseRepository _firebaseRepository = new FirebaseRepository();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  DocumentSnapshot user;
+  FirebaseUser user;
 
   @override
-  void initState(){
-    _firebaseRepository.getUserData().then((results){
-      setState(() {
-        this.user = results;
-      });
-    });
-    print(user.toString());
+  void initState() {
     super.initState();
+    initUser();
+  }
+
+  initUser() async {
+    user = await _firebaseRepository.getCurrentUser();
+    setState(() {});
+  }
+
+  Widget _textName(){
+    if(user?.displayName == null){
+      return Text('Usuario');
+    }else{
+      return Text("${user?.displayName}");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    var userAccountsDrawerHeader = UserAccountsDrawerHeader(
+              accountName: _textName(),
+              accountEmail: Text("${user?.email}"),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage("${user?.photoUrl}"),
+              ),
+              decoration: BoxDecoration(
+                color: Colors.red,
+              ),
+            );
     return Scaffold(
       key: _scaffoldKey,
       body: ListView(
@@ -172,16 +191,7 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text(user.data['n'].toString()),
-              accountEmail: Text('nd@gmail.com'),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.red,
-              ),
-            ),
+            userAccountsDrawerHeader,
             InkWell(
               onTap: () {},
               child: ListTile(
