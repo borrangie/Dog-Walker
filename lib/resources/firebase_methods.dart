@@ -49,6 +49,7 @@ class FirebaseMethods{
     _auth.signOut();
   }
 
+
   bool resetPassword(String mail){
     try{
       _auth.sendPasswordResetEmail(email: mail);
@@ -66,17 +67,9 @@ class FirebaseMethods{
   }
 
 
-  getUserInfo() async {
+  getUserData() async {
     FirebaseUser user = await getCurrentUser();
-    return await firestore.collection('u').document(user.uid).get().then((snapshot){
-      if(snapshot.exists){
-        var userInfo =  snapshot.data;
-        // print(userInfo);
-        return userInfo;
-      }else{
-        print('No such element');
-      }
-    });
+    return await firestore.collection('u').document(user.uid.toString()).get();
   }
 
 

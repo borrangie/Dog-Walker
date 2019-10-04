@@ -26,7 +26,6 @@ class _MyAppState extends State<MyApp> {
         future: _firebaseRepository.getCurrentUser(),
         builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
           if (snapshot.hasData) {
-            _firebaseRepository.getUserInfo();
             return HomeScreen2();
           } else {
             return LoginPage2();

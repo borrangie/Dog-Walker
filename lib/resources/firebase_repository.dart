@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogwalker2/resources/firebase_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -18,7 +19,13 @@ class FirebaseRepository{
 
   bool resetPassword(String mail) => _firebaseMethods.resetPassword(mail);
 
-  getUserInfo() async{
-    return  await _firebaseMethods.getUserInfo();
+  getUserData() async{
+    var elem =  await _firebaseMethods.getUserData();
+    print(elem);
+    return elem;
+  }
+
+  String getString(){
+    return "Hola que tal";
   }
 }

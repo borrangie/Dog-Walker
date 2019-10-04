@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen2 extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,27 +19,21 @@ class MyHomeScreen2 extends StatefulWidget {
   _MyHomeScreen2State createState() => _MyHomeScreen2State();
 }
 
-
 class _MyHomeScreen2State extends State<MyHomeScreen2> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
+  FirebaseRepository _firebaseRepository = new FirebaseRepository();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  
-  var userData;
-  String nombre="";
-  // var data = _firebaseRepository.getUserInfo();
+
+  DocumentSnapshot user;
 
   @override
   void initState(){
-    // super.initState();
-    Firestore.instance.collection('u').getDocuments().then((QuerySnapshot docs){
-      if(docs.documents.isNotEmpty){
-        // nombre = docs.documents[0].data['n'];
-        print(docs.documents[0].data);
-        print(docs.documents[0].data['n']);
-        nombre = docs.documents[0].data['n'];
-      }
+    _firebaseRepository.getUserData().then((results){
+      setState(() {
+        this.user = results;
+      });
     });
-    // print(userData);
+    print(user.toString());
+    super.initState();
   }
 
   @override
@@ -180,7 +173,7 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text(nombre),
+              accountName: Text(user.data['n'].toString()),
               accountEmail: Text('nd@gmail.com'),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
@@ -219,7 +212,9 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
                 ),
               ),
             ),
-            Divider(color: Colors.grey,),
+            Divider(
+              color: Colors.grey,
+            ),
             InkWell(
               onTap: () {},
               child: ListTile(
