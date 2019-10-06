@@ -21,7 +21,7 @@ class FirebaseRepository{
 
   getUserData() async{
     var elem =  await _firebaseMethods.getUserData();
-    print(elem);
+    // print(elem);
     return elem;
   }
 

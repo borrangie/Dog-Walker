@@ -24,14 +24,37 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
   FirebaseRepository _firebaseRepository = new FirebaseRepository();
   FirebaseUser user;
 
+  TextEditingController nameController;
+  TextEditingController mailController;
+  TextEditingController phoneController;
+  TextEditingController cityController;
+  TextEditingController addressController;
+
+  Map<dynamic, dynamic> data;
+
+  DateTime date;
+
   @override
   void initState() {
     super.initState();
     initUser();
+    initControllers();
+  }
+
+  initControllers() async {
+    print(await _firebaseRepository.getUserData());
+    data = await _firebaseRepository.getUserData();
+    this.nameController = new TextEditingController(text: data['n']);
+    this.phoneController = new TextEditingController(text: data['n']);
+    this.cityController = new TextEditingController(text: data['n']);
+    this.addressController = new TextEditingController(text: data['n']);
+
+    setState(() {});
   }
 
   initUser() async {
     user = await _firebaseRepository.getCurrentUser();
+    this.mailController = new TextEditingController(text: user.email);
     setState(() {});
   }
 
@@ -63,6 +86,9 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.red,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(70),
+                  bottomRight: Radius.circular(70)),
             ),
             child: GestureDetector(
               child: Center(
@@ -79,13 +105,13 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   TextField(
-                    // controller: mailController,
+                    controller: nameController,
                     decoration: InputDecoration(
                       icon: Icon(
                         FontAwesomeIcons.user,
                         color: Colors.red,
                       ),
-                      labelText: 'NOMBRE Y APELLIDO',
+                      labelText: 'Nombre Y Apellido',
                       labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
@@ -100,14 +126,76 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
                     height: 10,
                   ),
                   TextField(
-                    obscureText: true,
-                    // controller: passwordController,
+                    controller: mailController,
                     decoration: InputDecoration(
                       icon: Icon(
-                        FontAwesomeIcons.lock,
+                        FontAwesomeIcons.envelope,
                         color: Colors.red,
                       ),
-                      labelText: 'CONTRASEÑA',
+                      labelText: 'MAIL',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextField(
+                    controller: phoneController,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        FontAwesomeIcons.phone,
+                        color: Colors.red,
+                      ),
+                      labelText: 'TELEFONO',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextField(
+                    controller: cityController,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        FontAwesomeIcons.city,
+                        color: Colors.red,
+                      ),
+                      labelText: 'LOCALIDAD',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextField(
+                    controller: addressController,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        FontAwesomeIcons.home,
+                        color: Colors.red,
+                      ),
+                      labelText: 'DIRECCION',
                       labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
@@ -120,23 +208,165 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
                   ),
                 ]),
           ),
+          SizedBox(
+            height: 20,
+          ),
           FlatButton(
-              onPressed: () {
-                DatePicker.showDatePicker(context,
-                    showTitleActions: true,
-                    minTime: DateTime(1900, 1, 1),
-                    maxTime: DateTime.now(), onChanged: (date) {
-                  print('change $date');
-                }, onConfirm: (date) {
-                  print('confirm $date');
-                }, currentTime: DateTime.now(), locale: LocaleType.es);
-              },
-              child: Text(
-                'selecciona una fecha',
-                style: TextStyle(color: Colors.blue),
-              )),
+            onPressed: () {
+              DatePicker.showDatePicker(context,
+                  showTitleActions: true,
+                  minTime: DateTime(1900, 1, 1),
+                  maxTime: DateTime.now(), onChanged: (date) {
+                print('change $date');
+              }, onConfirm: (date) {
+                print('confirm $date');
+                setState(() {
+                  this.date = date;
+                });
+              }, currentTime: DateTime.now(), locale: LocaleType.es);
+            },
+            child: _getDateFormated(),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          FlatButton(
+            onPressed: () {},
+            child: Container(
+              width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.red, width: 3),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              child: Center(
+                child: Text(
+                  'Guardar',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 25,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 40,
+          ),
         ],
       ),
     );
+  }
+
+  _getDateFormated() {
+    if (date != null) {
+      return Container(
+        width: double.infinity,
+        height: 50,
+        decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              FontAwesomeIcons.calendarAlt,
+              color: Colors.white,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Container(
+              width: 50,
+              height: 35,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: Center(
+                child: Text(
+                  date.day.toString(),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Container(
+              width: 50,
+              height: 35,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: Center(
+                child: Text(
+                  date.month.toString(),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Container(
+              width: 87,
+              height: 35,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: Center(
+                child: Text(
+                  date.year.toString(),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        width: double.infinity,
+        height: 50,
+        decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                FontAwesomeIcons.calendarAlt,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                'Fecha de Nacimiento',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    }
   }
 }
