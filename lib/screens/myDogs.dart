@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dogwalker2/resources/firebase_repository.dart';
 import 'package:dogwalker2/screens/addDog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,6 +24,20 @@ class MyDogsPage extends StatefulWidget {
 }
 
 class _MyDogsPageState extends State<MyDogsPage> {
+  FirebaseRepository _firebaseRepository = new FirebaseRepository();
+  FirebaseUser user;
+
+  @override
+  void initState() {
+    super.initState();
+    initUser();
+  }
+
+  initUser() async {
+    user = await _firebaseRepository.getCurrentUser();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -97,7 +113,7 @@ class _MyDogsPageState extends State<MyDogsPage> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream: Firestore.instance.collection('d').snapshots(),
+              stream: Firestore.instance.collection('d').where('i', isEqualTo: user.uid).snapshots(),
               builder: (context, snapshot) {
                 if(!snapshot.hasData){
                   return Center(
@@ -135,6 +151,9 @@ class _MyDogsPageState extends State<MyDogsPage> {
 }
 
 Widget _listItem(DocumentSnapshot doc, BuildContext context) {
+  Timestamp d = doc['e']; 
+  DateTime date = new DateTime.fromMillisecondsSinceEpoch(d.seconds * 1000);
+  int years = DateTime.now().year - date.year;
   return Padding(
     padding: EdgeInsets.only(left: 15.0, top: 15.0),
     child: Stack(
@@ -206,7 +225,7 @@ Widget _listItem(DocumentSnapshot doc, BuildContext context) {
                           color: Color(0xFFF75A4C), size: 15.0),
                       SizedBox(width: 5.0),
                       Text(
-                        doc['e'].toString()+' años',
+                        years.toString()+' años',
                         style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontSize: 12.0,

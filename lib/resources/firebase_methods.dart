@@ -75,8 +75,17 @@ class FirebaseMethods{
   }
 
 
+Future<void> addDog(dogData){
+    firestore.collection('d').add(dogData).catchError((e){
+      print(e);
+    });
+  }
+
+
     
   }
   // Future<void> addDataToDB(FirebaseUser user) async{
     
   // }
+
+  

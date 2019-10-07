@@ -1,5 +1,9 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dogwalker2/resources/firebase_repository.dart';
 import 'package:dogwalker2/screens/myDogs.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -24,8 +28,18 @@ class _MyAddDogPageState extends State<MyAddDogPage> {
   DateTime date;
 var _radioValue;
 
+TextEditingController nameController = new TextEditingController();
+TextEditingController razaController = new TextEditingController();
+TextEditingController infoController = new TextEditingController();
+TextEditingController weightController = new TextEditingController();
+TextEditingController heightController = new TextEditingController();
+FirebaseRepository _firebaseRepository = new FirebaseRepository();
+
+
   @override
   Widget build(BuildContext context) {
+
+    
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +87,7 @@ var _radioValue;
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   TextField(
-                    // controller: nameController,
+                    controller: nameController,
                     decoration: InputDecoration(
                       icon: Icon(
                         FontAwesomeIcons.paw,
@@ -94,7 +108,7 @@ var _radioValue;
                     height: 10,
                   ),
                   TextField(
-                    // controller: mailController,
+                    controller: razaController,
                     decoration: InputDecoration(
                       icon: Icon(
                         FontAwesomeIcons.dog,
@@ -115,7 +129,8 @@ var _radioValue;
                     height: 10,
                   ),
                   TextField(
-                    // controller: phoneController,
+                    controller: weightController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       icon: Icon(
                         FontAwesomeIcons.weightHanging,
@@ -136,7 +151,8 @@ var _radioValue;
                     height: 10,
                   ),
                   TextField(
-                    // controller: cityController,
+                    controller: heightController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       icon: Icon(
                         FontAwesomeIcons.ruler,
@@ -157,7 +173,7 @@ var _radioValue;
                     height: 10,
                   ),
                   TextField(
-                    // controller: addressController,
+                    controller: infoController,
                     decoration: InputDecoration(
                       icon: Icon(
                         FontAwesomeIcons.infoCircle,
@@ -220,7 +236,7 @@ var _radioValue;
                 groupValue: _radioValue,
               ),
               Text(
-                'Masculino',
+                'El',
                 style: new TextStyle(fontSize: 16.0),
               ),
               new Radio(
@@ -228,7 +244,7 @@ var _radioValue;
                 groupValue: _radioValue,
               ),
               new Text(
-                'Femenino',
+                'Ella',
                 style: new TextStyle(
                   fontSize: 16.0,
                 ),
@@ -281,7 +297,13 @@ var _radioValue;
             height: 30,
           ),
           FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              _saveDog();
+              Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return DogsPage();
+                    }));
+            },
             child: Container(
               width: double.infinity,
               height: 50,
@@ -377,6 +399,25 @@ var _radioValue;
           ),
         ),
       );
+    }
+  }
+
+  _saveDog() async{
+    String name = nameController.text;
+    String raza = razaController.text;
+    String weight = weightController.text;
+    String height = heightController.text;
+    String info = infoController.text;
+    
+
+    if(name.isNotEmpty && raza.isNotEmpty && weight.isNotEmpty && height.isNotEmpty && info.isNotEmpty && date!=null){
+      double w = double.parse(weight);
+      double h = double.parse(height);
+      FirebaseUser user = await _firebaseRepository.getCurrentUser();
+      Map<String, dynamic> dogData = {'n'.toString():name, 'r'.toString():raza, 'p'.toString():w, 'a'.toString():h, 'ca'.toString():info, 'c'.toString():true, 'f'.toString():"", 's'.toString():true, 'e'.toString(): date,'i'.toString(): user.uid};
+      _firebaseRepository.addDog(dogData);
+    }else{
+      print('Complete the info of your dog'); 
     }
   }
 }

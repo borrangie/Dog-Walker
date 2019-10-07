@@ -28,4 +28,8 @@ class FirebaseRepository{
   String getString(){
     return "Hola que tal";
   }
+
+  Future<void> addDog(dogData)async{
+    _firebaseMethods.addDog(dogData);
+  }
 }

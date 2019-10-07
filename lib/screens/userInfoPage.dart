@@ -45,9 +45,9 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
     print(await _firebaseRepository.getUserData());
     data = await _firebaseRepository.getUserData();
     this.nameController = new TextEditingController(text: data['n']);
-    this.phoneController = new TextEditingController(text: data['n']);
-    this.cityController = new TextEditingController(text: data['n']);
-    this.addressController = new TextEditingController(text: data['n']);
+    this.phoneController = new TextEditingController(text: data['t']);
+    this.cityController = new TextEditingController(text: data['l']);
+    this.addressController = new TextEditingController(text: data['d']);
 
     setState(() {});
   }
