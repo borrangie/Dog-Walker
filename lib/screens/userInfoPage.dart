@@ -253,6 +253,31 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
             ),
           ),
           SizedBox(
+            height: 15,
+          ),
+          FlatButton(
+            onPressed: () {},
+            child: Container(
+              width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                border: Border.all(color: Colors.red, width: 3),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              child: Center(
+                child: Text(
+                  'Ser Paseador',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
             height: 40,
           ),
         ],
@@ -266,74 +291,28 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
         width: double.infinity,
         height: 50,
         decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.all(Radius.circular(15))),
+          color: Colors.transparent,
+        ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            SizedBox(
+              width: 5,
+            ),
             Icon(
               FontAwesomeIcons.calendarAlt,
-              color: Colors.white,
+              color: Colors.red,
             ),
             SizedBox(
-              width: 20,
+              width: 15,
             ),
-            Container(
-              width: 50,
-              height: 35,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Center(
-                child: Text(
-                  date.day.toString(),
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Container(
-              width: 50,
-              height: 35,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Center(
-                child: Text(
-                  date.month.toString(),
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Container(
-              width: 87,
-              height: 35,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Center(
-                child: Text(
+            Text(
+              date.day.toString() +
+                  '/' +
+                  date.month.toString() +
+                  '/' +
                   date.year.toString(),
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+              style: TextStyle(fontSize: 18),
             ),
           ],
         ),
@@ -343,24 +322,28 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
         width: double.infinity,
         height: 50,
         decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.all(Radius.circular(15))),
+          color: Colors.transparent,
+        ),
         child: Center(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
+              SizedBox(
+                width: 5,
+              ),
               Icon(
                 FontAwesomeIcons.calendarAlt,
-                color: Colors.white,
+                color: Colors.red,
               ),
               SizedBox(
-                width: 20,
+                width: 15,
               ),
               Text(
-                'Fecha de Nacimiento',
+                'CUMPLEAÑOS',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
+                  color: Colors.grey,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
                 ),
               )
             ],
@@ -369,4 +352,114 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
       );
     }
   }
+
+  // _getDateFormated() {
+  //   if (date != null) {
+  //     return Container(
+  //       width: double.infinity,
+  //       height: 50,
+  //       decoration: BoxDecoration(
+  //           color: Colors.red,
+  //           borderRadius: BorderRadius.all(Radius.circular(15))),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: <Widget>[
+  //           Icon(
+  //             FontAwesomeIcons.calendarAlt,
+  //             color: Colors.white,
+  //           ),
+  //           SizedBox(
+  //             width: 20,
+  //           ),
+  //           Container(
+  //             width: 50,
+  //             height: 35,
+  //             decoration: BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.all(Radius.circular(10))),
+  //             child: Center(
+  //               child: Text(
+  //                 date.day.toString(),
+  //                 style: TextStyle(
+  //                   color: Colors.black,
+  //                   fontSize: 22,
+  //                 ),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             width: 10,
+  //           ),
+  //           Container(
+  //             width: 50,
+  //             height: 35,
+  //             decoration: BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.all(Radius.circular(10))),
+  //             child: Center(
+  //               child: Text(
+  //                 date.month.toString(),
+  //                 style: TextStyle(
+  //                   color: Colors.black,
+  //                   fontSize: 22,
+  //                 ),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             width: 10,
+  //           ),
+  //           Container(
+  //             width: 87,
+  //             height: 35,
+  //             decoration: BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.all(Radius.circular(10))),
+  //             child: Center(
+  //               child: Text(
+  //                 date.year.toString(),
+  //                 style: TextStyle(
+  //                   color: Colors.black,
+  //                   fontSize: 22,
+  //                 ),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   } else {
+  //     return Container(
+  //       width: double.infinity,
+  //       height: 50,
+  //       decoration: BoxDecoration(
+  //           color: Colors.red,
+  //           borderRadius: BorderRadius.all(Radius.circular(15))),
+  //       child: Center(
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: <Widget>[
+  //             Icon(
+  //               FontAwesomeIcons.calendarAlt,
+  //               color: Colors.white,
+  //             ),
+  //             SizedBox(
+  //               width: 20,
+  //             ),
+  //             Text(
+  //               'Fecha de Nacimiento',
+  //               style: TextStyle(
+  //                 color: Colors.white,
+  //                 fontSize: 22,
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 }
