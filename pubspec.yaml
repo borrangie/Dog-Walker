@@ -60,6 +60,7 @@ flutter:
     - assets/images/a.jpeg
     - assets/images/g.jpeg
     - assets/images/m.jpeg
+    - assets/images/dog.jpg
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

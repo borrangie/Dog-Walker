@@ -1,5 +1,6 @@
 import 'package:dogwalker2/resources/firebase_repository.dart';
 import 'package:dogwalker2/screens/loginScreen2.dart';
+import 'package:dogwalker2/screens/myDogs.dart';
 import 'package:dogwalker2/screens/userInfoPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -220,7 +221,12 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return DogsPage();
+                    }));
+              },
               child: ListTile(
                 title: Text('Mis Perros'),
                 leading: Icon(
@@ -429,7 +435,7 @@ Widget _listItem(String imgPath, String foodName, String desc, String price,
                       spreadRadius: 3.0,
                       blurRadius: 3.0)
                 ]),
-            child: Text('Helloworld'),
+            // child: Text('Helloworld'),
           ),
         ),
         Positioned(
