@@ -4,11 +4,12 @@ import 'dog.dart';
 
 class DogOwner extends DBObject {
   String _name, _surname;
+  DateTime _birthday;
   List<String> _phones;
   List<Dog> _dogs;
   bool isActive;
 
-  DogOwner(id, this._name, this._surname, this._phones, this._dogs, this.isActive) : super(id);
+  DogOwner(id, this._name, this._surname, this._birthday, this._phones, this._dogs, this.isActive) : super(id);
 
   List<Dog> get dogs => _dogs;
 
