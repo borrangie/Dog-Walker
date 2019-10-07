@@ -1,6 +1,6 @@
 import 'package:dogwalker2/resources/firebase_repository.dart';
 import 'package:dogwalker2/screens/forgetPasswordScreen.dart';
-import 'package:dogwalker2/screens/homeScreen.dart';
+import 'package:dogwalker2/screens/homeScreen2.dart';
 import 'package:dogwalker2/screens/signUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -295,13 +295,13 @@ class _MyLoginPage2State extends State<MyLoginPage2> {
         // _firebaseRepository.addDataToDB(user).then((value){
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) {
-          return HomeScreen();
+          return HomeScreen2();
         }));
         // });
       } else {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) {
-          return HomeScreen();
+          return HomeScreen2();
         }));
       }
     });

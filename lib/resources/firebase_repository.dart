@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogwalker2/resources/firebase_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -17,4 +18,14 @@ class FirebaseRepository{
   Future<AuthResult> normalSignUp(String mail, String password)=> _firebaseMethods.normalSignUp(mail, password);
 
   bool resetPassword(String mail) => _firebaseMethods.resetPassword(mail);
+
+  getUserData() async{
+    var elem =  await _firebaseMethods.getUserData();
+    print(elem);
+    return elem;
+  }
+
+  String getString(){
+    return "Hola que tal";
+  }
 }

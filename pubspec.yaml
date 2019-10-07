@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -54,6 +54,11 @@ flutter:
   assets:
     - assets/images/dwlogo.svg
     - assets/images/dwlogo.png
+    - assets/images/nd.jpeg
+    - assets/images/nb.jpeg
+    - assets/images/a.jpeg
+    - assets/images/g.jpeg
+    - assets/images/m.jpeg
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

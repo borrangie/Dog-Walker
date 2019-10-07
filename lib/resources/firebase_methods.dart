@@ -49,6 +49,7 @@ class FirebaseMethods{
     _auth.signOut();
   }
 
+
   bool resetPassword(String mail){
     try{
       _auth.sendPasswordResetEmail(email: mail);
@@ -65,7 +66,15 @@ class FirebaseMethods{
     return user;
   }
 
+
+  getUserData() async {
+    FirebaseUser user = await getCurrentUser();
+    return await firestore.collection('u').document(user.uid.toString()).get();
+  }
+
+
+    
+  }
   // Future<void> addDataToDB(FirebaseUser user) async{
     
   // }
-}
