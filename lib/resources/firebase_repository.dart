@@ -21,11 +21,8 @@ class FirebaseRepository{
 
   getUserData() async{
     var elem =  await _firebaseMethods.getUserData();
+    // TODO: sacar
     print(elem);
     return elem;
-  }
-
-  String getString(){
-    return "Hola que tal";
   }
 }

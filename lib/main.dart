@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'screens/homeScreen2.dart';
 
-void main() => runApp(MyApp2());
+void main() => runApp(AppWrapper());
 
 class MyApp extends StatefulWidget {
   // Root App
@@ -36,13 +36,13 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class MyApp2 extends StatefulWidget {
+class AppWrapper extends StatefulWidget {
   // Root App
   @override
-  _MyAppState2 createState() => _MyAppState2();
+  _AppWrapperState createState() => _AppWrapperState();
 }
 
-class _MyAppState2 extends State<MyApp2> {
+class _AppWrapperState extends State<AppWrapper> {
   FirebaseRepository _firebaseRepository = FirebaseRepository();
   @override
   Widget build(BuildContext context) {
