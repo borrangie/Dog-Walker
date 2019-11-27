@@ -21,12 +21,7 @@ class FirebaseRepository{
 
   getUserData() async{
     var elem =  await _firebaseMethods.getUserData();
-    // print(elem);
     return elem;
-  }
-
-  String getString(){
-    return "Hola que tal";
   }
 
   Future<void> addDog(dogData)async{
