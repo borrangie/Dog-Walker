@@ -1,4 +1,4 @@
-# dogwalker2
+# DogWalker
 
 A new Flutter project.
 
