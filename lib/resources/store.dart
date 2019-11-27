@@ -14,6 +14,12 @@ class Store {
 
   set firebaseUser(FirebaseUser firebaseUser) => this.elements["firebase_user"] = firebaseUser;
 
+  bool get hasUser => this.elements["user"] != null;
+
+  bool get isDogOwner => this.elements["user"] is DogOwner;
+
+  bool get isDogWalker => this.elements["user"] is DogWalker;
+
   DogOwner get asDogOwner {
     if (this.elements["user"] is DogOwner)
       return this.elements["user"];
@@ -29,4 +35,6 @@ class Store {
   }
 
   set dogOwner(DogOwner dogOwner) => this.elements["user"] = dogOwner;
+
+  set dogWalker(DogWalker dogWalker) => this.elements["user"] = dogWalker;
 }
