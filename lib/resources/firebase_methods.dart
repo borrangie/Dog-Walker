@@ -65,6 +65,15 @@ class FirebaseMethods {
 
   getUserData() async {
     FirebaseUser user = await getCurrentUser();
-    return await firestore.collection('u').document(user.uid.toString()).get();
+    return await firestore.collection('u').document(user.uid.toString()).get().then((res){
+      return res.data;
+    });
+  }
+
+
+Future<void> addDog(dogData){
+    firestore.collection('d').add(dogData).catchError((e){
+      print(e);
+    });
   }
 }

@@ -290,7 +290,6 @@ class _MyLoginPage2State extends State<MyLoginPage2> {
 
   void authenticateUser(FirebaseUser user) {
     _firebaseRepository.authenticateUser(user).then((isNewUser) {
-      print(isNewUser);
       if (isNewUser) {
         // _firebaseRepository.addDataToDB(user).then((value){
         Navigator.pushReplacement(context,

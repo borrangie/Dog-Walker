@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogwalker2/resources/firebase_repository.dart';
 import 'package:dogwalker2/screens/loginScreen2.dart';
+import 'package:dogwalker2/screens/myDogs.dart';
+import 'package:dogwalker2/screens/userInfoPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -193,7 +194,9 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
           children: <Widget>[
             userAccountsDrawerHeader,
             InkWell(
-              onTap: () {},
+              onTap: () {
+
+              },
               child: ListTile(
                 title: Text('Inicio'),
                 leading: Icon(
@@ -203,7 +206,12 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return UserInfoPage();
+                    }));
+              },
               child: ListTile(
                 title: Text('Mi Perfil'),
                 leading: Icon(
@@ -213,7 +221,12 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return DogsPage();
+                    }));
+              },
               child: ListTile(
                 title: Text('Mis Perros'),
                 leading: Icon(
@@ -422,7 +435,7 @@ Widget _listItem(String imgPath, String foodName, String desc, String price,
                       spreadRadius: 3.0,
                       blurRadius: 3.0)
                 ]),
-            child: Text('Helloworld'),
+            // child: Text('Helloworld'),
           ),
         ),
         Positioned(
