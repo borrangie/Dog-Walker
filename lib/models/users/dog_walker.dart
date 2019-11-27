@@ -1,12 +1,11 @@
 import 'dog_owner.dart';
-import 'dog.dart';
 
 class DogWalker extends DogOwner {
   String _dni;
   double _cost;
 
-  DogWalker(id, name, surname, birthday, phones, dogs, isActive, this._dni, this._cost) :
-        super(id, name, surname, birthday, phones, dogs, isActive);
+  DogWalker(id, name, surname, birthday, address, phones, dogs, isActive, this._dni, this._cost) :
+        super(id, name, surname, birthday, address, phones, dogs, isActive);
 
   String get dni => _dni;
 

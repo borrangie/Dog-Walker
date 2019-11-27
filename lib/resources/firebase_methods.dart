@@ -7,72 +7,64 @@ class FirebaseMethods {
   GoogleSignIn _googleSignIn = GoogleSignIn();
   static final Firestore firestore = Firestore.instance;
 
-  Future<FirebaseUser> getCurrentUser() async{
+  Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;
     currentUser = await _auth.currentUser();
     return currentUser;
   }
 
-  Future<AuthResult> signIn() async{
+  Future<AuthResult> signIn() async {
     GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
-    GoogleSignInAuthentication _signInAuth = await _signInAccount.authentication;
+    GoogleSignInAuthentication _signInAuth = await _signInAccount
+        .authentication;
 
-  final AuthCredential credential = GoogleAuthProvider.getCredential(
-    accessToken: _signInAuth.accessToken,
-    idToken: _signInAuth.idToken
-  );
-    AuthResult user  = await _auth.signInWithCredential(credential);
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: _signInAuth.accessToken,
+        idToken: _signInAuth.idToken
+    );
+    AuthResult user = await _auth.signInWithCredential(credential);
     return user;
   }
 
-  Future<bool> authenticateUser(FirebaseUser user) async{
-
-    FirebaseUser user  = await _auth.currentUser();
+  Future<bool> authenticateUser(FirebaseUser user) async {
+    FirebaseUser user = await _auth.currentUser();
     // QuerySnapshot result = await firestore.collection("users").where("email", isEqualTo: user.email).getDocuments();
 
     // final List<DocumentSnapshot> docs = result.documents;
     // return docs.length == 0 ? true : false;
 
-    return user==null? false : true;
+    return user == null ? false : true;
   }
 
-  Future<AuthResult> normalSignIn(String mail, String password) async{
-    AuthResult user = await _auth.signInWithEmailAndPassword(email: mail, password: password);
+  Future<AuthResult> normalSignIn(String mail, String password) async {
+    AuthResult user = await _auth.signInWithEmailAndPassword(
+        email: mail, password: password);
     print(user.user.email);
     return user;
-
   }
 
-  void logout(){
+  void logout() {
     _auth.signOut();
   }
 
-
-  bool resetPassword(String mail){
-    try{
+  bool resetPassword(String mail) {
+    try {
       _auth.sendPasswordResetEmail(email: mail);
-    }catch(e){
+    } catch (e) {
       return false;
     }
     return true;
   }
 
-
-  Future<AuthResult> normalSignUp(String mail, String password) async{
-    AuthResult user = await _auth.createUserWithEmailAndPassword(email: mail, password: password);
+  Future<AuthResult> normalSignUp(String mail, String password) async {
+    AuthResult user = await _auth.createUserWithEmailAndPassword(
+        email: mail, password: password);
     print(user.user.email);
     return user;
   }
-
 
   getUserData() async {
     FirebaseUser user = await getCurrentUser();
     return await firestore.collection('u').document(user.uid.toString()).get();
   }
-
-
-    
-  }
-  // Future<void> addDataToDB(FirebaseUser user) async{
-    
-  // }
+}

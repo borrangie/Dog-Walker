@@ -1,5 +1,5 @@
-import 'package:dogwalker2/models/dog_owner.dart';
-import 'package:dogwalker2/models/dog_walker.dart';
+import 'package:dogwalker2/models/users/dog_owner.dart';
+import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Store {

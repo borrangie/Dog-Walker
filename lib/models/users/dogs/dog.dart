@@ -1,7 +1,7 @@
 import 'package:dogwalker2/models/db_object.dart';
 import 'package:flutter/cupertino.dart';
 
-import "breeds.dart";
+import 'breeds.dart';
 
 class Dog extends DBObject {
   String _name;
