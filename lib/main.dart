@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dogwalker2/resources/firebase_repository.dart';
+import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/loginScreen2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,33 +8,6 @@ import 'package:flutter/material.dart';
 import 'screens/homeScreen2.dart';
 
 void main() => runApp(AppWrapper());
-
-class MyApp extends StatefulWidget {
-  // Root App
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Dog Walker',
-      debugShowCheckedModeBanner: false,
-      home: FutureBuilder(
-        future: _firebaseRepository.getCurrentUser(),
-        builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
-          if (snapshot.hasData) {
-            return HomeScreen2();
-          } else {
-            return LoginPage2();
-          }
-        },
-      ),
-    );
-  }
-}
 
 class AppWrapper extends StatefulWidget {
   // Root App
@@ -121,6 +94,33 @@ class _SplashScreenState extends State<SplashScreen> {
             ],
           )
         ],
+      ),
+    );
+  }
+}
+
+class MyApp extends StatefulWidget {
+  // Root App
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  FirebaseRepository _firebaseRepository = FirebaseRepository();
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Dog Walker',
+      debugShowCheckedModeBanner: false,
+      home: FutureBuilder(
+        future: _firebaseRepository.getCurrentUser(),
+        builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+          if (snapshot.hasData) {
+            return HomeScreen2();
+          } else {
+            return LoginPage2();
+          }
+        },
       ),
     );
   }

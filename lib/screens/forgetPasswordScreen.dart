@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dogwalker2/resources/firebase_repository.dart';
+import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/loginScreen2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

@@ -1,4 +1,4 @@
-import 'package:dogwalker2/resources/firebase_repository.dart';
+import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/loginScreen2.dart';
 import 'package:dogwalker2/screens/myDogs.dart';
 import 'package:dogwalker2/screens/userInfoPage.dart';

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class FirebaseMethods {
+class FirebaseRepository{
   FirebaseAuth _auth = FirebaseAuth.instance;
   GoogleSignIn _googleSignIn = GoogleSignIn();
   static final Firestore firestore = Firestore.instance;
@@ -70,9 +70,8 @@ class FirebaseMethods {
     });
   }
 
-
-Future<void> addDog(dogData){
-    firestore.collection('d').add(dogData).catchError((e){
+  Future<void> addDog(dogData) {
+    return firestore.collection('d').add(dogData).catchError((e){
       print(e);
     });
   }

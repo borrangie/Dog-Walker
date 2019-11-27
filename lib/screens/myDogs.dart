@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dogwalker2/resources/firebase_repository.dart';
+import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/addDog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
