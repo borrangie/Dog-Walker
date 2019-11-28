@@ -9,6 +9,8 @@ class Dog extends DBObject {
   int _months;
   Breed _breed;
   Image _picture;
+  double ratingAvg;
+  List<Rating> ratings;
 
   Dog(String id, String name, int years, int months, Breed breed) : super(id) {
     this._name = name;
