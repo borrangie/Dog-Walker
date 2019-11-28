@@ -20,14 +20,16 @@ exports.onUserCreate = functions.auth.user().onCreate(async (user) => {
     let usersReference = db.collection(global.COLLECTIONS.USERS);
 
     await usersReference.doc(user.uid).create({
-        i: "",
-        n: "",
-        s: "",
-        p: [],
-        d: {},
-        ad: {},
-        a: false,
-        c: -1
+        dni: "",
+        name: "",
+        surname: "",
+        phone: "",
+        address: null,
+        birthday: null,
+        mail: user.mail,
+        rating_avg: 0,
+        ratings: [],
+        walks: 0
     });
 
     let customClaims = {
