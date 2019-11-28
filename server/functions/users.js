@@ -2,10 +2,9 @@ let global = require("./global");
 let db = null;
 let admin = null;
 
-export default {
+module.exports = {
     initialize: initialize,
-    addDog: addDog,
-    removeDog: removeDog
+    onUserCreate: onUserCreate
 };
 
 function initialize(_admin, _db) {
@@ -16,7 +15,7 @@ function initialize(_admin, _db) {
 // ---------------- Main methods ----------------
 // Whenever a new user is created, we need to add him/her to the Users collection
 // and setup basic data
-exports.onUserCreate = functions.auth.user().onCreate(async (user) => {
+async function onUserCreate(user) {
     let usersReference = db.collection(global.COLLECTIONS.USERS);
 
     await usersReference.doc(user.uid).create({
@@ -42,4 +41,4 @@ exports.onUserCreate = functions.auth.user().onCreate(async (user) => {
     await admin
         .auth()
         .setCustomUserClaims(user.uid, customClaims);
-});
+}

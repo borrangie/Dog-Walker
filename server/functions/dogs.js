@@ -2,7 +2,7 @@ let global = require("./global");
 let db = null;
 let admin = null;
 
-export default {
+module.exports = {
     initialize: initialize,
     addDog: addDog,
     editDog: editDog,
@@ -89,7 +89,7 @@ async function editDog(data, context) {
             let dog = {};
             let docData = doc.data();
 
-            if (typeof data.name === "string" && data.name != docData.name) {
+            if (typeof data.name === "string" && data.name !== docData.name) {
                 let dogQuery = db.collection(global.COLLECTIONS.USERS).doc(context.auth.uid).collection(global.COLLECTIONS.DOGS).where('name', '==', data.name).limit(1);
                 let doc = await transaction.get(dogQuery);
                 if (doc.exists) {

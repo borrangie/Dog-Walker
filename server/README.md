@@ -1,6 +1,12 @@
 # dog-walker-server
 Code for Dog Walker's Server
 
+Install modules:
+
+```bash
+cd functions & npm install
+```
+
 Deploy:
 
 ```bash

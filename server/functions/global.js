@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     COLLECTIONS: {
         USERS: 'Users',
         DOGS: 'Dogs',
@@ -12,9 +12,9 @@ export default {
         DOG_ALREADY_EXISTS: "Dog already exists",
         USER_IS_ACTIVE: "This action cannot be performed when a transaction is in place"
     },
-    BREEDS: {
+    BREEDS: [
 
-    },
+    ],
     formatResult: formatResult,
     formatError: formatError,
     formatData: formatData,
