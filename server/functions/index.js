@@ -16,5 +16,8 @@ exports.onUserCreate = functions.auth.user().onCreate(users.onUserCreate);
 // This method handles the creation of a Dog.
 exports.addDog = functions.https.onCall(dogs.addDog);
 
+// This method handles the modification of a Dog.
+exports.editDog = functions.https.onCall(dogs.editDog);
+
 // This method handles the removal of a Dog.
 exports.removeDog = functions.https.onCall(dogs.removeDog);
