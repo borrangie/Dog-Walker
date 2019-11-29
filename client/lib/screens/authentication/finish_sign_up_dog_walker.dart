@@ -1,22 +1,10 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/authentication/select_user_type.dart';
-import 'package:dogwalker2/screens/home_screen.dart';
 import 'package:dogwalker2/screens/authentication/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-
-class FinishSignUpDogWalker extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: FinishSignUpDogWalkerPage(),
-    );
-  }
-}
 
 class FinishSignUpDogWalkerPage extends StatefulWidget {
   @override
@@ -24,7 +12,6 @@ class FinishSignUpDogWalkerPage extends StatefulWidget {
 }
 
 class _FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
   TextEditingController mailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
   TextEditingController repasswordController = new TextEditingController();
@@ -51,7 +38,7 @@ class _FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
               onPressed: () {
                 Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (context) {
-                            return LoginPage();
+                            return LogInPage();
                           }));
                  //Navigator.pop(context);
               },
@@ -208,11 +195,11 @@ class _FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
         showToast("Las contraseñas no coinciden");
         return;
       }
-      _firebaseRepository.signUp(mail, password).then((AuthResult user) {
+      FirebaseRepository.signUp(mail, password).then((AuthResult user) {
         if (user != null) {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-                return SelectUserType();
+                return SelectUserTypePage();
           }));
         } else {
           showToast("Error creando usuario. Reintente luego");

@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_owner.dart';
@@ -19,7 +16,6 @@ class AppWrapper extends StatefulWidget {
 }
 
 class _AppWrapperState extends State<AppWrapper> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,12 +32,32 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  // TODO: Manage offline
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        return MyApp();
-      }));
+    FirebaseRepository.getCurrentUser().then((user) {
+      Widget widget;
+
+      if (user != null) {
+        if (user is DogWalker) {
+          if (!user.walkerVerified) {
+            widget = FinishSignUpDogWalkerPage();
+          }
+        } else {
+          if (!user.verified)
+            widget = FinishSignUpDogOwnerPage();
+        }
+        widget = HomeScreenPage();
+      } else {
+        widget = LogInPage();
+      }
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) {
+          return widget;
+        })
+      );
     });
   }
 
@@ -97,41 +113,6 @@ class _SplashScreenState extends State<SplashScreen> {
             ],
           )
         ],
-      ),
-    );
-  }
-}
-
-class MyApp extends StatefulWidget {
-  // Root App
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Dog Walker',
-      debugShowCheckedModeBanner: false,
-      home: FutureBuilder(
-        future: _firebaseRepository.getCurrentUser(),
-        builder: (context, AsyncSnapshot<DogOwner> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data is DogWalker) {
-              if (!(snapshot.data as DogWalker).walkerVerified)
-                return FinishSignUpDogWalker();
-            } else {
-              if (!snapshot.data.verified)
-                return FinishSignUpDogOwner();
-            }
-
-            return HomeScreen();
-          } else {
-            return LoginPage();
-          }
-        },
       ),
     );
   }

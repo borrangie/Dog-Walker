@@ -6,23 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class ForgotPassword extends StatelessWidget {
+class ForgotPasswordPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyForgotPasswordPage(),
-    );
-  }
+  _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
 }
 
-class MyForgotPasswordPage extends StatefulWidget {
-  @override
-  _MyForgotPasswordPageState createState() => _MyForgotPasswordPageState();
-}
-
-class _MyForgotPasswordPageState extends State<MyForgotPasswordPage> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   TextEditingController mailController = new TextEditingController();
 
   @override
@@ -42,7 +31,7 @@ class _MyForgotPasswordPageState extends State<MyForgotPasswordPage> {
               onPressed: () {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
-                  return LoginPage();
+                  return LogInPage();
                 }));
                 //Navigator.pop(context);
               },
@@ -158,13 +147,13 @@ class _MyForgotPasswordPageState extends State<MyForgotPasswordPage> {
       showToast("Ingrese el mail");
     } else {
       print(mail);
-      bool res = _firebaseRepository.resetPassword(mail);
+      bool res = FirebaseRepository.resetPassword(mail);
       if (res) {
         showSuccessToast('Se envio el mail');
         Timer(Duration(seconds: 3), () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-            return LoginPage();
+            return LogInPage();
           }));
         });
       }else{

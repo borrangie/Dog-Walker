@@ -1,28 +1,16 @@
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/home_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class UserInfoPage extends StatelessWidget {
+class UserInfoPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyUserInfoPage(),
-    );
-  }
+  _UserInfoPageState createState() => _UserInfoPageState();
 }
 
-class MyUserInfoPage extends StatefulWidget {
-  @override
-  _MyUserInfoPageState createState() => _MyUserInfoPageState();
-}
-
-class _MyUserInfoPageState extends State<MyUserInfoPage> {
-  FirebaseRepository _firebaseRepository = new FirebaseRepository();
+class _UserInfoPageState extends State<UserInfoPage> {
   TextEditingController nameController;
   TextEditingController mailController;
   TextEditingController phoneController;
@@ -39,7 +27,7 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
   }
 
   initControllers() async {
-    print(await _firebaseRepository.getCurrentUser());
+    print(await FirebaseRepository.getCurrentUser());
     // TODO
 //    data = await _firebaseRepository.getCurrentUser();
 //    this.nameController = new TextEditingController(text: data['n']);
@@ -51,7 +39,7 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
   }
 
   initUser() async {
-    user = await _firebaseRepository.getCurrentUser();
+    user = await FirebaseRepository.getCurrentUser();
     this.mailController = new TextEditingController(text: user.email);
     setState(() {});
   }
@@ -72,7 +60,7 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
             onPressed: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) {
-                return HomeScreen();
+                return HomeScreenPage();
               }));
               //Navigator.pop(context);
             },

@@ -2,30 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/add_dog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'home_screen.dart';
 
-class DogsPage extends StatelessWidget {
+class DogsPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyDogsPage(),
-    );
-  }
+  _DogsPageState createState() => _DogsPageState();
 }
 
-class MyDogsPage extends StatefulWidget {
-  @override
-  _MyDogsPageState createState() => _MyDogsPageState();
-}
-
-class _MyDogsPageState extends State<MyDogsPage> {
-  FirebaseRepository _firebaseRepository = new FirebaseRepository();
+class _DogsPageState extends State<DogsPage> {
   DogOwner user;
 
   @override
@@ -35,7 +23,7 @@ class _MyDogsPageState extends State<MyDogsPage> {
   }
 
   initUser() async {
-    user = await _firebaseRepository.getCurrentUser();
+    user = await FirebaseRepository.getCurrentUser();
     setState(() {});
   }
 
@@ -55,7 +43,7 @@ class _MyDogsPageState extends State<MyDogsPage> {
             onPressed: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) {
-                return HomeScreen();
+                return HomeScreenPage();
               }));
               //Navigator.pop(context);
             },
@@ -141,7 +129,7 @@ class _MyDogsPageState extends State<MyDogsPage> {
       onPressed: () {
         Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return AddDog();
+                      return AddDogPage();
                     }));
       },
       child: Icon(FontAwesomeIcons.plus),

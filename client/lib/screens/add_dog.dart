@@ -1,31 +1,17 @@
-import 'dart:ffi';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/my_dogs.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class AddDog extends StatelessWidget {
+class AddDogPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyAddDogPage(),
-    );
-  }
+  _AddDogPageState createState() => _AddDogPageState();
 }
 
-class MyAddDogPage extends StatefulWidget {
-  @override
-  _MyAddDogPageState createState() => _MyAddDogPageState();
-}
-
-class _MyAddDogPageState extends State<MyAddDogPage> {
+class _AddDogPageState extends State<AddDogPage> {
   DateTime date;
 var _radioValue;
 
@@ -34,7 +20,6 @@ TextEditingController razaController = new TextEditingController();
 TextEditingController infoController = new TextEditingController();
 TextEditingController weightController = new TextEditingController();
 TextEditingController heightController = new TextEditingController();
-FirebaseRepository _firebaseRepository = new FirebaseRepository();
 
 
   @override
@@ -414,9 +399,9 @@ FirebaseRepository _firebaseRepository = new FirebaseRepository();
     if(name.isNotEmpty && raza.isNotEmpty && weight.isNotEmpty && height.isNotEmpty && info.isNotEmpty && date!=null){
       double w = double.parse(weight);
       double h = double.parse(height);
-      DogOwner user = await _firebaseRepository.getCurrentUser();
+      DogOwner user = await FirebaseRepository.getCurrentUser();
       Map<String, dynamic> dogData = {'n'.toString():name, 'r'.toString():raza, 'p'.toString():w, 'a'.toString():h, 'ca'.toString():info, 'c'.toString():true, 'f'.toString():"", 's'.toString():true, 'e'.toString(): date,'i'.toString(): user.id};
-      _firebaseRepository.addDog(dogData);
+      FirebaseRepository.addDog(dogData);
     }else{
       print('Complete the info of your dog'); 
     }

@@ -2,29 +2,17 @@ import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/my_dogs.dart';
 import 'package:dogwalker2/screens/user_info_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'authentication/login_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreenPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomeScreen(),
-    );
-  }
+  _HomeScreenPageState createState() => _HomeScreenPageState();
 }
 
-class MyHomeScreen extends StatefulWidget {
-  @override
-  _MyHomeScreenState createState() => _MyHomeScreenState();
-}
-
-class _MyHomeScreenState extends State<MyHomeScreen> {
-  FirebaseRepository _firebaseRepository = new FirebaseRepository();
+class _HomeScreenPageState extends State<HomeScreenPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   DogOwner user;
@@ -36,7 +24,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   }
 
   initUser() async {
-    user = await _firebaseRepository.getCurrentUser();
+    user = await FirebaseRepository.getCurrentUser();
     setState(() {});
   }
 
@@ -267,7 +255,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                 logout();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
-                  return LoginPage();
+                  return LogInPage();
                 }));
               },
               child: ListTile(
@@ -566,6 +554,5 @@ Widget _listItem(String imgPath, String foodName, String desc, String price,
 
 logout() {
   print("Me voy");
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
-  _firebaseRepository.logout();
+  FirebaseRepository.logout();
 }

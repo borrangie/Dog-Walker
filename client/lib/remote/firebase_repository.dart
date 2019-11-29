@@ -5,20 +5,20 @@ import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class FirebaseRepository {
+abstract class FirebaseRepository {
   static final Firestore firestore = Firestore.instance;
-  static final String COLLECTION_USERS = "Users";
-  static final String COLLECTION_DOGS = "Dogs";
-  static final String COLLECTION_WALKS = "Walks";
+  static final String collectionUsers = "Users";
+  static final String collectionsDogs = "Dogs";
+  static final String collectionWalks = "Walks";
 
-  GoogleSignIn _googleSignIn = GoogleSignIn();
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn();
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<DogOwner> getCurrentUser() async {
+  static Future<DogOwner> getCurrentUser() async {
     FirebaseUser currentUser = await _auth.currentUser();
     DogOwner user;
     if (currentUser != null) {
-      var userDocument = await firestore.collection(COLLECTION_USERS).document(currentUser.uid).get();
+      var userDocument = await firestore.collection(collectionUsers).document(currentUser.uid).get();
       if (userDocument.exists) {
         Map claims = (await currentUser.getIdToken(refresh: true)).claims;
         Address address;
@@ -66,7 +66,7 @@ class FirebaseRepository {
     return user;
   }
 
-  Future<AuthResult> signInGoogle() async {
+  static Future<AuthResult> signInGoogle() async {
     GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
     GoogleSignInAuthentication _signInAuth = await _signInAccount.authentication;
 
@@ -77,18 +77,18 @@ class FirebaseRepository {
     return await _auth.signInWithCredential(credential);
   }
 
-  Future<AuthResult> signIn(String mail, String password) async {
+  static Future<AuthResult> signIn(String mail, String password) async {
     return await _auth.signInWithEmailAndPassword(
         email: mail,
         password: password
     );
   }
 
-  void logout() {
+  static void logout() {
     _auth.signOut();
   }
 
-  bool resetPassword(String mail) {
+  static bool resetPassword(String mail) {
     try {
       _auth.sendPasswordResetEmail(email: mail);
       return true;
@@ -97,14 +97,14 @@ class FirebaseRepository {
     }
   }
 
-  Future<AuthResult> signUp(String mail, String password) async {
+  static Future<AuthResult> signUp(String mail, String password) async {
     return await _auth.createUserWithEmailAndPassword(
         email: mail,
         password: password
     );
   }
 
-  Future<void> addDog(dogData) {
+  static Future<void> addDog(dogData) {
     return firestore.collection('d').add(dogData).catchError((e){
       print(e);
     });

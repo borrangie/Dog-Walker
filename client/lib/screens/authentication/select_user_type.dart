@@ -5,24 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-
-class SelectUserType extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SelectUserTypePage(),
-    );
-  }
-}
-
 class SelectUserTypePage extends StatefulWidget {
   @override
   _SelectUserTypePageState createState() => _SelectUserTypePageState();
 }
 
 class _SelectUserTypePageState extends State<SelectUserTypePage> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
   TextEditingController mailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
   TextEditingController repasswordController = new TextEditingController();
@@ -49,7 +37,7 @@ class _SelectUserTypePageState extends State<SelectUserTypePage> {
               onPressed: () {
                 Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (context) {
-                            return LoginPage();
+                            return LogInPage();
                           }));
                  //Navigator.pop(context);
               },
@@ -206,11 +194,11 @@ class _SelectUserTypePageState extends State<SelectUserTypePage> {
         showToast("Las contraseñas no coinciden");
         return;
       }
-      _firebaseRepository.signUp(mail, password).then((AuthResult user) {
+      FirebaseRepository.signUp(mail, password).then((AuthResult user) {
         if (user != null) {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-                return SelectUserType();
+                return SelectUserTypePage();
           }));
         } else {
           showToast("Error creando usuario. Reintente luego");
