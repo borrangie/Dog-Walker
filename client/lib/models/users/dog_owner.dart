@@ -6,6 +6,7 @@ import 'dogs/dog.dart';
 class DogOwner extends DBObject {
   String _name;
   String _surname;
+  String _email;
   Address _address;
   DateTime _birthday;
   String _phone;
@@ -13,7 +14,7 @@ class DogOwner extends DBObject {
   bool _verified;
   List<Dog> _dogs;
 
-  DogOwner(id, this._name, this._surname, this._address, this._birthday, this._phone, this._ratingAvg, this._verified) : super(id);
+  DogOwner(id, this._name, this._surname, this._email, this._address, this._birthday, this._phone, this._ratingAvg, this._verified) : super(id);
 
   bool get verified => _verified;
 
@@ -42,4 +43,6 @@ class DogOwner extends DBObject {
   String get surname => _surname;
 
   String get name => _name;
+
+  String get email => _email;
 }

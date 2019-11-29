@@ -267,7 +267,7 @@ class _MyLoginPage2State extends State<MyLoginPage2> {
     } else {
       print(mail);
       print(password);
-      _firebaseRepository.normalSignIn(mail, password).then((AuthResult user) {
+      _firebaseRepository.signIn(mail, password).then((AuthResult user) {
         if (user != null) {
           print("entre");
           authenticateUser(user.user);
@@ -279,7 +279,7 @@ class _MyLoginPage2State extends State<MyLoginPage2> {
   }
 
   void performLogin() {
-    _firebaseRepository.signIn().then((AuthResult user) {
+    _firebaseRepository.signInGoogle().then((AuthResult user) {
       if (user != null) {
         authenticateUser(user.user);
       } else {
@@ -289,7 +289,7 @@ class _MyLoginPage2State extends State<MyLoginPage2> {
   }
 
   void authenticateUser(FirebaseUser user) {
-    _firebaseRepository.authenticateUser(user).then((isNewUser) {
+    _firebaseRepository.authenticate(user).then((isNewUser) {
       if (isNewUser) {
         // _firebaseRepository.addDataToDB(user).then((value){
         Navigator.pushReplacement(context,

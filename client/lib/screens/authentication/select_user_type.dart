@@ -1,5 +1,4 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/home_screen.dart';
 import 'package:dogwalker2/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,25 +7,25 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 
 class SignUp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MySignUpPage(),
+      home: SignUpPage(),
     );
   }
 }
 
-class MySignUpPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _MySignUpPageState createState() => _MySignUpPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _MySignUpPageState extends State<MySignUpPage> {
+class _SignUpPageState extends State<SignUpPage> {
   FirebaseRepository _firebaseRepository = FirebaseRepository();
   TextEditingController mailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  TextEditingController repasswordController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +61,7 @@ class _MySignUpPageState extends State<MySignUpPage> {
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.fromLTRB(130.0, 90.0, 0, 0),
+                      padding: EdgeInsets.fromLTRB(130.0, 30.0, 0, 0),
                       child: Text(
                         "Sign",
                         style: TextStyle(
@@ -72,7 +71,7 @@ class _MySignUpPageState extends State<MySignUpPage> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(130.0, 155.0, 0, 0),
+                      padding: EdgeInsets.fromLTRB(130.0, 95.0, 0, 0),
                       child: Text(
                         "Up",
                         style: TextStyle(
@@ -82,7 +81,7 @@ class _MySignUpPageState extends State<MySignUpPage> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(0, 90, 20, 0),
+                      padding: EdgeInsets.fromLTRB(0, 30, 20, 0),
                       child: Image.asset(
                         'assets/images/dwlogo.png',
                         width: 130,
@@ -119,6 +118,24 @@ class _MySignUpPageState extends State<MySignUpPage> {
                     controller: passwordController,
                     decoration: InputDecoration(
                       labelText: 'CONTRASEÑA',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextField(
+                    obscureText: true,
+                    controller: repasswordController,
+                    decoration: InputDecoration(
+                      labelText: 'REINGRESE CONTRASEÑA',
                       labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
@@ -172,46 +189,34 @@ class _MySignUpPageState extends State<MySignUpPage> {
   void normalSignUp() {
     String mail = mailController.text;
     String password = passwordController.text;
-    if (mail.isEmpty || password.isEmpty) {
-      if(mail.isEmpty && password.isEmpty){
+    String repassword = repasswordController.text;
+
+    if (mail.isEmpty || password.isEmpty || repassword.isEmpty) {
+      if (mail.isEmpty && password.isEmpty) {
         showToast("Ingrese mail y contraseña");
-      }else if(mail.isEmpty){
+      } else if (mail.isEmpty) {
         showToast("Ingrese el mail");
-      }else{
+      } else if (password.isEmpty) {
         showToast("Ingrese contraseña");
+      } else {
+        showToast("Reingrese contraseña");
       }
     } else {
-      print("llego hasta aca");
-      print(mail);
-      print(password);
-      _firebaseRepository.normalSignUp(mail, password).then((AuthResult user) {
+      if (password != repassword) {
+        showToast("Las contraseñas no coinciden");
+        return;
+      }
+      _firebaseRepository.signUp(mail, password).then((AuthResult user) {
         if (user != null) {
-          print("entre");
-          authenticateUser(user.user);
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+                return SelectUserType();
+          }));
         } else {
-          print("error");
+          showToast("Error creando usuario. Reintente luego");
         }
       });
     }
-  }
-
-  void authenticateUser(FirebaseUser user) {
-    _firebaseRepository.authenticateUser(user).then((isNewUser) {
-      print(isNewUser);
-      if (isNewUser) {
-        // _firebaseRepository.addDataToDB(user).then((value){
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) {
-          return HomeScreen();
-        }));
-        // });
-      } else {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) {
-          return HomeScreen();
-        }));
-      }
-    });
   }
 
   void showToast(String text){
@@ -221,8 +226,6 @@ class _MySignUpPageState extends State<MySignUpPage> {
       backgroundColor: Colors.redAccent,
       textColor: Colors.white,
       timeInSecForIos: 1
-      
     );
   }
-  
 }
