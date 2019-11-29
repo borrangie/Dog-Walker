@@ -37,6 +37,7 @@ class FirebaseRepository {
               currentUser.uid,
               userDocument.data["name"],
               userDocument.data["surname"],
+              userDocument.data["email"],
               address,
               userDocument.data["birthday"],
               userDocument.data["phone"],
@@ -51,6 +52,7 @@ class FirebaseRepository {
               currentUser.uid,
               userDocument.data["name"],
               userDocument.data["surname"],
+              userDocument.data["email"],
               address,
               userDocument.data["birthday"],
               userDocument.data["phone"],
@@ -64,33 +66,22 @@ class FirebaseRepository {
     return user;
   }
 
-  Future<AuthResult> signIn() async {
+  Future<AuthResult> signInGoogle() async {
     GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
-    GoogleSignInAuthentication _signInAuth = await _signInAccount
-        .authentication;
+    GoogleSignInAuthentication _signInAuth = await _signInAccount.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: _signInAuth.accessToken,
         idToken: _signInAuth.idToken
     );
-    AuthResult user = await _auth.signInWithCredential(credential);
-    return user;
+    return await _auth.signInWithCredential(credential);
   }
 
-  Future<bool> authenticateUser(FirebaseUser user) async {
-    FirebaseUser user = await _auth.currentUser();
-    // QuerySnapshot result = await firestore.collection("users").where("email", isEqualTo: user.email).getDocuments();
-
-    // final List<DocumentSnapshot> docs = result.documents;
-    // return docs.length == 0 ? true : false;
-
-    return user == null ? false : true;
-  }
-
-  Future<AuthResult> normalSignIn(String mail, String password) async {
-    AuthResult user = await _auth.signInWithEmailAndPassword(
-        email: mail, password: password);
-    return user;
+  Future<AuthResult> signIn(String mail, String password) async {
+    return await _auth.signInWithEmailAndPassword(
+        email: mail,
+        password: password
+    );
   }
 
   void logout() {
@@ -100,16 +91,17 @@ class FirebaseRepository {
   bool resetPassword(String mail) {
     try {
       _auth.sendPasswordResetEmail(email: mail);
+      return true;
     } catch (e) {
       return false;
     }
-    return true;
   }
 
-  Future<AuthResult> normalSignUp(String mail, String password) async {
-    AuthResult user = await _auth.createUserWithEmailAndPassword(
-        email: mail, password: password);
-    return user;
+  Future<AuthResult> signUp(String mail, String password) async {
+    return await _auth.createUserWithEmailAndPassword(
+        email: mail,
+        password: password
+    );
   }
 
   Future<void> addDog(dogData) {

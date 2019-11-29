@@ -1,3 +1,4 @@
+import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,16 +23,12 @@ class MyUserInfoPage extends StatefulWidget {
 
 class _MyUserInfoPageState extends State<MyUserInfoPage> {
   FirebaseRepository _firebaseRepository = new FirebaseRepository();
-  FirebaseUser user;
-
   TextEditingController nameController;
   TextEditingController mailController;
   TextEditingController phoneController;
   TextEditingController cityController;
   TextEditingController addressController;
-
-  Map<dynamic, dynamic> data;
-
+  DogOwner user;
   DateTime date;
 
   @override
@@ -42,12 +39,13 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
   }
 
   initControllers() async {
-    print(await _firebaseRepository.getUserData());
-    data = await _firebaseRepository.getUserData();
-    this.nameController = new TextEditingController(text: data['n']);
-    this.phoneController = new TextEditingController(text: data['t']);
-    this.cityController = new TextEditingController(text: data['l']);
-    this.addressController = new TextEditingController(text: data['d']);
+    print(await _firebaseRepository.getCurrentUser());
+    // TODO
+//    data = await _firebaseRepository.getCurrentUser();
+//    this.nameController = new TextEditingController(text: data['n']);
+//    this.phoneController = new TextEditingController(text: data['t']);
+//    this.cityController = new TextEditingController(text: data['l']);
+//    this.addressController = new TextEditingController(text: data['d']);
 
     setState(() {});
   }
@@ -94,7 +92,7 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
               child: Center(
                 child: CircleAvatar(
                   radius: 60.0,
-                  backgroundImage: NetworkImage("${user?.photoUrl}"),
+//                  backgroundImage: NetworkImage("${user?.photoUrl}"), TODO
                 ),
               ),
             ),

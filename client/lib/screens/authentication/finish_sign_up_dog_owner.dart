@@ -1,28 +1,29 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
+import 'package:dogwalker2/screens/authentication/select_user_type.dart';
 import 'package:dogwalker2/screens/home_screen.dart';
-import 'package:dogwalker2/screens/login_screen.dart';
+import 'package:dogwalker2/screens/authentication/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 
-class SignUp extends StatelessWidget {
+class FinishSignUpDogOwner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MySignUpPage(),
+      home: FinishSignUpDogWalkerPage(),
     );
   }
 }
 
-class MySignUpPage extends StatefulWidget {
+class FinishSignUpDogWalkerPage extends StatefulWidget {
   @override
-  _MySignUpPageState createState() => _MySignUpPageState();
+  _FinishSignUpDogWalkerPageState createState() => _FinishSignUpDogWalkerPageState();
 }
 
-class _MySignUpPageState extends State<MySignUpPage> {
+class _FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
   FirebaseRepository _firebaseRepository = FirebaseRepository();
   TextEditingController mailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();

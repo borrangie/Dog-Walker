@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_owner.dart';
+import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_walker.dart';
+import 'package:dogwalker2/screens/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/home_screen.dart';

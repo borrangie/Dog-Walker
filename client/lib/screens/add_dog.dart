@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/my_dogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -413,8 +414,8 @@ FirebaseRepository _firebaseRepository = new FirebaseRepository();
     if(name.isNotEmpty && raza.isNotEmpty && weight.isNotEmpty && height.isNotEmpty && info.isNotEmpty && date!=null){
       double w = double.parse(weight);
       double h = double.parse(height);
-      FirebaseUser user = await _firebaseRepository.getCurrentUser();
-      Map<String, dynamic> dogData = {'n'.toString():name, 'r'.toString():raza, 'p'.toString():w, 'a'.toString():h, 'ca'.toString():info, 'c'.toString():true, 'f'.toString():"", 's'.toString():true, 'e'.toString(): date,'i'.toString(): user.uid};
+      DogOwner user = await _firebaseRepository.getCurrentUser();
+      Map<String, dynamic> dogData = {'n'.toString():name, 'r'.toString():raza, 'p'.toString():w, 'a'.toString():h, 'ca'.toString():info, 'c'.toString():true, 'f'.toString():"", 's'.toString():true, 'e'.toString(): date,'i'.toString(): user.id};
       _firebaseRepository.addDog(dogData);
     }else{
       print('Complete the info of your dog'); 

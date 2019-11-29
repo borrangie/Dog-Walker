@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/add_dog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,7 +26,7 @@ class MyDogsPage extends StatefulWidget {
 
 class _MyDogsPageState extends State<MyDogsPage> {
   FirebaseRepository _firebaseRepository = new FirebaseRepository();
-  FirebaseUser user;
+  DogOwner user;
 
   @override
   void initState() {
@@ -113,7 +114,7 @@ class _MyDogsPageState extends State<MyDogsPage> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream: Firestore.instance.collection('d').where('i', isEqualTo: user.uid).snapshots(),
+              stream: Firestore.instance.collection('d').where('i', isEqualTo: user.id).snapshots(),
               builder: (context, snapshot) {
                 if(!snapshot.hasData){
                   return Center(

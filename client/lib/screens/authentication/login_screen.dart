@@ -1,12 +1,13 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/forgot_password_screen.dart';
+import 'package:dogwalker2/screens/authentication/sign_up.dart';
 import 'package:dogwalker2/screens/home_screen.dart';
-import 'package:dogwalker2/screens/sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'forgot_password_screen.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -289,21 +290,21 @@ class _MyLoginPage2State extends State<MyLoginPage2> {
   }
 
   void authenticateUser(FirebaseUser user) {
-    _firebaseRepository.authenticate(user).then((isNewUser) {
-      if (isNewUser) {
-        // _firebaseRepository.addDataToDB(user).then((value){
+//    _firebaseRepository.authenticate(user).then((isNewUser) {
+//      if (isNewUser) {
+//         _firebaseRepository.addDataToDB(user).then((value){
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) {
           return HomeScreen();
         }));
         // });
-      } else {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) {
-          return HomeScreen();
-        }));
-      }
-    });
+//      } else {
+//        Navigator.pushReplacement(context,
+//            MaterialPageRoute(builder: (context) {
+//          return HomeScreen();
+//        }));
+//      }
+//    });
   }
 
   void showToast(String text) {

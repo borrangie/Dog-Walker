@@ -1,10 +1,12 @@
+import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/login_screen.dart';
 import 'package:dogwalker2/screens/my_dogs.dart';
 import 'package:dogwalker2/screens/user_info_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'authentication/login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -25,7 +27,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   FirebaseRepository _firebaseRepository = new FirebaseRepository();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  FirebaseUser user;
+  DogOwner user;
 
   @override
   void initState() {
@@ -39,10 +41,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   }
 
   Widget _textName(){
-    if(user?.displayName == null){
+    if(user?.name == null){
       return Text('Usuario');
     }else{
-      return Text("${user?.displayName}");
+      return Text("${user?.name}");
     }
   }
 
@@ -50,9 +52,11 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   Widget build(BuildContext context) {
     var userAccountsDrawerHeader = UserAccountsDrawerHeader(
               accountName: _textName(),
-              accountEmail: Text("${user?.email}"),
+              accountEmail: Text("${user?.name}"),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage("${user?.photoUrl}"),
+                // TODO
+//                backgroundImage: NetworkImage("${user?.photoUrl}"),
+                backgroundImage: NetworkImage(""),
               ),
               decoration: BoxDecoration(
                 color: Colors.red,
