@@ -1,7 +1,7 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/loginScreen2.dart';
-import 'package:dogwalker2/screens/myDogs.dart';
-import 'package:dogwalker2/screens/userInfoPage.dart';
+import 'package:dogwalker2/screens/login_screen.dart';
+import 'package:dogwalker2/screens/my_dogs.dart';
+import 'package:dogwalker2/screens/user_info_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

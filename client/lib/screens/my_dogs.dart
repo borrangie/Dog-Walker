@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/addDog.dart';
+import 'package:dogwalker2/screens/add_dog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'homeScreen.dart';
+import 'home_screen.dart';
 
 class DogsPage extends StatelessWidget {
   @override

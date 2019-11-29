@@ -1,5 +1,5 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/homeScreen.dart';
+import 'package:dogwalker2/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';

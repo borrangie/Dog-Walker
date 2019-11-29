@@ -1,7 +1,7 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/forgetPasswordScreen.dart';
-import 'package:dogwalker2/screens/homeScreen.dart';
-import 'package:dogwalker2/screens/signUp.dart';
+import 'package:dogwalker2/screens/forgot_password_screen.dart';
+import 'package:dogwalker2/screens/home_screen.dart';
+import 'package:dogwalker2/screens/sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
