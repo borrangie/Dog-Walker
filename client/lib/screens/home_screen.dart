@@ -6,22 +6,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class HomeScreen2 extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyHomeScreen2(),
+      home: MyHomeScreen(),
     );
   }
 }
 
-class MyHomeScreen2 extends StatefulWidget {
+class MyHomeScreen extends StatefulWidget {
   @override
-  _MyHomeScreen2State createState() => _MyHomeScreen2State();
+  _MyHomeScreenState createState() => _MyHomeScreenState();
 }
 
-class _MyHomeScreen2State extends State<MyHomeScreen2> {
+class _MyHomeScreenState extends State<MyHomeScreen> {
   FirebaseRepository _firebaseRepository = new FirebaseRepository();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -263,7 +263,7 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
                 logout();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
-                  return LoginPage2();
+                  return LoginPage();
                 }));
               },
               child: ListTile(

@@ -1,16 +1,67 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dogwalker2/models/users/address.dart';
+import 'package:dogwalker2/models/users/dog_owner.dart';
+import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class FirebaseRepository{
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  GoogleSignIn _googleSignIn = GoogleSignIn();
+class FirebaseRepository {
   static final Firestore firestore = Firestore.instance;
+  static final String COLLECTION_USERS = "Users";
+  static final String COLLECTION_DOGS = "Dogs";
+  static final String COLLECTION_WALKS = "Walks";
 
-  Future<FirebaseUser> getCurrentUser() async {
-    FirebaseUser currentUser;
-    currentUser = await _auth.currentUser();
-    return currentUser;
+  GoogleSignIn _googleSignIn = GoogleSignIn();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<DogOwner> getCurrentUser() async {
+    FirebaseUser currentUser = await _auth.currentUser();
+    DogOwner user;
+    if (currentUser != null) {
+      var userDocument = await firestore.collection(COLLECTION_USERS).document(currentUser.uid).get();
+      if (userDocument.exists) {
+        Map claims = (await currentUser.getIdToken(refresh: true)).claims;
+        Address address;
+
+        if (userDocument.data["address"] != null) {
+          address = new Address(
+              userDocument.data["address"]["department_numer"],
+              userDocument.data["address"]["description"],
+              userDocument.data["address"]["number"],
+              userDocument.data["address"]["location"]
+          );
+        }
+
+        if (claims['walker']) {
+          user = new DogWalker(
+              currentUser.uid,
+              userDocument.data["name"],
+              userDocument.data["surname"],
+              address,
+              userDocument.data["birthday"],
+              userDocument.data["phone"],
+              userDocument.data["rating_avg"],
+              claims["verified"],
+              userDocument.data["dni"],
+              userDocument.data["cost"],
+              claims["walker_verified"]
+          );
+        } else {
+          user = new DogOwner(
+              currentUser.uid,
+              userDocument.data["name"],
+              userDocument.data["surname"],
+              address,
+              userDocument.data["birthday"],
+              userDocument.data["phone"],
+              userDocument.data["rating_avg"],
+              claims["verified"]
+          );
+        }
+      }
+    }
+
+    return user;
   }
 
   Future<AuthResult> signIn() async {
@@ -39,7 +90,6 @@ class FirebaseRepository{
   Future<AuthResult> normalSignIn(String mail, String password) async {
     AuthResult user = await _auth.signInWithEmailAndPassword(
         email: mail, password: password);
-    print(user.user.email);
     return user;
   }
 
@@ -59,15 +109,7 @@ class FirebaseRepository{
   Future<AuthResult> normalSignUp(String mail, String password) async {
     AuthResult user = await _auth.createUserWithEmailAndPassword(
         email: mail, password: password);
-    print(user.user.email);
     return user;
-  }
-
-  getUserData() async {
-    FirebaseUser user = await getCurrentUser();
-    return await firestore.collection('u').document(user.uid.toString()).get().then((res){
-      return res.data;
-    });
   }
 
   Future<void> addDog(dogData) {

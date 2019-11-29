@@ -1,5 +1,5 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/homeScreen2.dart';
+import 'package:dogwalker2/screens/homeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -74,7 +74,7 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
             onPressed: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) {
-                return HomeScreen2();
+                return HomeScreen();
               }));
               //Navigator.pop(context);
             },

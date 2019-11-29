@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:dogwalker2/models/users/dog_owner.dart';
+import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/loginScreen2.dart';
+import 'package:dogwalker2/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/homeScreen2.dart';
+import 'screens/home_screen.dart';
 
 void main() => runApp(AppWrapper());
 
@@ -114,11 +116,19 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: FutureBuilder(
         future: _firebaseRepository.getCurrentUser(),
-        builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+        builder: (context, AsyncSnapshot<DogOwner> snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen2();
+            if (snapshot.data is DogWalker) {
+              if (!(snapshot.data as DogWalker).walkerVerified)
+                return FinishSignUpDogWalker();
+            } else {
+              if (!snapshot.data.verified)
+                return FinishSignUpDogOwner();
+            }
+
+            return HomeScreen();
           } else {
-            return LoginPage2();
+            return LoginPage();
           }
         },
       ),

@@ -1,29 +1,29 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/homeScreen2.dart';
-import 'package:dogwalker2/screens/loginScreen2.dart';
+import 'package:dogwalker2/screens/forgetPasswordScreen.dart';
+import 'package:dogwalker2/screens/homeScreen.dart';
+import 'package:dogwalker2/screens/signUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
-class SignUp extends StatelessWidget {
-
+class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MySignUpPage(),
+      home: MyLoginPage2(),
     );
   }
 }
 
-class MySignUpPage extends StatefulWidget {
+class MyLoginPage2 extends StatefulWidget {
   @override
-  _MySignUpPageState createState() => _MySignUpPageState();
+  _MyLoginPage2State createState() => _MyLoginPage2State();
 }
 
-class _MySignUpPageState extends State<MySignUpPage> {
+class _MyLoginPage2State extends State<MyLoginPage2> {
   FirebaseRepository _firebaseRepository = FirebaseRepository();
   TextEditingController mailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
@@ -41,20 +41,6 @@ class _MySignUpPageState extends State<MySignUpPage> {
       child: Scaffold(
         // backgroundColor: Colors.transparent,
         resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 5,
-            automaticallyImplyLeading: true,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios, color: Colors.red,),
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) {
-                            return LoginPage2();
-                          }));
-                 //Navigator.pop(context);
-              },
-            )),
         body: Column(
           children: <Widget>[
             Container(
@@ -64,7 +50,7 @@ class _MySignUpPageState extends State<MySignUpPage> {
                     Container(
                       padding: EdgeInsets.fromLTRB(130.0, 90.0, 0, 0),
                       child: Text(
-                        "Sign",
+                        "Dog",
                         style: TextStyle(
                           fontSize: 50.0,
                           fontWeight: FontWeight.bold,
@@ -74,7 +60,7 @@ class _MySignUpPageState extends State<MySignUpPage> {
                     Container(
                       padding: EdgeInsets.fromLTRB(130.0, 155.0, 0, 0),
                       child: Text(
-                        "Up",
+                        "Walker",
                         style: TextStyle(
                           fontSize: 50.0,
                           fontWeight: FontWeight.bold,
@@ -130,7 +116,31 @@ class _MySignUpPageState extends State<MySignUpPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 50,
+                    height: 5,
+                  ),
+                  Container(
+                    alignment: Alignment(1, 0),
+                    padding: EdgeInsets.only(top: 15, left: 20),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ForgotPassword();
+                        }));
+                      },
+                      child: Text(
+                        'Olvido Su Contraseña?',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Montserrat',
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 40,
                   ),
                   Container(
                     height: 45,
@@ -140,14 +150,14 @@ class _MySignUpPageState extends State<MySignUpPage> {
                       shadowColor: Colors.redAccent,
                       elevation: 7,
                       child: GestureDetector(
-                        onTap: () => normalSignUp(),
+                        onTap: () => normalSignIn(),
                         child: Center(
                           child: Text(
-                            'Registrarme',
+                            'INGRESAR',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                              fontSize: 18,
                               fontFamily: 'Montserrat',
                             ),
                           ),
@@ -156,11 +166,85 @@ class _MySignUpPageState extends State<MySignUpPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 70,
+                    height: 20,
                   ),
+                  Container(
+                    height: 45,
+                    color: Colors.transparent,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Colors.black,
+                            style: BorderStyle.solid,
+                            width: 2),
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.transparent,
+                      ),
+                      child: GestureDetector(
+                        onTap: () => performLogin(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Center(
+                              child: Icon(
+                                FontAwesomeIcons.google,
+                                color: Colors.red,
+                                size: 19,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Center(
+                              child: Text(
+                                'INGRESAR CON GOOGLE',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  fontFamily: 'Montserrat',
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
+            SizedBox(
+              height: 45,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Nuevo en DoogWalker ?',
+                  style: TextStyle(fontFamily: 'Montserrat'),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return SignUp();
+                    }));
+                  },
+                  child: Text(
+                    'Registrate',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -169,22 +253,21 @@ class _MySignUpPageState extends State<MySignUpPage> {
 
   // Functions used for the log
 
-  void normalSignUp() {
+  void normalSignIn() {
     String mail = mailController.text;
     String password = passwordController.text;
     if (mail.isEmpty || password.isEmpty) {
-      if(mail.isEmpty && password.isEmpty){
+      if (mail.isEmpty && password.isEmpty) {
         showToast("Ingrese mail y contraseña");
-      }else if(mail.isEmpty){
+      } else if (mail.isEmpty) {
         showToast("Ingrese el mail");
-      }else{
+      } else {
         showToast("Ingrese contraseña");
       }
     } else {
-      print("llego hasta aca");
       print(mail);
       print(password);
-      _firebaseRepository.normalSignUp(mail, password).then((AuthResult user) {
+      _firebaseRepository.normalSignIn(mail, password).then((AuthResult user) {
         if (user != null) {
           print("entre");
           authenticateUser(user.user);
@@ -195,34 +278,41 @@ class _MySignUpPageState extends State<MySignUpPage> {
     }
   }
 
+  void performLogin() {
+    _firebaseRepository.signIn().then((AuthResult user) {
+      if (user != null) {
+        authenticateUser(user.user);
+      } else {
+        print("There is an error");
+      }
+    });
+  }
+
   void authenticateUser(FirebaseUser user) {
     _firebaseRepository.authenticateUser(user).then((isNewUser) {
-      print(isNewUser);
       if (isNewUser) {
         // _firebaseRepository.addDataToDB(user).then((value){
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) {
-          return HomeScreen2();
+          return HomeScreen();
         }));
         // });
       } else {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) {
-          return HomeScreen2();
+          return HomeScreen();
         }));
       }
     });
   }
 
-  void showToast(String text){
+  void showToast(String text) {
     Fluttertoast.showToast(
       msg: text,
       toastLength: Toast.LENGTH_LONG,
       backgroundColor: Colors.redAccent,
       textColor: Colors.white,
-      timeInSecForIos: 1
-      
+      timeInSecForIos: 1,
     );
   }
-  
 }

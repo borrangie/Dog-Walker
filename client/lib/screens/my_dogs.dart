@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'homeScreen2.dart';
+import 'homeScreen.dart';
 
 class DogsPage extends StatelessWidget {
   @override
@@ -54,7 +54,7 @@ class _MyDogsPageState extends State<MyDogsPage> {
             onPressed: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) {
-                return HomeScreen2();
+                return HomeScreen();
               }));
               //Navigator.pop(context);
             },

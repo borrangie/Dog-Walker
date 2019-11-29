@@ -42,7 +42,7 @@ class _MyForgotPasswordPageState extends State<MyForgotPasswordPage> {
               onPressed: () {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
-                  return LoginPage2();
+                  return LoginPage();
                 }));
                 //Navigator.pop(context);
               },
@@ -164,7 +164,7 @@ class _MyForgotPasswordPageState extends State<MyForgotPasswordPage> {
         Timer(Duration(seconds: 3), () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-            return LoginPage2();
+            return LoginPage();
           }));
         });
       }else{
