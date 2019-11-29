@@ -24,112 +24,119 @@ class _LogInPageState extends State<LogInPage> {
     return Container(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
-        body: ListView(
-          children: <Widget>[
-            Container(
-              child: Center(
-                child: Stack(
+        resizeToAvoidBottomInset: false,
+        body: SingleChildScrollView(
+          reverse: true,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Center(
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(130.0, 30.0, 0, 0),
+                          child: Text(
+                            "Dog",
+                            style: TextStyle(
+                              fontSize: 50.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(130.0, 95.0, 0, 0),
+                          child: Text(
+                            "Walker",
+                            style: TextStyle(
+                              fontSize: 50.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 30, 20, 0),
+                          child: Image.asset(
+                            'assets/images/dwlogo.png',
+                            width: 130,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 55, left: 20, right: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      TextFieldFactory.generate(mailController, "MAIL"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFieldFactory.generatePassword(passwordController, "CONTRASEÑA"),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        alignment: Alignment(1, 0),
+                        padding: EdgeInsets.only(top: 0, left: 0),
+                        child: ButtonFactory.generateLink(
+                            "Olvido Su Contraseña?",
+                                () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return ForgotPasswordPage();
+                                  })
+                              )
+                            }
+                        ),
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      ButtonFactory.generate("INGRESAR", _normalSignIn),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _generateGoogleButton()
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 45,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(130.0, 30.0, 0, 0),
-                      child: Text(
-                        "Dog",
-                        style: TextStyle(
-                          fontSize: 50.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                    Text(
+                      'Nuevo en DogWalker?',
+                      style: TextStyle(fontFamily: 'Montserrat'),
+                    ),
+                    SizedBox(
+                      width: 5,
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(130.0, 95.0, 0, 0),
-                      child: Text(
-                        "Walker",
-                        style: TextStyle(
-                          fontSize: 50.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 30, 20, 0),
-                      child: Image.asset(
-                        'assets/images/dwlogo.png',
-                        width: 130,
+                      alignment: Alignment(1, 0),
+                      child: ButtonFactory.generateLink(
+                        "Registrate",
+                        () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) {
+                              return SignUpPage();
+                            })
+                          )
+                        }
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 55, left: 20, right: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  TextFieldFactory.generate(mailController, "MAIL"),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFieldFactory.generatePassword(passwordController, "CONTRASEÑA"),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    alignment: Alignment(1, 0),
-                    padding: EdgeInsets.only(top: 0, left: 0),
-                    child: ButtonFactory.generateLink(
-                        "Olvido Su Contraseña?",
-                            () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return ForgotPasswordPage();
-                              })
-                          )
-                        }
-                    ),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  ButtonFactory.generate("INGRESAR", _normalSignIn),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _generateGoogleButton()
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 45,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'Nuevo en DogWalker?',
-                  style: TextStyle(fontFamily: 'Montserrat'),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Container(
-                  alignment: Alignment(1, 0),
-                  child: ButtonFactory.generateLink(
-                    "Registrate",
-                    () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return SignUpPage();
-                        })
-                      )
-                    }
-                  ),
-                ),
+                )
               ],
             )
-          ],
+          )
         ),
       ),
     );
