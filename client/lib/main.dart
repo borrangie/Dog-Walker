@@ -19,7 +19,15 @@ class _AppWrapperState extends State<AppWrapper> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.red, accentColor: Colors.white),
+      theme: ThemeData(
+        primaryColor: Colors.red,
+        accentColor: Colors.white,
+        primaryTextTheme: TextTheme(
+          title: TextStyle(
+            color: Colors.black
+          )
+        )
+      ),
       title: 'Dog Walker',
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
