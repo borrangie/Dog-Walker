@@ -28,7 +28,7 @@ async function onUserCreate(user) {
         phone: "",
         address: null,
         birthday: null,
-        mail: user.mail,
+        mail: user.email,
         rating_avg: 0,
         ratings: [],
         walks: 0
