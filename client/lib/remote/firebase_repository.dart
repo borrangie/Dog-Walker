@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dogwalker2/models/users/address.dart';
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
@@ -6,19 +7,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class FirebaseRepository {
-  static final Firestore firestore = Firestore.instance;
+  static final CloudFunctions _cloudFunctions = CloudFunctions.instance;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn();
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final Firestore _firestore = Firestore.instance;
+
   static final String collectionUsers = "Users";
   static final String collectionsDogs = "Dogs";
   static final String collectionWalks = "Walks";
-
-  static final GoogleSignIn _googleSignIn = GoogleSignIn();
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final int typeDogOwner = 0;
+  static final int typeDogWalker = 1;
 
   static Future<DogOwner> getCurrentUser() async {
     FirebaseUser currentUser = await _auth.currentUser();
     DogOwner user;
     if (currentUser != null) {
-      var userDocument = await firestore.collection(collectionUsers).document(currentUser.uid).get();
+      var userDocument = await _firestore.collection(collectionUsers).document(currentUser.uid).get();
       if (userDocument.exists) {
         Map claims = (await currentUser.getIdToken(refresh: true)).claims;
         Address address;
@@ -66,6 +70,13 @@ abstract class FirebaseRepository {
     return user;
   }
 
+  static Future<AuthResult> signUp(String mail, String password) async {
+    return await _auth.createUserWithEmailAndPassword(
+        email: mail,
+        password: password
+    );
+  }
+
   static Future<AuthResult> signInGoogle() async {
     GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
     GoogleSignInAuthentication _signInAuth = await _signInAccount.authentication;
@@ -84,10 +95,6 @@ abstract class FirebaseRepository {
     );
   }
 
-  static void logout() {
-    _auth.signOut();
-  }
-
   static bool resetPassword(String mail) {
     try {
       _auth.sendPasswordResetEmail(email: mail);
@@ -97,15 +104,23 @@ abstract class FirebaseRepository {
     }
   }
 
-  static Future<AuthResult> signUp(String mail, String password) async {
-    return await _auth.createUserWithEmailAndPassword(
-        email: mail,
-        password: password
-    );
+  static void logout() {
+    _auth.signOut();
   }
 
+  static void setAccountType(int type) async {
+    if (type != typeDogOwner || type != typeDogWalker)
+      return;
+
+    await _cloudFunctions.getHttpsCallable(functionName: "setUserType").call({
+      "userId": (await _auth.currentUser()).uid,
+      "type": type
+    });
+  }
+
+
   static Future<void> addDog(dogData) {
-    return firestore.collection('d').add(dogData).catchError((e){
+    return _firestore.collection('d').add(dogData).catchError((e){
       print(e);
     });
   }

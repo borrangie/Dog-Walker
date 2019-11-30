@@ -2,6 +2,8 @@ let global = require("./global");
 let db = null;
 let admin = null;
 
+let DOG_WALKER = 1;
+
 module.exports = {
     initialize: initialize,
     onUserCreate: onUserCreate
@@ -41,4 +43,19 @@ async function onUserCreate(user) {
     await admin
         .auth()
         .setCustomUserClaims(user.uid, customClaims);
+}
+
+async function setUserType(userId, type) {
+    user = await admin.getUser(userId);
+
+    if (type === DOG_WALKER) {
+        if (!user.customClaims.walker) {
+            user.customClaims.walker = true;
+            user.customClaims.walker_verified = false;
+
+            await admin
+                .auth()
+                .setCustomUserClaims(userId, customClaims);
+        }
+    }
 }
