@@ -2,6 +2,7 @@ import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/authentication/select_user_type.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
+import 'package:dogwalker2/screens/components/logo_text_factory.dart';
 import 'package:dogwalker2/screens/components/text_field_factory.dart';
 import 'package:dogwalker2/screens/components/toast_factory.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,48 +25,14 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: false,
-        appBar: AppBarFactory.generate(context, "Sign Up"),
+        appBar: AppBarFactory.generate(context, "Registrarse"),
         body: SingleChildScrollView(
           reverse: true,
           child: Padding(
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               children: <Widget>[
-                Container(
-                  child: Center(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(130.0, 30.0, 0, 0),
-                          child: Text(
-                            "Sign",
-                            style: TextStyle(
-                              fontSize: 50.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(130.0, 95.0, 0, 0),
-                          child: Text(
-                            "Up",
-                            style: TextStyle(
-                              fontSize: 50.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(0, 30, 20, 0),
-                          child: Image.asset(
-                            'assets/images/dwlogo.png',
-                            width: 130,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                LogoTextFactory.generate(context, "Registrarse", ""),
                 Container(
                   padding: EdgeInsets.only(top: 55, left: 20, right: 20),
                   child: Column(

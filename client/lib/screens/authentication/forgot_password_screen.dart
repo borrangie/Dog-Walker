@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/authentication/login_screen.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
+import 'package:dogwalker2/screens/components/button_factory.dart';
+import 'package:dogwalker2/screens/components/logo_text_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,41 +30,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               children: <Widget>[
-                Container(
-                  child: Center(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(130.0, 70.0, 0, 0),
-                          child: Text(
-                            "Olvido Su",
-                            style: TextStyle(
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(130.0, 125.0, 0, 0),
-                          child: Text(
-                            "Contraseña?",
-                            style: TextStyle(
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(0, 55, 20, 0),
-                          child: Image.asset(
-                            'assets/images/dwlogo.png',
-                            width: 130,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                LogoTextFactory.generate(context, "Olvido su", "Contraseña?"),
                 Container(
                   padding: EdgeInsets.only(top: 55, left: 20, right: 20),
                   child: Column(
@@ -97,29 +65,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       SizedBox(
                         height: 50,
                       ),
-                      Container(
-                        height: 45,
-                        child: Material(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.red,
-                          shadowColor: Colors.redAccent,
-                          elevation: 7,
-                          child: GestureDetector(
-                            onTap: () => forgotPassword(),
-                            child: Center(
-                              child: Text(
-                                'Enviar',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  fontFamily: 'Montserrat',
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      ButtonFactory.generate("Enviar", _forgotPassword)
                     ],
                   ),
                 ),
@@ -133,7 +79,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   // Functions used for the log
 
-  void forgotPassword() {
+  void _forgotPassword() {
     String mail = mailController.text;
     if (mail.isEmpty) {
       showToast("Ingrese el mail");

@@ -2,7 +2,9 @@ import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/authentication/forgot_password_screen.dart';
 import 'package:dogwalker2/screens/authentication/sign_up.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
+import 'package:dogwalker2/screens/components/logo_text_factory.dart';
 import 'package:dogwalker2/screens/components/text_field_factory.dart';
+import 'package:dogwalker2/screens/components/toast_factory.dart';
 import 'package:dogwalker2/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,41 +33,7 @@ class _LogInPageState extends State<LogInPage> {
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               children: <Widget>[
-                Container(
-                  child: Center(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(130.0, 30.0, 0, 0),
-                          child: Text(
-                            "Dog",
-                            style: TextStyle(
-                              fontSize: 50.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(130.0, 95.0, 0, 0),
-                          child: Text(
-                            "Walker",
-                            style: TextStyle(
-                              fontSize: 50.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(0, 30, 20, 0),
-                          child: Image.asset(
-                            'assets/images/dwlogo.png',
-                            width: 130,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                LogoTextFactory.generate(context, "Dog", "Walker"),
                 Container(
                   padding: EdgeInsets.only(top: 55, left: 20, right: 20),
                   child: Column(
@@ -97,7 +65,7 @@ class _LogInPageState extends State<LogInPage> {
                       SizedBox(
                         height: 40,
                       ),
-                      ButtonFactory.generate("INGRESAR", _normalSignIn),
+                      ButtonFactory.generate("INGRESAR", _logIn),
                       SizedBox(
                         height: 20,
                       ),
@@ -142,16 +110,16 @@ class _LogInPageState extends State<LogInPage> {
     );
   }
 
-  void _normalSignIn() {
+  void _logIn() {
     String mail = mailController.text;
     String password = passwordController.text;
     if (mail.isEmpty || password.isEmpty) {
       if (mail.isEmpty && password.isEmpty) {
-        _showToast("Ingrese mail y contraseña");
+        ToastFactory.showError("Ingrese mail y contraseña");
       } else if (mail.isEmpty) {
-        _showToast("Ingrese el mail");
+        ToastFactory.showError("Ingrese el mail");
       } else {
-        _showToast("Ingrese contraseña");
+        ToastFactory.showError("Ingrese contraseña");
       }
     } else {
       print(mail);
@@ -167,7 +135,7 @@ class _LogInPageState extends State<LogInPage> {
     }
   }
 
-  void _performLogin() {
+  void _logInGoogle() {
     FirebaseRepository.signInGoogle().then((AuthResult user) {
       if (user != null) {
         _authenticateUser(user.user);
@@ -199,55 +167,44 @@ class _LogInPageState extends State<LogInPage> {
     return Container(
       height: 45,
       color: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-              color: Colors.black,
-              style: BorderStyle.solid,
-              width: 2),
-          borderRadius: BorderRadius.circular(50),
-          color: Colors.transparent,
+      child: OutlineButton(
+        shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(50)
         ),
-        child: GestureDetector(
-          onTap: () => _performLogin(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: Icon(
-                  FontAwesomeIcons.google,
-                  color: Colors.red,
-                  size: 19,
+        borderSide: BorderSide(
+          color: Colors.black,
+          style: BorderStyle.solid, //Style of the border
+          width: 2, //width of the border
+        ),
+        color: Colors.red,
+        onPressed: _logInGoogle,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Icon(
+                FontAwesomeIcons.google,
+                color: Colors.red,
+                size: 19,
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Center(
+              child: Text(
+                'INGRESAR CON GOOGLE',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  fontFamily: 'Montserrat',
                 ),
               ),
-              SizedBox(
-                width: 10,
-              ),
-              Center(
-                child: Text(
-                  'INGRESAR CON GOOGLE',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    fontFamily: 'Montserrat',
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
+            )
+          ],
+        )
       ),
-    );
-  }
-
-  void _showToast(String text) {
-    Fluttertoast.showToast(
-      msg: text,
-      toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Colors.redAccent,
-      textColor: Colors.white,
-      timeInSecForIos: 1,
     );
   }
 }

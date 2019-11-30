@@ -1,6 +1,8 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/authentication/select_user_type.dart';
-import 'package:dogwalker2/screens/authentication/login_screen.dart';
+import 'package:dogwalker2/screens/components/app_bar_factory.dart';
+import 'package:dogwalker2/screens/components/button_factory.dart';
+import 'package:dogwalker2/screens/components/text_field_factory.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,155 +21,80 @@ class _FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // decoration: BoxDecoration(
-      //   gradient: LinearGradient(
-      //       colors: [Color.fromRGBO(252, 92, 125, 1) , Color.fromRGBO(106, 130, 251, 1)],
-      //       stops: [0.05,0.4],
-      //       begin: Alignment.topCenter,
-      //       end: Alignment.bottomCenter),
-      // ),
       child: Scaffold(
-        // backgroundColor: Colors.transparent,
         resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 5,
-            automaticallyImplyLeading: true,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios, color: Colors.red,),
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) {
-                            return LogInPage();
-                          }));
-                 //Navigator.pop(context);
-              },
-            )),
-        body: Column(
-          children: <Widget>[
-            Container(
-              child: Center(
-                child: Stack(
+        appBar: AppBarFactory.generate(context, "Set up profile"),
+        body: SingleChildScrollView(
+            reverse: true,
+            child: Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Column(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.fromLTRB(130.0, 30.0, 0, 0),
-                      child: Text(
-                        "Sign",
-                        style: TextStyle(
-                          fontSize: 50.0,
-                          fontWeight: FontWeight.bold,
+                      child: Center(
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.fromLTRB(130.0, 30.0, 0, 0),
+                              child: Text(
+                                "Sign",
+                                style: TextStyle(
+                                  fontSize: 50.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(130.0, 95.0, 0, 0),
+                              child: Text(
+                                "Up",
+                                style: TextStyle(
+                                  fontSize: 50.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(0, 30, 20, 0),
+                              child: Image.asset(
+                                'assets/images/dwlogo.png',
+                                width: 130,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(130.0, 95.0, 0, 0),
-                      child: Text(
-                        "Up",
-                        style: TextStyle(
-                          fontSize: 50.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 30, 20, 0),
-                      child: Image.asset(
-                        'assets/images/dwlogo.png',
-                        width: 130,
+                      padding: EdgeInsets.only(top: 55, left: 20, right: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          TextFieldFactory.generate(mailController, "MAIL"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFieldFactory.generatePassword(passwordController, "CONTRASEÑA"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFieldFactory.generatePassword(repasswordController, "REINGRESE CONTRASEÑA"),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          ButtonFactory.generate("REGISTRARME", normalSignUp),
+                          SizedBox(
+                            height: 70,
+                          ),
+                          SizedBox(
+                            height: 1,
+                          ),
+                        ],
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 55, left: 20, right: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  TextField(
-                    controller: mailController,
-                    decoration: InputDecoration(
-                      labelText: 'MAIL',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    obscureText: true,
-                    controller: passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'CONTRASEÑA',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    obscureText: true,
-                    controller: repasswordController,
-                    decoration: InputDecoration(
-                      labelText: 'REINGRESE CONTRASEÑA',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Container(
-                    height: 45,
-                    child: Material(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.red,
-                      shadowColor: Colors.redAccent,
-                      elevation: 7,
-                      child: GestureDetector(
-                        onTap: () => normalSignUp(),
-                        child: Center(
-                          child: Text(
-                            'Registrarme',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              fontFamily: 'Montserrat',
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 70,
-                  ),
-                ],
-              ),
-            ),
-          ],
+                )
+            )
         ),
       ),
     );
@@ -198,9 +125,10 @@ class _FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
       FirebaseRepository.signUp(mail, password).then((AuthResult user) {
         if (user != null) {
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) {
-                return SelectUserTypePage();
-          }));
+            MaterialPageRoute(builder: (context) {
+              return SelectUserTypePage();
+            }
+          ));
         } else {
           showToast("Error creando usuario. Reintente luego");
         }
