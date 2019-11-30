@@ -21,11 +21,13 @@ abstract class FirebaseRepository {
   static Future<DogOwner> getCurrentUser() async {
     FirebaseUser currentUser = await _auth.currentUser();
     DogOwner user;
+
     if (currentUser != null) {
       var userDocument = await _firestore.collection(collectionUsers).document(currentUser.uid).get();
       if (userDocument.exists) {
         Map claims = (await currentUser.getIdToken(refresh: true)).claims;
         Address address;
+        print(claims);
 
         if (userDocument.data["address"] != null) {
           address = new Address(
@@ -36,7 +38,12 @@ abstract class FirebaseRepository {
           );
         }
 
+        var rawRating = userDocument.data["rating_avg"];
+        double rating = rawRating is int ? rawRating.toDouble() : (rawRating as double);
         if (claims['walker']) {
+          var rawCost = userDocument.data["cost"];
+          double cost = rawCost is int ? rawCost.toDouble() : (rawCost as double);
+
           user = new DogWalker(
               currentUser.uid,
               userDocument.data["name"],
@@ -45,10 +52,10 @@ abstract class FirebaseRepository {
               address,
               userDocument.data["birthday"],
               userDocument.data["phone"],
-              userDocument.data["rating_avg"],
+              rating,
               claims["verified"],
               userDocument.data["dni"],
-              userDocument.data["cost"],
+              cost,
               claims["walker_verified"]
           );
         } else {
@@ -60,7 +67,7 @@ abstract class FirebaseRepository {
               address,
               userDocument.data["birthday"],
               userDocument.data["phone"],
-              userDocument.data["rating_avg"],
+              rating,
               claims["verified"]
           );
         }

@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dogwalker2/models/users/dog_owner.dart';
+import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/authentication/forgot_password_screen.dart';
 import 'package:dogwalker2/screens/authentication/sign_up.dart';
@@ -11,6 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'finish_sign_up_dog_owner.dart';
+import 'finish_sign_up_dog_walker.dart';
 
 class LogInPage extends StatefulWidget {
   @override
@@ -110,9 +117,10 @@ class _LogInPageState extends State<LogInPage> {
     );
   }
 
-  void _logIn() {
+  void _logIn() async {
     String mail = mailController.text;
     String password = passwordController.text;
+
     if (mail.isEmpty || password.isEmpty) {
       if (mail.isEmpty && password.isEmpty) {
         ToastFactory.showError("Ingrese mail y contraseña");
@@ -122,45 +130,57 @@ class _LogInPageState extends State<LogInPage> {
         ToastFactory.showError("Ingrese contraseña");
       }
     } else {
-      print(mail);
-      print(password);
-      FirebaseRepository.signIn(mail, password).then((AuthResult user) {
-        if (user != null) {
-          print("entre");
-          _authenticateUser(user.user);
-        } else {
-          print("error");
-        }
-      });
+      try {
+        await FirebaseRepository.signIn(mail, password);
+        _authenticateUser();
+      } catch (e) {
+        ToastFactory.showError("User does not exist");
+      }
     }
   }
 
   void _logInGoogle() {
     FirebaseRepository.signInGoogle().then((AuthResult user) {
       if (user != null) {
-        _authenticateUser(user.user);
+        _authenticateUser();
       } else {
         print("There is an error");
       }
     });
   }
 
-  void _authenticateUser(FirebaseUser user) {
-//    _firebaseRepository.authenticate(user).then((isNewUser) {
-//      if (isNewUser) {
-//         _firebaseRepository.addDataToDB(user).then((value){
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) {
-          return HomeScreenPage();
-        }));
-        // });
-//      } else {
-//        Navigator.pushReplacement(context,
-//            MaterialPageRoute(builder: (context) {
-//          return HomeScreen();
-//        }));
-//      }
-//    });
+  void _authenticateUser() async {
+    DogOwner user = await FirebaseRepository.getCurrentUser();
+    Widget widget;
+    while (user == null) {
+      sleep(Duration(seconds: 1));
+      user = await FirebaseRepository.getCurrentUser();
+    }
+
+    if (user != null) {
+      if (user is DogWalker) {
+        if (!user.walkerVerified) {
+          widget = FinishSignUpDogWalkerPage();
+        } else {
+          widget = HomeScreenPage();
+        }
+      } else {
+        if (!user.verified) {
+          widget = FinishSignUpDogOwnerPage();
+        } else {
+          widget = HomeScreenPage();
+        }
+      }
+    } else {
+      widget = LogInPage();
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return widget;
+      })
+    );
   }
 
   Container _generateGoogleButton() {

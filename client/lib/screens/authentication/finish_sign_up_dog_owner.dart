@@ -1,14 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/authentication/select_user_type.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/text_field_factory.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class FinishSignUpDogOwnerPage extends StatefulWidget {
   @override
