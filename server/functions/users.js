@@ -6,7 +6,8 @@ let DOG_WALKER = 1;
 
 module.exports = {
     initialize: initialize,
-    onUserCreate: onUserCreate
+    onUserCreate: onUserCreate,
+    setAccountType: setAccountType
 };
 
 function initialize(_admin, _db) {
@@ -45,7 +46,7 @@ async function onUserCreate(user) {
         .setCustomUserClaims(user.uid, customClaims);
 }
 
-async function setUserType(userId, type) {
+async function setAccountType(userId, type) {
     user = await admin.getUser(userId);
 
     if (type === DOG_WALKER) {

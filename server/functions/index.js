@@ -13,6 +13,9 @@ dogs.initialize(admin, db);
 // and setup basic data
 exports.onUserCreate = functions.auth.user().onCreate(users.onUserCreate);
 
+// Handle the initial account setup
+exports.setAccountType = functions.https.onCall(users.setAccountType);
+
 // This method handles the creation of a Dog.
 exports.addDog = functions.https.onCall(dogs.addDog);
 

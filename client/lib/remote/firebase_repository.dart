@@ -112,7 +112,7 @@ abstract class FirebaseRepository {
     if (type != typeDogOwner || type != typeDogWalker)
       return;
 
-    await _cloudFunctions.getHttpsCallable(functionName: "setUserType").call({
+    await _cloudFunctions.getHttpsCallable(functionName: "setAccountType").call({
       "userId": (await _auth.currentUser()).uid,
       "type": type
     });
