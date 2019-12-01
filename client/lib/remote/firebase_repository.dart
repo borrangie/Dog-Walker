@@ -3,6 +3,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dogwalker2/models/users/address.dart';
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
+import 'package:dogwalker2/models/users/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -18,9 +19,9 @@ abstract class FirebaseRepository {
   static final int typeDogOwner = 0;
   static final int typeDogWalker = 1;
 
-  static Future<DogOwner> getCurrentUser() async {
+  static Future<User> getCurrentUser() async {
     FirebaseUser currentUser = await _auth.currentUser();
-    DogOwner user;
+    User user;
 
     if (currentUser != null) {
       var userDocument = await _firestore.collection(collectionUsers).document(currentUser.uid).get();
@@ -58,7 +59,7 @@ abstract class FirebaseRepository {
               cost,
               claims["walker_verified"]
           );
-        } else {
+        } else if (claims['owner']) {
           user = new DogOwner(
               currentUser.uid,
               userDocument.data["name"],

@@ -1,9 +1,10 @@
 import 'package:dogwalker2/models/db_object.dart';
 import 'package:dogwalker2/models/users/address.dart';
+import 'package:dogwalker2/models/users/user.dart';
 
 import 'dogs/dog.dart';
 
-class DogOwner extends DBObject {
+class DogOwner extends User {
   String _name;
   String _surname;
   String _email;
