@@ -4,6 +4,7 @@ import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_owner.dart';
 import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_walker.dart';
 import 'package:dogwalker2/screens/authentication/login_screen.dart';
+import 'package:dogwalker2/screens/authentication/select_user_type.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/home_screen.dart';
@@ -46,32 +47,53 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     // TODO: implement build
     FirebaseRepository.getCurrentUser().then((user) {
-      Widget widget;
+      List<Widget> widgets = [];
 
       if (user != null) {
         if (user is DogWalker) {
           if (!user.walkerVerified) {
-            widget = FinishSignUpDogWalkerPage();
+            widgets.add(LogInPage());
+            widgets.add(SelectUserTypePage());
+            widgets.add(FinishSignUpDogWalkerPage());
           } else {
-            widget = HomeScreenPage();
+            widgets.add(HomeScreenPage());
+          }
+        } else if (user is DogOwner) {
+          if (!user.verified) {
+            widgets.add(LogInPage());
+            widgets.add(SelectUserTypePage());
+            widgets.add(FinishSignUpDogOwnerPage());
+          } else {
+            widgets.add(HomeScreenPage());
           }
         } else {
-          if (!user.verified) {
-            widget = FinishSignUpDogOwnerPage();
-          } else {
-            widget = HomeScreenPage();
-          }
+          widgets.add(LogInPage());
+          widgets.add(SelectUserTypePage());
         }
-        widget = HomeScreenPage();
       } else {
-        widget = LogInPage();
+        widgets.add(LogInPage());
       }
 
       Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) {
-          return widget;
-        })
+          context,
+          MaterialPageRoute(builder: (context) {
+            return widgets[0];
+          })
+      );
+      for (var i = 1; i < widgets.length; i++) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return widgets[i];
+            })
+        );
+      }
+    }).catchError((error) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return LogInPage();
+          })
       );
     });
 

@@ -4,6 +4,7 @@ import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/authentication/forgot_password_screen.dart';
+import 'package:dogwalker2/screens/authentication/select_user_type.dart';
 import 'package:dogwalker2/screens/authentication/sign_up.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/logo_text_factory.dart';
@@ -151,7 +152,7 @@ class _LogInPageState extends State<LogInPage> {
 
   void _authenticateUser() async {
     DogOwner user = await FirebaseRepository.getCurrentUser();
-    Widget widget;
+    List<Widget> widgets = [];
     while (user == null) {
       sleep(Duration(seconds: 1));
       user = await FirebaseRepository.getCurrentUser();
@@ -160,27 +161,39 @@ class _LogInPageState extends State<LogInPage> {
     if (user != null) {
       if (user is DogWalker) {
         if (!user.walkerVerified) {
-          widget = FinishSignUpDogWalkerPage();
+          widgets.add(SelectUserTypePage());
+          widgets.add(FinishSignUpDogWalkerPage());
         } else {
-          widget = HomeScreenPage();
+          widgets.add(HomeScreenPage());
+        }
+      } else if (user is DogOwner) {
+        if (!user.verified) {
+          widgets.add(SelectUserTypePage());
+          widgets.add(FinishSignUpDogOwnerPage());
+        } else {
+          widgets.add(HomeScreenPage());
         }
       } else {
-        if (!user.verified) {
-          widget = FinishSignUpDogOwnerPage();
-        } else {
-          widget = HomeScreenPage();
-        }
+        widgets.add(SelectUserTypePage());
       }
     } else {
-      widget = LogInPage();
+      widgets.add(LogInPage());
     }
 
     Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return widget;
-      })
+        context,
+        MaterialPageRoute(builder: (context) {
+          return widgets[0];
+        })
     );
+    for (var i = 1; i < widgets.length; i++) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return widgets[i];
+          })
+      );
+    }
   }
 
   Container _generateGoogleButton() {
