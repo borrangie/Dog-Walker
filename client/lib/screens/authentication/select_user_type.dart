@@ -1,4 +1,6 @@
 import 'package:dogwalker2/remote/firebase_repository.dart';
+import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_owner.dart';
+import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_walker.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/logo_text_factory.dart';
@@ -30,11 +32,11 @@ class _SelectUserTypePageState extends State<SelectUserTypePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          ButtonFactory.generateBig("Tengo perros", () => FirebaseRepository.setAccountType(FirebaseRepository.typeDogOwner)),
+                          ButtonFactory.generateBig("Tengo perros", () => _setAccountType(FirebaseRepository.typeDogOwner)),
                           SizedBox(
                             height: 30,
                           ),
-                          ButtonFactory.generateBig("Quiero pasear perros", () => FirebaseRepository.setAccountType(FirebaseRepository.typeDogWalker))
+                          ButtonFactory.generateBig("Quiero pasear perros", () => _setAccountType(FirebaseRepository.typeDogWalker))
                         ],
                       ),
                     ),
@@ -44,5 +46,21 @@ class _SelectUserTypePageState extends State<SelectUserTypePage> {
         ),
       ),
     );
+  }
+
+  void _setAccountType(userType) async {
+    await FirebaseRepository.setAccountType(userType);
+    Widget widget;
+    if (userType == FirebaseRepository.typeDogWalker) {
+      widget = FinishSignUpDogWalkerPage();
+    } else {
+      widget = FinishSignUpDogOwnerPage();
+    }
+
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return widget;
+        }
+    ));
   }
 }

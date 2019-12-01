@@ -28,7 +28,6 @@ abstract class FirebaseRepository {
       if (userDocument.exists) {
         Map claims = (await currentUser.getIdToken(refresh: true)).claims;
         Address address;
-        print(claims);
 
         if (userDocument.data["address"] != null) {
           address = new Address(
@@ -71,6 +70,8 @@ abstract class FirebaseRepository {
               rating,
               claims["verified"]
           );
+        } else {
+          user = new User(currentUser.uid);
         }
       }
     }
@@ -116,7 +117,7 @@ abstract class FirebaseRepository {
     _auth.signOut();
   }
 
-  static void setAccountType(int type) async {
+  static Future<void> setAccountType(int type) async {
     if (type != typeDogOwner || type != typeDogWalker)
       return;
 

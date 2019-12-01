@@ -23,7 +23,7 @@ class _FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
     return Container(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
-        appBar: AppBarFactory.generate(context, "Set up profile"),
+        appBar: AppBarFactory.generate(context, "Quiero pasear perros"),
         body: SingleChildScrollView(
             reverse: true,
             child: Padding(

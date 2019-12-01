@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
+import 'package:dogwalker2/models/users/user.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/authentication/forgot_password_screen.dart';
 import 'package:dogwalker2/screens/authentication/select_user_type.dart';
@@ -14,7 +15,6 @@ import 'package:dogwalker2/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'finish_sign_up_dog_owner.dart';
@@ -151,7 +151,7 @@ class _LogInPageState extends State<LogInPage> {
   }
 
   void _authenticateUser() async {
-    DogOwner user = await FirebaseRepository.getCurrentUser();
+    User user = await FirebaseRepository.getCurrentUser();
     List<Widget> widgets = [];
     while (user == null) {
       sleep(Duration(seconds: 1));

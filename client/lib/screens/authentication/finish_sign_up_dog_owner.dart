@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dogwalker2/screens/components/address_component_factory.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/text_field_factory.dart';
@@ -21,13 +24,14 @@ class _FinishSignUpDogOwnerPageState extends State<FinishSignUpDogOwnerPage> {
 
   DateTime birthday;
   TextEditingController phoneController = new TextEditingController();
+//  Completer<GoogleMapController> _controller = Completer();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
-        appBar: AppBarFactory.generate(context, "Set up profile"),
+        appBar: AppBarFactory.generate(context, "Tengo perros"),
         body: SingleChildScrollView(
             reverse: true,
             child: Padding(
@@ -47,11 +51,11 @@ class _FinishSignUpDogOwnerPageState extends State<FinishSignUpDogOwnerPage> {
                           SizedBox(
                             height: 10,
                           ),
-                          TextFieldFactory.generatePassword(addressDepartmentController, "Departamento"),
+                          AddressFactory.generateAddressContainer(context, nameController, surnameController, nameController, "S"),
                           SizedBox(
                             height: 50,
                           ),
-                          ButtonFactory.generate("Continuar", normalSignUp),
+                          ButtonFactory.generate("CONTINUAR", normalSignUp),
                           SizedBox(
                             height: 70,
                           ),
