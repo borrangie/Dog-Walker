@@ -9,7 +9,7 @@ import 'package:dogwalker2/screens/authentication/select_user_type.dart';
 import 'package:dogwalker2/screens/authentication/sign_up.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/logo_text_factory.dart';
-import 'package:dogwalker2/screens/components/text_field_factory.dart';
+import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:dogwalker2/screens/components/toast_factory.dart';
 import 'package:dogwalker2/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,11 +47,11 @@ class _LogInPageState extends State<LogInPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      TextFieldFactory.generate(mailController, "MAIL"),
+                      TextFactory.generateTextField(mailController, "MAIL"),
                       SizedBox(
                         height: 10,
                       ),
-                      TextFieldFactory.generatePassword(passwordController, "CONTRASEÑA"),
+                      TextFactory.generateTextFieldPassword(passwordController, "CONTRASEÑA"),
                       SizedBox(
                         height: 5,
                       ),

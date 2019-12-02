@@ -3,7 +3,7 @@ import 'package:dogwalker2/screens/authentication/select_user_type.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/logo_text_factory.dart';
-import 'package:dogwalker2/screens/components/text_field_factory.dart';
+import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:dogwalker2/screens/components/toast_factory.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,15 +38,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      TextFieldFactory.generate(mailController, "MAIL"),
+                      TextFactory.generateTextField(mailController, "MAIL"),
                       SizedBox(
                         height: 10,
                       ),
-                      TextFieldFactory.generatePassword(passwordController, "CONTRASEÑA"),
+                      TextFactory.generateTextFieldPassword(passwordController, "CONTRASEÑA"),
                       SizedBox(
                         height: 10,
                       ),
-                      TextFieldFactory.generatePassword(repasswordController, "REINGRESE CONTRASEÑA"),
+                      TextFactory.generateTextFieldPassword(repasswordController, "REINGRESE CONTRASEÑA"),
                       SizedBox(
                         height: 50,
                       ),

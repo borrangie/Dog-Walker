@@ -1,4 +1,4 @@
-import 'package:dogwalker2/screens/components/text_field_factory.dart';
+import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:dogwalker2/resources/global.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +16,12 @@ abstract class AddressFactory {
       alignment: Alignment.center,
       child: RaisedButton(
         onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
+//          Navigator.push(
+//            context,
+//            MaterialPageRoute(builder: (context) {
 //              return LocationPage();
-            })
-          );
+//            })
+//          );
         },
         child: Text('Find address'),
       )
@@ -40,11 +40,11 @@ abstract class AddressFactory {
           SizedBox(
             height: 10,
           ),
-          TextFieldFactory.generate(departmentController, "Apartamento"),
+          TextFactory.generateTextField(departmentController, "Apartamento"),
           SizedBox(
             height: 10,
           ),
-          TextFieldFactory.generate(descriptionController, "Descripcion adicional"),
+          TextFactory.generateTextField(descriptionController, "Descripcion adicional"),
         ],
       ),
     );

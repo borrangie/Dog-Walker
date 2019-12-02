@@ -1,3 +1,4 @@
+import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:flutter/material.dart';
 
 abstract class LogoTextFactory {
@@ -8,23 +9,11 @@ abstract class LogoTextFactory {
           children: <Widget>[
             Container(
               padding: EdgeInsets.fromLTRB(130.0, 30.0, 0, 0),
-              child: Text(
-                titleRow1,
-                style: TextStyle(
-                  fontSize: 50.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child: TextFactory.generateText(titleRow1, size: 50.0, weight: FontWeight.bold)
             ),
             Container(
               padding: EdgeInsets.fromLTRB(130.0, 95.0, 0, 0),
-              child: Text(
-                titleRow2,
-                style: TextStyle(
-                  fontSize: 50.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child: TextFactory.generateText(titleRow2, size: 50.0, weight: FontWeight.bold)
             ),
             Container(
               padding: EdgeInsets.fromLTRB(0, 30, 20, 0),
