@@ -1,6 +1,7 @@
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
+import 'package:dogwalker2/screens/components/toast_factory.dart';
 import 'package:dogwalker2/screens/components/user_info_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -59,5 +60,29 @@ class FinishSignUpDogOwnerPageState extends State<FinishSignUpDogOwnerPage> {
   }
 
   void _continue() {
+    if (hasEmptyFields()) {
+      ToastFactory.showError("Hay campos faltantes.");
+    } else {
+      saveToDB();
+    }
+  }
+
+  void saveToDB() {
+
+//      try {
+//        await FirebaseRepository.signIn(mail, password);
+//        _authenticateUser();
+//      } catch (e) {
+//        ToastFactory.showError("User does not exist");
+//      }
+  }
+
+  bool hasEmptyFields() {
+    String name = nameController.text;
+    String surname = surnameController.text;
+    String dateTime = dateTimeController.text;
+    String phone = phoneController.text;
+
+    return name.isEmpty || surname.isEmpty || dateTime.isEmpty || phone.isEmpty;
   }
 }

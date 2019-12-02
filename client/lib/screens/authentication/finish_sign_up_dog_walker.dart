@@ -15,8 +15,21 @@ class _FinishSignUpDogWalkerPageState extends FinishSignUpDogOwnerPageState {
   Widget build(BuildContext context) {
     return buildAll(
         context,
-        "Tengo perros",
+        "Quiero pasear perros",
         UserInfoFactory.generateDogWalkerSetUp(nameController, surnameController, dateTimeController, phoneController, dniController)
     );
+  }
+
+  @override
+  void saveToDB() {
+    super.saveToDB();
+  }
+
+  @override
+  bool hasEmptyFields() {
+    if (!super.hasEmptyFields()) {
+      return dniController.text.isEmpty;
+    }
+    return true;
   }
 }

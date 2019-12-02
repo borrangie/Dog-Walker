@@ -1,10 +1,5 @@
-import 'package:dogwalker2/models/users/dog_owner.dart';
-import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
-import 'package:dogwalker2/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 abstract class UserInfoFactory {
   static Container generateDogOwnerSetUp(nameController, surnameController, dateTimeController, phoneController) {

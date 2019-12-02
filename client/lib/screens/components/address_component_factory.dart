@@ -1,13 +1,6 @@
 import 'package:dogwalker2/screens/components/text_factory.dart';
-import 'package:dogwalker2/resources/global.dart';
 import 'package:flutter/material.dart';
 
-import '../location.dart';
-
-//String _department;
-//String _description;
-//int _number;
-//GeoPoint _location;
 abstract class AddressFactory {
 //  static GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: Global.GOOGLE_MAPS_API_KEY);
 
