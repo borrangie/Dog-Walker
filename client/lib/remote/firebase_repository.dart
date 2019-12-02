@@ -41,9 +41,6 @@ abstract class FirebaseRepository {
         var rawRating = userDocument.data["rating_avg"];
         double rating = rawRating is int ? rawRating.toDouble() : (rawRating as double);
         if (claims['walker']) {
-          var rawCost = userDocument.data["cost"];
-          double cost = rawCost is int ? rawCost.toDouble() : (rawCost as double);
-
           user = new DogWalker(
               currentUser.uid,
               userDocument.data["name"],
@@ -55,7 +52,6 @@ abstract class FirebaseRepository {
               rating,
               claims["verified"],
               userDocument.data["dni"],
-              cost,
               claims["walker_verified"]
           );
         } else if (claims['owner']) {
