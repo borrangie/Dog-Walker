@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class FirebaseRepository {
+  static final String _bucketUrl = "gs://dog-walker-itba.appspot.com/";
   static final CloudFunctions _cloudFunctions = CloudFunctions.instance;
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -17,6 +18,10 @@ abstract class FirebaseRepository {
   static final String collectionWalks = "Walks";
   static final int typeDogOwner = 0;
   static final int typeDogWalker = 1;
+
+  static String generateProfilePictureUrl(String id) {
+    return _bucketUrl + id;
+  }
 
   static Future<User> getCurrentUser() async {
     FirebaseUser currentUser = await _auth.currentUser();
@@ -123,7 +128,6 @@ abstract class FirebaseRepository {
     if (type != typeDogOwner && type != typeDogWalker)
       return false;
 
-
     return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setAccountType").call({
       "type": type,
     }), "result");
@@ -141,5 +145,11 @@ abstract class FirebaseRepository {
       return false;
     }
     return result.data["data"][key];
+  }
+
+  static Future<bool> setPhoneNumber(String phone) async {
+    return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setPhoneNumber").call({
+      "phone": phone,
+    }), "result");
   }
 }

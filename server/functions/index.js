@@ -19,6 +19,9 @@ exports.setUpAccount = functions.https.onCall(users.setUpAccount);
 // Set account type
 exports.setAccountType = functions.https.onCall(users.setAccountType);
 
+// Set account's phone number
+exports.setPhoneNumber = functions.https.onCall(users.setPhoneNumber);
+
 // This method handles the creation of a Dog.
 exports.addDog = functions.https.onCall(dogs.addDog);
 

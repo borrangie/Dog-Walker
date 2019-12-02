@@ -9,7 +9,8 @@ module.exports = {
     initialize: initialize,
     onUserCreate: onUserCreate,
     setUpAccount: setUpAccount,
-    setAccountType: setAccountType
+    setAccountType: setAccountType,
+    setPhoneNumber: setPhoneNumber
 };
 
 function initialize(_admin, _db) {
@@ -56,7 +57,6 @@ async function setUpAccount(data, context) {
     let safeData = {};
     let type = data.type;
     data = data.data;
-    let userId = context.auth.uid;
     if (type !== DOG_OWNER && type !== DOG_WALKER) {
         return global.formatError(global.ERRORS.UNSUPPORTED_USER_TYPE);
     }
@@ -78,7 +78,7 @@ async function setUpAccount(data, context) {
         safeData["birthday"] = data["birthday"];
     }
 
-    user = await admin.auth().getUser(userId);
+    user = await admin.auth().getUser(context.auth.uid);
     if ((type === DOG_OWNER && user.customClaims.verified) || (type === DOG_WALKER && user.customClaims.walker_verified)) {
         return global.formatError(global.ERRORS.USER_ALREADY_VERIFIED);
     }
@@ -87,21 +87,20 @@ async function setUpAccount(data, context) {
         return global.formatError(global.ERRORS.SET_UP_USER_TYPE);
     }
 
-    // try {
-        await db.collection(global.COLLECTIONS.USERS).doc(userId).set(safeData, {merge: true});
+    try {
+        await db.collection(global.COLLECTIONS.USERS).doc(context.auth.uid).set(safeData, {merge: true});
         user.customClaims.walker_verified = type === DOG_WALKER;
         user.customClaims.verified = true;
         
         await admin
         .auth()
-        .setCustomUserClaims(userId, user.customClaims);
+        .setCustomUserClaims(context.auth.uid, user.customClaims);
         return global.formatData({
             result: true
         });
-    // } catch (e) {
-        // throw e;
-        // return global.formatError(e);
-    // }
+    } catch (e) {
+        return global.formatError(emessage);
+    }
 }
 
 async function setAccountType(data, context) {
@@ -113,6 +112,23 @@ async function setAccountType(data, context) {
     return global.formatData({
         result: await setAccountTypeUser(user, data.type)
     });
+}
+
+async function setPhoneNumber(data, context) {
+    if (context.auth.uid === null || context.auth.uid === undefined) {
+        return global.formatError(global.ERRORS.AUTH);
+    }
+
+    try {
+        await db.collection(global.COLLECTIONS.USERS).doc(context.auth.uid).set({
+            "phone": data.phone
+        }, {merge: true});
+        return global.formatData({
+            result: true
+        });
+    } catch (e) {
+        return global.formatError(e.message);
+    }
 }
 
 async function setAccountTypeUser(user, type) {
