@@ -1,28 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 abstract class TextFactory {
-  static Widget generateTextField(controller, text, {enabled: true}) {
-    return _generateTextField(controller, text, TextInputType.text, enabled);
+  static TextField generateTextField(controller, text, {enabled: true, Icon icon}) {
+    return _generateTextField(controller, text, TextInputType.text, enabled, icon);
   }
 
-  static Widget generateTextFieldPassword(controller, text, {enabled: true}) {
-    return _generateTextField(controller, text, TextInputType.text, enabled, obscureText: true);
+  static TextField generateTextFieldPassword(controller, text, {enabled: true, Icon icon}) {
+    return _generateTextField(controller, text, TextInputType.text, enabled, icon, obscureText: true);
   }
 
-  static Widget generateTextFieldEmail(controller, text, {enabled: true}) {
-    return _generateTextField(controller, text, TextInputType.emailAddress, enabled);
+  static TextField generateTextFieldEmail(controller, text, {enabled: true, Icon icon}) {
+    return _generateTextField(controller, text, TextInputType.emailAddress, enabled, icon);
   }
 
-  static Widget generateTextFieldNumeric(controller, text, {enabled: true}) {
-    return _generateTextField(controller, text, TextInputType.number, enabled);
+  static TextField generateTextFieldNumeric(controller, text, {enabled: true, Icon icon}) {
+    return _generateTextField(controller, text, TextInputType.number, enabled, icon);
   }
 
-  static Widget generateTextFieldPhone(controller, text, {enabled: true}) {
-    return _generateTextField(controller, text, TextInputType.phone, enabled);
+  static TextField generateTextFieldPhone(controller, text, {enabled: true, Icon icon}) {
+    return _generateTextField(controller, text, TextInputType.phone, enabled, icon);
   }
 
-  static Widget generateTextFieldDatetime(controller, text, {enabled: true}) {
-    return _generateTextField(controller, text, TextInputType.datetime, enabled);
+  static Widget generateTextFieldDatetime(context, controller, text, {enabled: true, Icon icon, onDateSet}) {
+    var onTap;
+    if (enabled) {
+      onTap = () {
+        DatePicker.showDatePicker(
+          context,
+          showTitleActions: true,
+          minTime: DateTime(1800, 1, 1),
+          maxTime: DateTime.now(),
+          currentTime: DateTime.now(),
+          onConfirm: onDateSet,
+          locale: LocaleType.es
+        );
+      };
+    }
+
+    return Container(
+      child: RawMaterialButton(
+        onPressed: onTap,
+        child: _generateTextField(controller, text, TextInputType.datetime, false, icon, color: Colors.black),
+      ),
+    );
   }
 
   static Text generateText(text, {double size: 16.0, FontWeight weight, Color color: Colors.black}) {
@@ -32,36 +53,28 @@ abstract class TextFactory {
     );
   }
 
-  static Widget _generateTextField(controller, text, TextInputType textInputType, enabled, {obscureText: false}) {
-    Widget widget;
-    if (enabled) {
-      widget = _generateTextFieldContainer(controller, text, textInputType, enabled, obscureText);
-    } else {
-      widget = FocusScope(
-        node: new FocusScopeNode(),
-        child: _generateTextFieldContainer(controller, text, textInputType, enabled, obscureText)
-      );
-    }
-
-    return widget;
-  }
-
-  static TextField _generateTextFieldContainer(controller, text, TextInputType textInputType, enabled, obscureText) {
+  static TextField _generateTextField(controller, text, TextInputType textInputType, enabled, icon, {obscureText: false, color}) {
     return TextField(
-        obscureText: obscureText,
-        controller: controller,
-        keyboardType: textInputType,
-        decoration: _generateDecoration(text)
+      enableInteractiveSelection: enabled,
+      enabled: enabled,
+      obscureText: obscureText,
+      controller: controller,
+      keyboardType: textInputType,
+      style: _generateTextStyle(
+        color: color != null ? color : (enabled ? Colors.black : Colors.black54)
+      ),
+      decoration: _generateDecoration(text, icon)
     );
   }
 
-  static InputDecoration _generateDecoration(text) {
+  static InputDecoration _generateDecoration(text, icon) {
     return InputDecoration(
-        labelText: text,
-        labelStyle: _generateTextFieldStyle(),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.red),
-        )
+      labelText: text,
+      labelStyle: _generateTextFieldStyle(),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      ),
+      icon: icon
     );
   }
 
@@ -75,10 +88,9 @@ abstract class TextFactory {
   }
 
   static TextStyle _generateTextFieldStyle() {
-    return TextStyle(
-      fontFamily: 'Montserrat',
-      fontWeight: FontWeight.bold,
-      color: Colors.grey,
+    return _generateTextStyle(
+      weight: FontWeight.bold,
+      color: Colors.grey
     );
   }
 }
