@@ -10,7 +10,7 @@ abstract class UserInfoFactory {
       onTap: onTap,
       child: Center(
         child: CircularProfileAvatar(
-          user?.photoUrl,
+          user != null ? user.photoUrl : "",
           radius: 60.0,
           borderWidth: 0,
           backgroundColor: Colors.blueAccent,
@@ -55,8 +55,7 @@ abstract class UserInfoFactory {
       dateTimeController,
       onDateSet,
       phoneController,
-      dniController,
-      {enabled: false}
+      dniController
       ) {
     return _generate(
         _generateDogWalkerWidgets(
@@ -79,8 +78,7 @@ abstract class UserInfoFactory {
       dateTimeController,
       onDateSet,
       phoneController,
-      dniController,
-      {enabled: false}
+      dniController
       ) {
     return _generate(
         _generateDogWalkerWidgets(
