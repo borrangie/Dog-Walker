@@ -11,4 +11,14 @@ abstract class ToastFactory {
         timeInSecForIos: 1
     );
   }
+
+  static void showInfo(String text) {
+    Fluttertoast.showToast(
+        msg: text,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: Colors.black54,
+        textColor: Colors.white,
+        timeInSecForIos: 1
+    );
+  }
 }
