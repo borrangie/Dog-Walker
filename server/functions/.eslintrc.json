@@ -36,7 +36,7 @@
     "array-callback-return": 1,
 
     // Require the use of === and !==
-    "eqeqeq": 2,
+    "eqeqeq": 1,
 
     // Disallow the use of alert, confirm, and prompt
     "no-alert": 2,
@@ -45,7 +45,7 @@
     "no-caller": 2,
 
     // Disallow null comparisons without type-checking operators
-    "no-eq-null": 2,
+    "no-eq-null": 1,
 
     // Disallow the use of eval()
     "no-eval": 2,

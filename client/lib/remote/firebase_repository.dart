@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:dogwalker2/models/users/address.dart';
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:dogwalker2/models/users/user.dart';
@@ -100,31 +99,47 @@ abstract class FirebaseRepository {
     _auth.signOut();
   }
 
-  static Future<void> setAccountType(int type, DogOwner user) async {
-    if (type != typeDogOwner || type != typeDogWalker)
-      return;
+  static Future<bool> setUpAccount(int type, Map rawData) async {
+    if (type != typeDogOwner && type != typeDogWalker)
+      return false;
 
     Map data = {
-      "name": user.name,
-      "surname": user.surname,
-      "phone": user.phone,
+      "name": rawData["name"],
+      "surname": rawData["surname"],
+      "phone": rawData["phone"],
     };
-    if (user is DogWalker) {
-      data["dni"] = user.dni;
-      data["birthday"] = user.birthday;
+    if (type == typeDogWalker) {
+      data["dni"] = rawData["dni"];
+      data["birthday"] = rawData["birthday"];
     }
 
-    await _cloudFunctions.getHttpsCallable(functionName: "setAccountType").call({
-      "userId": (await _auth.currentUser()).uid,
+    return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setUpAccount").call({
       "type": type,
       "data": data
-    });
+    }), "result");
   }
 
+  static Future<bool> setAccountType(int type) async {
+    if (type != typeDogOwner && type != typeDogWalker)
+      return false;
+
+
+    return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setAccountType").call({
+      "type": type,
+    }), "result");
+  }
 
   static Future<void> addDog(dogData) {
     return _firestore.collection('d').add(dogData).catchError((e){
       print(e);
     });
+  }
+
+  static bool _parseOutput(HttpsCallableResult result, String key) {
+    print(result.data);
+    if (result == null || result.data == null || result.data["error"]) {
+      return false;
+    }
+    return result.data["data"][key];
   }
 }

@@ -1,6 +1,8 @@
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/home_screen.dart';
+import 'package:dogwalker2/screens/components/app_bar_factory.dart';
+import 'package:dogwalker2/screens/components/button_factory.dart';
+import 'package:dogwalker2/screens/components/user_info_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,11 +13,10 @@ class UserInfoPage extends StatefulWidget {
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
-  TextEditingController nameController;
-  TextEditingController mailController;
-  TextEditingController phoneController;
-  TextEditingController cityController;
-  TextEditingController addressController;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController surnameController = TextEditingController();
+  TextEditingController dateTimeController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   DogOwner user;
   DateTime date;
 
@@ -40,7 +41,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   initUser() async {
     user = await FirebaseRepository.getCurrentUser();
-    this.mailController = new TextEditingController(text: user.email);
     setState(() {});
   }
 
@@ -48,151 +48,20 @@ class _UserInfoPageState extends State<UserInfoPage> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.red,
-          elevation: 0,
-          automaticallyImplyLeading: true,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return HomeScreenPage();
-              }));
-              //Navigator.pop(context);
-            },
-          )),
+      appBar: AppBarFactory.generate(
+        context,
+        "Mi perfil",
+        color: Colors.red,
+        textColor: Colors.white,
+        buttonColor: Colors.white
+      ),
       body: ListView(
+        padding: EdgeInsets.only(left: 20, right: 20),
         children: <Widget>[
+          _generateCard(),
           Container(
-            height: 180,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(70),
-                  bottomRight: Radius.circular(70)),
-            ),
-            child: GestureDetector(
-              child: Center(
-                child: CircleAvatar(
-                  radius: 60.0,
-//                  backgroundImage: NetworkImage("${user?.photoUrl}"), TODO
-                ),
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 55, left: 20, right: 20),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesomeIcons.user,
-                        color: Colors.red,
-                      ),
-                      labelText: 'Nombre Y Apellido',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: mailController,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesomeIcons.envelope,
-                        color: Colors.red,
-                      ),
-                      labelText: 'MAIL',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: phoneController,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesomeIcons.phone,
-                        color: Colors.red,
-                      ),
-                      labelText: 'TELEFONO',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: cityController,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesomeIcons.city,
-                        color: Colors.red,
-                      ),
-                      labelText: 'LOCALIDAD',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: addressController,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesomeIcons.home,
-                        color: Colors.red,
-                      ),
-                      labelText: 'DIRECCION',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                ]),
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: UserInfoFactory.generateDogOwner(nameController, surnameController, phoneController),
           ),
           SizedBox(
             height: 20,
@@ -216,53 +85,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
           SizedBox(
             height: 30,
           ),
-          FlatButton(
-            onPressed: () {},
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.red, width: 3),
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Center(
-                child: Text(
-                  'Guardar',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 25,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
+          ButtonFactory.generateOutline("GUARDAR", () {}),
           SizedBox(
             height: 15,
           ),
-          FlatButton(
-            onPressed: () {},
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                border: Border.all(color: Colors.red, width: 3),
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Center(
-                child: Text(
-                  'Ser Paseador',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
+          ButtonFactory.generate("SER PASEADOR", () {}),
           SizedBox(
             height: 40,
           ),
@@ -271,7 +98,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 
-  _getDateFormated() {
+  Widget _getDateFormated() {
     if (date != null) {
       return Container(
         width: double.infinity,
@@ -325,7 +152,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 width: 15,
               ),
               Text(
-                'CUMPLEAÑOS',
+                'Fecha de nacimiento',
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 17,
@@ -339,113 +166,24 @@ class _UserInfoPageState extends State<UserInfoPage> {
     }
   }
 
-  // _getDateFormated() {
-  //   if (date != null) {
-  //     return Container(
-  //       width: double.infinity,
-  //       height: 50,
-  //       decoration: BoxDecoration(
-  //           color: Colors.red,
-  //           borderRadius: BorderRadius.all(Radius.circular(15))),
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: <Widget>[
-  //           Icon(
-  //             FontAwesomeIcons.calendarAlt,
-  //             color: Colors.white,
-  //           ),
-  //           SizedBox(
-  //             width: 20,
-  //           ),
-  //           Container(
-  //             width: 50,
-  //             height: 35,
-  //             decoration: BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.all(Radius.circular(10))),
-  //             child: Center(
-  //               child: Text(
-  //                 date.day.toString(),
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 22,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //             ),
-  //           ),
-  //           SizedBox(
-  //             width: 10,
-  //           ),
-  //           Container(
-  //             width: 50,
-  //             height: 35,
-  //             decoration: BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.all(Radius.circular(10))),
-  //             child: Center(
-  //               child: Text(
-  //                 date.month.toString(),
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 22,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //             ),
-  //           ),
-  //           SizedBox(
-  //             width: 10,
-  //           ),
-  //           Container(
-  //             width: 87,
-  //             height: 35,
-  //             decoration: BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.all(Radius.circular(10))),
-  //             child: Center(
-  //               child: Text(
-  //                 date.year.toString(),
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 22,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  //   } else {
-  //     return Container(
-  //       width: double.infinity,
-  //       height: 50,
-  //       decoration: BoxDecoration(
-  //           color: Colors.red,
-  //           borderRadius: BorderRadius.all(Radius.circular(15))),
-  //       child: Center(
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: <Widget>[
-  //             Icon(
-  //               FontAwesomeIcons.calendarAlt,
-  //               color: Colors.white,
-  //             ),
-  //             SizedBox(
-  //               width: 20,
-  //             ),
-  //             Text(
-  //               'Fecha de Nacimiento',
-  //               style: TextStyle(
-  //                 color: Colors.white,
-  //                 fontSize: 22,
-  //               ),
-  //             )
-  //           ],
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // }
+  Container _generateCard() {
+    return Container(
+      height: 180,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(70),
+            bottomRight: Radius.circular(70)),
+      ),
+      child: GestureDetector(
+        child: Center(
+          child: CircleAvatar(
+            radius: 60.0,
+//                  backgroundImage: NetworkImage("${user?.photoUrl}"), TODO
+          ),
+        ),
+      ),
+    );
+  }
 }

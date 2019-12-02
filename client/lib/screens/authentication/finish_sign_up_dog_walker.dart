@@ -9,6 +9,7 @@ class FinishSignUpDogWalkerPage extends StatefulWidget {
 }
 
 class _FinishSignUpDogWalkerPageState extends FinishSignUpDogOwnerPageState {
+  TextEditingController dateTimeController = new TextEditingController();
   TextEditingController dniController = new TextEditingController();
 
   @override
@@ -16,7 +17,7 @@ class _FinishSignUpDogWalkerPageState extends FinishSignUpDogOwnerPageState {
     return buildAll(
         context,
         "Quiero pasear perros",
-        UserInfoFactory.generateDogWalkerSetUp(nameController, surnameController, dateTimeController, phoneController, dniController)
+        UserInfoFactory.generateDogWalkerSetUp(context, nameController, surnameController, dateTimeController, (date) {}, phoneController, dniController)
     );
   }
 

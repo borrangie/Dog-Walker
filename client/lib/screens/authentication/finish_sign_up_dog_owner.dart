@@ -1,3 +1,5 @@
+import 'package:dogwalker2/models/users/dog_owner.dart';
+import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
@@ -15,7 +17,6 @@ class FinishSignUpDogOwnerPage extends StatefulWidget {
 class FinishSignUpDogOwnerPageState extends State<FinishSignUpDogOwnerPage> {
   TextEditingController nameController = new TextEditingController();
   TextEditingController surnameController = new TextEditingController();
-  TextEditingController dateTimeController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
 
   @override
@@ -23,7 +24,10 @@ class FinishSignUpDogOwnerPageState extends State<FinishSignUpDogOwnerPage> {
     return buildAll(
         context,
         "Tengo perros",
-        UserInfoFactory.generateDogOwnerSetUp(nameController, surnameController, dateTimeController, phoneController)
+//        UserInfoFactory.generateDogOwnerSetUp(context, nameController, surnameController, dateTimeController, (DateTime date) {
+//          dateTimeController.text = date.year.toString() + "/" + date.month.toString() + "/" + date.day.toString();
+//        }, phoneController)
+        UserInfoFactory.generateDogOwnerSetUp(nameController, surnameController, phoneController)
     );
   }
 
@@ -78,22 +82,23 @@ class FinishSignUpDogOwnerPageState extends State<FinishSignUpDogOwnerPage> {
   }
 
   Future<bool> saveToDB() async {
-    return true;
-
-//      try {
-//        await FirebaseRepository.signIn(mail, password);
-//        _authenticateUser();
-//      } catch (e) {
-//        ToastFactory.showError("User does not exist");
-//      }
+    try {
+      return await FirebaseRepository.setUpAccount(FirebaseRepository.typeDogOwner, {
+        "name": nameController.text,
+        "surname": surnameController.text,
+        "phone": phoneController.text
+      });
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   bool hasEmptyFields() {
-    String name = nameController.text;
-    String surname = surnameController.text;
-    String dateTime = dateTimeController.text;
-    String phone = phoneController.text;
+    String name = nameController.text = nameController.text.trim();
+    String surname = surnameController.text = surnameController.text.trim();
+    String phone = phoneController.text = phoneController.text.trim();
 
-    return name.isEmpty || surname.isEmpty || dateTime.isEmpty || phone.isEmpty;
+    return name.isEmpty || surname.isEmpty || phone.isEmpty;
   }
 }

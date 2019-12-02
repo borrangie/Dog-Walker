@@ -10,7 +10,10 @@ module.exports = {
         UNKNOWN: "Unknown error. Please, try again later",
         DOC_NOT_FOUND: "Document not found in DB",
         DOG_ALREADY_EXISTS: "Dog already exists",
-        USER_IS_ACTIVE: "This action cannot be performed when a transaction is in place"
+        USER_IS_ACTIVE: "This action cannot be performed when a transaction is in place",
+        USER_ALREADY_VERIFIED: "User is already verified",
+        UNSUPPORTED_USER_TYPE: "Unsupported user type",
+        SET_UP_USER_TYPE: "Setting up user type"
     },
     BREEDS: [
 

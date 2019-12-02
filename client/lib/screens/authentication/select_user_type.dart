@@ -49,7 +49,6 @@ class _SelectUserTypePageState extends State<SelectUserTypePage> {
   }
 
   void _setAccountType(userType) async {
-    await FirebaseRepository.setAccountType(userType);
     Widget widget;
     if (userType == FirebaseRepository.typeDogWalker) {
       widget = FinishSignUpDogWalkerPage();
