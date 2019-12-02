@@ -1,31 +1,21 @@
+import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/loginScreen2.dart';
-import 'package:dogwalker2/screens/myDogs.dart';
-import 'package:dogwalker2/screens/userInfoPage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dogwalker2/screens/my_dogs.dart';
+import 'package:dogwalker2/screens/user_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class HomeScreen2 extends StatelessWidget {
+import 'authentication/login_screen.dart';
+
+class HomeScreenPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomeScreen2(),
-    );
-  }
+  _HomeScreenPageState createState() => _HomeScreenPageState();
 }
 
-class MyHomeScreen2 extends StatefulWidget {
-  @override
-  _MyHomeScreen2State createState() => _MyHomeScreen2State();
-}
-
-class _MyHomeScreen2State extends State<MyHomeScreen2> {
-  FirebaseRepository _firebaseRepository = new FirebaseRepository();
+class _HomeScreenPageState extends State<HomeScreenPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  FirebaseUser user;
+  DogOwner user;
 
   @override
   void initState() {
@@ -34,15 +24,15 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
   }
 
   initUser() async {
-    user = await _firebaseRepository.getCurrentUser();
+    user = await FirebaseRepository.getCurrentUser();
     setState(() {});
   }
 
   Widget _textName(){
-    if(user?.displayName == null){
+    if(user?.name == null){
       return Text('Usuario');
     }else{
-      return Text("${user?.displayName}");
+      return Text("${user?.name}");
     }
   }
 
@@ -50,9 +40,11 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
   Widget build(BuildContext context) {
     var userAccountsDrawerHeader = UserAccountsDrawerHeader(
               accountName: _textName(),
-              accountEmail: Text("${user?.email}"),
+              accountEmail: Text("${user?.name}"),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage("${user?.photoUrl}"),
+                // TODO
+//                backgroundImage: NetworkImage("${user?.photoUrl}"),
+                backgroundImage: NetworkImage(""),
               ),
               decoration: BoxDecoration(
                 color: Colors.red,
@@ -263,7 +255,7 @@ class _MyHomeScreen2State extends State<MyHomeScreen2> {
                 logout();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
-                  return LoginPage2();
+                  return LogInPage();
                 }));
               },
               child: ListTile(
@@ -562,6 +554,5 @@ Widget _listItem(String imgPath, String foodName, String desc, String price,
 
 logout() {
   print("Me voy");
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
-  _firebaseRepository.logout();
+  FirebaseRepository.logout();
 }

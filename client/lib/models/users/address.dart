@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Address {
-  String _department, _description;
+  String _department;
+  String _description;
   int _number;
   GeoPoint _location;
 
@@ -11,7 +12,7 @@ class Address {
 
   int get number => _number;
 
-  get description => _description;
+  String get description => _description;
 
   String get department => _department;
 }

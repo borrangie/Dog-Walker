@@ -1,65 +1,31 @@
+import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/homeScreen2.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dogwalker2/screens/my_dogs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class UserInfoPage extends StatelessWidget {
+class AddDogPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyUserInfoPage(),
-    );
-  }
+  _AddDogPageState createState() => _AddDogPageState();
 }
 
-class MyUserInfoPage extends StatefulWidget {
-  @override
-  _MyUserInfoPageState createState() => _MyUserInfoPageState();
-}
-
-class _MyUserInfoPageState extends State<MyUserInfoPage> {
-  FirebaseRepository _firebaseRepository = new FirebaseRepository();
-  FirebaseUser user;
-
-  TextEditingController nameController;
-  TextEditingController mailController;
-  TextEditingController phoneController;
-  TextEditingController cityController;
-  TextEditingController addressController;
-
-  Map<dynamic, dynamic> data;
-
+class _AddDogPageState extends State<AddDogPage> {
   DateTime date;
+var _radioValue;
 
-  @override
-  void initState() {
-    super.initState();
-    initUser();
-    initControllers();
-  }
+TextEditingController nameController = new TextEditingController();
+TextEditingController razaController = new TextEditingController();
+TextEditingController infoController = new TextEditingController();
+TextEditingController weightController = new TextEditingController();
+TextEditingController heightController = new TextEditingController();
 
-  initControllers() async {
-    print(await _firebaseRepository.getUserData());
-    data = await _firebaseRepository.getUserData();
-    this.nameController = new TextEditingController(text: data['n']);
-    this.phoneController = new TextEditingController(text: data['t']);
-    this.cityController = new TextEditingController(text: data['l']);
-    this.addressController = new TextEditingController(text: data['d']);
-
-    setState(() {});
-  }
-
-  initUser() async {
-    user = await _firebaseRepository.getCurrentUser();
-    this.mailController = new TextEditingController(text: user.email);
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
+
+    
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -74,7 +40,7 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
             onPressed: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) {
-                return HomeScreen2();
+                return DogsPage();
               }));
               //Navigator.pop(context);
             },
@@ -94,7 +60,9 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
               child: Center(
                 child: CircleAvatar(
                   radius: 60.0,
-                  backgroundImage: NetworkImage("${user?.photoUrl}"),
+                  backgroundColor: Color(0xFFF9EFEB),
+                  backgroundImage: NetworkImage(
+                      "https://cdn1.imggmi.com/uploads/2019/10/7/4438a3feb8440f48d156aec9e93dc33e-full.png"),
                 ),
               ),
             ),
@@ -108,10 +76,10 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
                     controller: nameController,
                     decoration: InputDecoration(
                       icon: Icon(
-                        FontAwesomeIcons.user,
+                        FontAwesomeIcons.paw,
                         color: Colors.red,
                       ),
-                      labelText: 'Nombre Y Apellido',
+                      labelText: 'NOMBRE',
                       labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
@@ -126,13 +94,13 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
                     height: 10,
                   ),
                   TextField(
-                    controller: mailController,
+                    controller: razaController,
                     decoration: InputDecoration(
                       icon: Icon(
-                        FontAwesomeIcons.envelope,
+                        FontAwesomeIcons.dog,
                         color: Colors.red,
                       ),
-                      labelText: 'MAIL',
+                      labelText: 'RAZA',
                       labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
@@ -147,13 +115,14 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
                     height: 10,
                   ),
                   TextField(
-                    controller: phoneController,
+                    controller: weightController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       icon: Icon(
-                        FontAwesomeIcons.phone,
+                        FontAwesomeIcons.weightHanging,
                         color: Colors.red,
                       ),
-                      labelText: 'TELEFONO',
+                      labelText: 'PESO',
                       labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
@@ -168,13 +137,14 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
                     height: 10,
                   ),
                   TextField(
-                    controller: cityController,
+                    controller: heightController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       icon: Icon(
-                        FontAwesomeIcons.city,
+                        FontAwesomeIcons.ruler,
                         color: Colors.red,
                       ),
-                      labelText: 'LOCALIDAD',
+                      labelText: 'ALTURA',
                       labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
@@ -189,13 +159,13 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
                     height: 10,
                   ),
                   TextField(
-                    controller: addressController,
+                    controller: infoController,
                     decoration: InputDecoration(
                       icon: Icon(
-                        FontAwesomeIcons.home,
+                        FontAwesomeIcons.infoCircle,
                         color: Colors.red,
                       ),
-                      labelText: 'DIRECCION',
+                      labelText: 'CARACTERISTICAS',
                       labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
@@ -216,10 +186,8 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
               DatePicker.showDatePicker(context,
                   showTitleActions: true,
                   minTime: DateTime(1900, 1, 1),
-                  maxTime: DateTime.now(), onChanged: (date) {
-                print('change $date');
-              }, onConfirm: (date) {
-                print('confirm $date');
+                  maxTime: DateTime.now(),
+                  onChanged: (date) {}, onConfirm: (date) {
                 setState(() {
                   this.date = date;
                 });
@@ -228,10 +196,100 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
             child: _getDateFormated(),
           ),
           SizedBox(
+            height: 20,
+          ),
+          new Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                width: 22,
+              ),
+              Icon(
+                FontAwesomeIcons.venusMars,
+                color: Colors.red,
+              ),
+              SizedBox(width: 15,),
+              Text(
+                'GENERO',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Radio(
+                value: 0,
+                groupValue: _radioValue,
+              ),
+              Text(
+                'El',
+                style: new TextStyle(fontSize: 16.0),
+              ),
+              new Radio(
+                value: 1,
+                groupValue: _radioValue,
+              ),
+              new Text(
+                'Ella',
+                style: new TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          new Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                width: 22,
+              ),
+              Icon(
+                FontAwesomeIcons.minusCircle,
+                color: Colors.red,
+              ),
+              SizedBox(width: 15,),
+              Text(
+                'CASTRADO',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Radio(
+                value: 0,
+                groupValue: _radioValue,
+              ),
+              Text(
+                'Si',
+                style: new TextStyle(fontSize: 16.0),
+              ),
+              new Radio(
+                value: 1,
+                groupValue: _radioValue,
+              ),
+              new Text(
+                'No',
+                style: new TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
             height: 30,
           ),
           FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              _saveDog();
+              Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return DogsPage();
+                    }));
+            },
             child: Container(
               width: double.infinity,
               height: 50,
@@ -253,37 +311,14 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
             ),
           ),
           SizedBox(
-            height: 15,
-          ),
-          FlatButton(
-            onPressed: () {},
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                border: Border.all(color: Colors.red, width: 3),
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Center(
-                child: Text(
-                  'Ser Paseador',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
             height: 40,
           ),
         ],
       ),
     );
   }
+
+
 
   _getDateFormated() {
     if (date != null) {
@@ -353,113 +388,22 @@ class _MyUserInfoPageState extends State<MyUserInfoPage> {
     }
   }
 
-  // _getDateFormated() {
-  //   if (date != null) {
-  //     return Container(
-  //       width: double.infinity,
-  //       height: 50,
-  //       decoration: BoxDecoration(
-  //           color: Colors.red,
-  //           borderRadius: BorderRadius.all(Radius.circular(15))),
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: <Widget>[
-  //           Icon(
-  //             FontAwesomeIcons.calendarAlt,
-  //             color: Colors.white,
-  //           ),
-  //           SizedBox(
-  //             width: 20,
-  //           ),
-  //           Container(
-  //             width: 50,
-  //             height: 35,
-  //             decoration: BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.all(Radius.circular(10))),
-  //             child: Center(
-  //               child: Text(
-  //                 date.day.toString(),
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 22,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //             ),
-  //           ),
-  //           SizedBox(
-  //             width: 10,
-  //           ),
-  //           Container(
-  //             width: 50,
-  //             height: 35,
-  //             decoration: BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.all(Radius.circular(10))),
-  //             child: Center(
-  //               child: Text(
-  //                 date.month.toString(),
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 22,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //             ),
-  //           ),
-  //           SizedBox(
-  //             width: 10,
-  //           ),
-  //           Container(
-  //             width: 87,
-  //             height: 35,
-  //             decoration: BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.all(Radius.circular(10))),
-  //             child: Center(
-  //               child: Text(
-  //                 date.year.toString(),
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 22,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  //   } else {
-  //     return Container(
-  //       width: double.infinity,
-  //       height: 50,
-  //       decoration: BoxDecoration(
-  //           color: Colors.red,
-  //           borderRadius: BorderRadius.all(Radius.circular(15))),
-  //       child: Center(
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: <Widget>[
-  //             Icon(
-  //               FontAwesomeIcons.calendarAlt,
-  //               color: Colors.white,
-  //             ),
-  //             SizedBox(
-  //               width: 20,
-  //             ),
-  //             Text(
-  //               'Fecha de Nacimiento',
-  //               style: TextStyle(
-  //                 color: Colors.white,
-  //                 fontSize: 22,
-  //               ),
-  //             )
-  //           ],
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // }
+  _saveDog() async{
+    String name = nameController.text;
+    String raza = razaController.text;
+    String weight = weightController.text;
+    String height = heightController.text;
+    String info = infoController.text;
+    
+
+    if(name.isNotEmpty && raza.isNotEmpty && weight.isNotEmpty && height.isNotEmpty && info.isNotEmpty && date!=null){
+      double w = double.parse(weight);
+      double h = double.parse(height);
+      DogOwner user = await FirebaseRepository.getCurrentUser();
+      Map<String, dynamic> dogData = {'n'.toString():name, 'r'.toString():raza, 'p'.toString():w, 'a'.toString():h, 'ca'.toString():info, 'c'.toString():true, 'f'.toString():"", 's'.toString():true, 'e'.toString(): date,'i'.toString(): user.id};
+      FirebaseRepository.addDog(dogData);
+    }else{
+      print('Complete the info of your dog'); 
+    }
+  }
 }

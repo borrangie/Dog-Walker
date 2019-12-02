@@ -58,7 +58,7 @@ async function addDog(data, context) {
         });
     } catch (e) {
         console.error(e);
-        return global.formatError(ERRORS.UNKNOWN);
+        return global.formatError(global.ERRORS.UNKNOWN);
     }
 }
 

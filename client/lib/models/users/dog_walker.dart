@@ -2,17 +2,15 @@ import 'dog_owner.dart';
 
 class DogWalker extends DogOwner {
   String _dni;
-  double _cost;
+  DateTime _birthday;
+  bool _walkerVerified;
 
-  DogWalker(id, name, surname, birthday, address, phones, dogs, isActive, this._dni, this._cost) :
-        super(id, name, surname, birthday, address, phones, dogs, isActive);
+  DogWalker(id, name, surname, email, phone, ratingAvg, verified, this._birthday, this._dni, this._walkerVerified) :
+        super(id, name, surname, email, phone, ratingAvg, verified);
 
   String get dni => _dni;
 
-  double get cost => _cost;
+  bool get walkerVerified => _walkerVerified;
 
-  set cost(double value) {
-    if (value >= 0)
-      _cost = value;
-  }
+  DateTime get birthday => _birthday;
 }

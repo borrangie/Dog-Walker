@@ -1,11 +1,13 @@
-import 'dart:async';
-
+import 'package:dogwalker2/models/users/dog_owner.dart';
+import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
-import 'package:dogwalker2/screens/loginScreen2.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_owner.dart';
+import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_walker.dart';
+import 'package:dogwalker2/screens/authentication/login_screen.dart';
+import 'package:dogwalker2/screens/authentication/select_user_type.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/homeScreen2.dart';
+import 'screens/home_screen.dart';
 
 void main() => runApp(AppWrapper());
 
@@ -16,11 +18,18 @@ class AppWrapper extends StatefulWidget {
 }
 
 class _AppWrapperState extends State<AppWrapper> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.red, accentColor: Colors.white),
+      theme: ThemeData(
+        primaryColor: Colors.red,
+        accentColor: Colors.white,
+        primaryTextTheme: TextTheme(
+          title: TextStyle(
+            color: Colors.black
+          )
+        )
+      ),
       title: 'Dog Walker',
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
@@ -33,18 +42,61 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  void initState() {
-    super.initState();
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        return MyApp();
-      }));
-    });
-  }
-
+  // TODO: Manage offline
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    FirebaseRepository.getCurrentUser().then((user) {
+      List<Widget> widgets = [];
+
+      if (user != null) {
+        if (user is DogWalker) {
+          if (!user.walkerVerified) {
+            widgets.add(LogInPage());
+            widgets.add(SelectUserTypePage());
+            widgets.add(FinishSignUpDogWalkerPage());
+          } else {
+            widgets.add(HomeScreenPage());
+          }
+        } else if (user is DogOwner) {
+          if (!user.verified) {
+            widgets.add(LogInPage());
+            widgets.add(SelectUserTypePage());
+            widgets.add(FinishSignUpDogOwnerPage());
+          } else {
+            widgets.add(HomeScreenPage());
+          }
+        } else {
+          widgets.add(LogInPage());
+          widgets.add(SelectUserTypePage());
+        }
+      } else {
+        widgets.add(LogInPage());
+      }
+
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return widgets[0];
+          })
+      );
+      for (var i = 1; i < widgets.length; i++) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return widgets[i];
+            })
+        );
+      }
+    }).catchError((error) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return LogInPage();
+          })
+      );
+    });
+
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -94,33 +146,6 @@ class _SplashScreenState extends State<SplashScreen> {
             ],
           )
         ],
-      ),
-    );
-  }
-}
-
-class MyApp extends StatefulWidget {
-  // Root App
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Dog Walker',
-      debugShowCheckedModeBanner: false,
-      home: FutureBuilder(
-        future: _firebaseRepository.getCurrentUser(),
-        builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
-          if (snapshot.hasData) {
-            return HomeScreen2();
-          } else {
-            return LoginPage2();
-          }
-        },
       ),
     );
   }

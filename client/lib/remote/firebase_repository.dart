@@ -1,78 +1,145 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:dogwalker2/models/users/dog_owner.dart';
+import 'package:dogwalker2/models/users/dog_walker.dart';
+import 'package:dogwalker2/models/users/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class FirebaseRepository{
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  GoogleSignIn _googleSignIn = GoogleSignIn();
-  static final Firestore firestore = Firestore.instance;
+abstract class FirebaseRepository {
+  static final CloudFunctions _cloudFunctions = CloudFunctions.instance;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn();
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final Firestore _firestore = Firestore.instance;
 
-  Future<FirebaseUser> getCurrentUser() async {
-    FirebaseUser currentUser;
-    currentUser = await _auth.currentUser();
-    return currentUser;
+  static final String collectionUsers = "Users";
+  static final String collectionsDogs = "Dogs";
+  static final String collectionWalks = "Walks";
+  static final int typeDogOwner = 0;
+  static final int typeDogWalker = 1;
+
+  static Future<User> getCurrentUser() async {
+    FirebaseUser currentUser = await _auth.currentUser();
+    User user;
+
+    if (currentUser != null) {
+      var userDocument = await _firestore.collection(collectionUsers).document(currentUser.uid).get();
+      if (userDocument.exists) {
+        Map claims = (await currentUser.getIdToken(refresh: true)).claims;
+
+        var rawRating = userDocument.data["rating_avg"];
+        double rating = rawRating is int ? rawRating.toDouble() : (rawRating as double);
+        if (claims['walker']) {
+          user = new DogWalker(
+              currentUser.uid,
+              userDocument.data["name"],
+              userDocument.data["surname"],
+              userDocument.data["email"],
+              userDocument.data["phone"],
+              rating,
+              claims["verified"],
+              userDocument.data["birthday"],
+              userDocument.data["dni"],
+              claims["walker_verified"]
+          );
+        } else if (claims['owner']) {
+          user = new DogOwner(
+              currentUser.uid,
+              userDocument.data["name"],
+              userDocument.data["surname"],
+              userDocument.data["email"],
+              userDocument.data["phone"],
+              rating,
+              claims["verified"]
+          );
+        } else {
+          user = new User(currentUser.uid);
+        }
+      }
+    }
+
+    return user;
   }
 
-  Future<AuthResult> signIn() async {
+  static Future<AuthResult> signUp(String mail, String password) async {
+    return await _auth.createUserWithEmailAndPassword(
+        email: mail,
+        password: password
+    );
+  }
+
+  static Future<AuthResult> signInGoogle() async {
     GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
-    GoogleSignInAuthentication _signInAuth = await _signInAccount
-        .authentication;
+    GoogleSignInAuthentication _signInAuth = await _signInAccount.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: _signInAuth.accessToken,
         idToken: _signInAuth.idToken
     );
-    AuthResult user = await _auth.signInWithCredential(credential);
-    return user;
+    return await _auth.signInWithCredential(credential);
   }
 
-  Future<bool> authenticateUser(FirebaseUser user) async {
-    FirebaseUser user = await _auth.currentUser();
-    // QuerySnapshot result = await firestore.collection("users").where("email", isEqualTo: user.email).getDocuments();
-
-    // final List<DocumentSnapshot> docs = result.documents;
-    // return docs.length == 0 ? true : false;
-
-    return user == null ? false : true;
+  static Future<AuthResult> signIn(String mail, String password) async {
+    return await _auth.signInWithEmailAndPassword(
+        email: mail,
+        password: password
+    );
   }
 
-  Future<AuthResult> normalSignIn(String mail, String password) async {
-    AuthResult user = await _auth.signInWithEmailAndPassword(
-        email: mail, password: password);
-    print(user.user.email);
-    return user;
-  }
-
-  void logout() {
-    _auth.signOut();
-  }
-
-  bool resetPassword(String mail) {
+  static bool resetPassword(String mail) {
     try {
       _auth.sendPasswordResetEmail(email: mail);
+      return true;
     } catch (e) {
       return false;
     }
-    return true;
   }
 
-  Future<AuthResult> normalSignUp(String mail, String password) async {
-    AuthResult user = await _auth.createUserWithEmailAndPassword(
-        email: mail, password: password);
-    print(user.user.email);
-    return user;
+  static void logout() {
+    _auth.signOut();
   }
 
-  getUserData() async {
-    FirebaseUser user = await getCurrentUser();
-    return await firestore.collection('u').document(user.uid.toString()).get().then((res){
-      return res.data;
-    });
+  static Future<bool> setUpAccount(int type, Map rawData) async {
+    if (type != typeDogOwner && type != typeDogWalker)
+      return false;
+
+    Map data = {
+      "name": rawData["name"],
+      "surname": rawData["surname"],
+      "phone": rawData["phone"],
+    };
+    if (type == typeDogWalker) {
+      data["dni"] = rawData["dni"];
+      data["birthday"] = rawData["birthday"];
+    }
+
+    return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setUpAccount").call({
+      "type": type,
+      "data": data
+    }), "result");
   }
 
-  Future<void> addDog(dogData) {
-    return firestore.collection('d').add(dogData).catchError((e){
+  static Future<bool> setAccountType(int type) async {
+    if (type != typeDogOwner && type != typeDogWalker)
+      return false;
+
+
+    return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setAccountType").call({
+      "type": type,
+    }), "result");
+  }
+
+  static Future<void> addDog(dogData) {
+    return _firestore.collection('d').add(dogData).catchError((e){
       print(e);
     });
+  }
+
+  static bool _parseOutput(HttpsCallableResult result, String key) {
+    print(result.data);
+    if (result == null || result.data == null || result.data["error"]) {
+      return false;
+    }
+    return result.data["data"][key];
   }
 }
