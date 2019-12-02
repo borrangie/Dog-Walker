@@ -1,5 +1,7 @@
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
+import 'package:dogwalker2/resources/store.dart';
+import 'package:dogwalker2/screens/authentication/apply_dog_walker.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/toast_factory.dart';
@@ -22,11 +24,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   @override
   void initState() {
     super.initState();
-    _initialize();
-  }
-
-  _initialize() async {
-    user = await FirebaseRepository.getCurrentUser();
+    user = Store.instance.user;
     nameController.text = user.name;
     surnameController.text = user.surname;
     phoneController.text = user.phone;
@@ -39,7 +37,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     Widget userWidget;
 
     if (user is DogOwner) {
-      beAWalkerButton = ButtonFactory.generate("QUIERO SER PASEADOR", () {});
+      beAWalkerButton = ButtonFactory.generate("QUIERO SER PASEADOR", _applyDogWalker);
       beAWalkerBox = SizedBox(
         height: 15,
       );
@@ -104,7 +102,14 @@ class _UserInfoPageState extends State<UserInfoPage> {
     }
   }
 
-  void _setUserType() {
-    FirebaseRepository.setAccountType(FirebaseRepository.typeDogWalker);
+  void _applyDogWalker() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return ApplyDogWalkerPage();
+        }
+      )
+    );
   }
 }

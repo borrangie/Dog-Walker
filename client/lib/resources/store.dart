@@ -2,7 +2,7 @@ import 'package:dogwalker2/models/users/user.dart';
 
 class Store {
   static Store _instance = Store._();
-  Map<String, dynamic> _elements;
+  Map<String, dynamic> _elements = {};
 
   Store._();
 

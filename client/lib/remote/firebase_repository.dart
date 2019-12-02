@@ -124,12 +124,13 @@ abstract class FirebaseRepository {
     }), "result");
   }
 
-  static Future<bool> setAccountType(int type) async {
-    if (type != typeDogOwner && type != typeDogWalker)
-      return false;
-
-    return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setAccountType").call({
-      "type": type,
+  static Future<bool> setDogWalker(Map rawData) async {
+    return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setDogWalker").call({
+      "data": {
+        "phone": rawData["phone"],
+        "dni": rawData["dni"],
+        "birthday": rawData["birthday"]
+      },
     }), "result");
   }
 

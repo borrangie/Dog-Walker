@@ -9,7 +9,7 @@ module.exports = {
     initialize: initialize,
     onUserCreate: onUserCreate,
     setUpAccount: setUpAccount,
-    setAccountType: setAccountType,
+    setDogWalker: setDogWalker,
     setPhoneNumber: setPhoneNumber
 };
 
@@ -103,15 +103,34 @@ async function setUpAccount(data, context) {
     }
 }
 
-async function setAccountType(data, context) {
+async function setDogWalker(data, context) {
     if (context.auth.uid === null || context.auth.uid === undefined) {
         return global.formatError(global.ERRORS.AUTH);
     }
 
     user = await admin.auth().getUser(context.auth.uid);
-    return global.formatData({
-        result: await setAccountTypeUser(user, data.type)
-    });
+    if (!await setAccountTypeUser(user, DOG_WALKER)) {
+        return global.formatError(global.ERRORS.SET_UP_USER_TYPE);
+    }
+
+    let safeData = {};
+    safeData["phone"] = data["phone"];
+    safeData["dni"] = data["dni"];
+    safeData["birthday"] = data["birthday"];
+    try {
+        await db.collection(global.COLLECTIONS.USERS).doc(context.auth.uid).set(safeData, {merge: true});
+        user.customClaims.walker_verified = true;
+        user.customClaims.verified = true;
+        
+        await admin
+        .auth()
+        .setCustomUserClaims(context.auth.uid, user.customClaims);
+        return global.formatData({
+            result: true
+        });
+    } catch (e) {
+        return global.formatError(emessage);
+    }
 }
 
 async function setPhoneNumber(data, context) {

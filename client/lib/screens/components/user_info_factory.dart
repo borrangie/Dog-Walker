@@ -10,7 +10,7 @@ abstract class UserInfoFactory {
       onTap: onTap,
       child: Center(
         child: CircularProfileAvatar(
-          user != null ? user.photoUrl : "",
+          user?.photoUrl,
           radius: 60.0,
           borderWidth: 0,
           backgroundColor: Colors.blueAccent,
@@ -45,6 +45,29 @@ abstract class UserInfoFactory {
         surnameController,
         phoneController
       )
+    );
+  }
+
+  static Container generateDogWalkerApply(
+      context,
+      nameController,
+      surnameController,
+      dateTimeController,
+      onDateSet,
+      phoneController,
+      dniController
+      ) {
+    return _generate(
+        _generateDogWalkerWidgets(
+            context,
+            nameController,
+            surnameController,
+            dateTimeController,
+            onDateSet,
+            phoneController,
+            dniController,
+            apply: true
+        )
     );
   }
 
@@ -148,9 +171,9 @@ abstract class UserInfoFactory {
       onDateSet,
       phoneController,
       dniController,
-      {enabled: false}
+      {enabled: false, apply: false}
       ) {
-    List<Widget> widgets = _generateDogOwnerWidgets(nameController, surnameController, phoneController, enabled: enabled);
+    List<Widget> widgets = _generateDogOwnerWidgets(nameController, surnameController, phoneController, enabled: apply ? false : enabled);
 
     widgets.addAll([
       SizedBox(
@@ -160,7 +183,7 @@ abstract class UserInfoFactory {
           context,
           dateTimeController,
           "Fecha de nacimiento",
-          enabled: enabled,
+          enabled: apply ? true : enabled,
           icon: Icon(
             FontAwesomeIcons.calendarAlt,
             color: Colors.red,
@@ -173,7 +196,7 @@ abstract class UserInfoFactory {
       TextFactory.generateTextFieldNumeric(
         dniController,
         "DNI",
-        enabled: enabled,
+        enabled: apply ? true : enabled,
         icon: Icon(
           FontAwesomeIcons.phone,
           color: Colors.red,
