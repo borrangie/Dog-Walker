@@ -1,4 +1,3 @@
-import 'package:dogwalker2/models/users/address.dart';
 import 'package:dogwalker2/models/users/user.dart';
 
 import 'dogs/dog.dart';
