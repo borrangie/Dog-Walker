@@ -1,6 +1,7 @@
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
+import 'package:dogwalker2/resources/store.dart';
 import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_owner.dart';
 import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_walker.dart';
 import 'package:dogwalker2/screens/authentication/login_screen.dart';
@@ -42,12 +43,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  // TODO: Manage offline
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     FirebaseRepository.getCurrentUser().then((user) {
       List<Widget> widgets = [];
+      Store.instance.user = user;
 
       if (user != null) {
         if (user is DogWalker) {

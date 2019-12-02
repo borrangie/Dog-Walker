@@ -1,5 +1,6 @@
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
+import 'package:dogwalker2/resources/store.dart';
 import 'package:dogwalker2/screens/my_dogs.dart';
 import 'package:dogwalker2/screens/user_info_page.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
   }
 
   initUser() async {
+    user = Store.instance.user;
     user = await FirebaseRepository.getCurrentUser();
     setState(() {});
   }

@@ -28,7 +28,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
   }
 
   initControllers() async {
-    print(await FirebaseRepository.getCurrentUser());
     // TODO
 //    data = await _firebaseRepository.getCurrentUser();
 //    this.nameController = new TextEditingController(text: data['n']);
