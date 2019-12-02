@@ -4,6 +4,7 @@ import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:dogwalker2/models/users/user.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
+import 'package:dogwalker2/resources/store.dart';
 import 'package:dogwalker2/screens/authentication/forgot_password_screen.dart';
 import 'package:dogwalker2/screens/authentication/select_user_type.dart';
 import 'package:dogwalker2/screens/authentication/sign_up.dart';
@@ -158,26 +159,23 @@ class _LogInPageState extends State<LogInPage> {
       user = await FirebaseRepository.getCurrentUser();
     }
 
-    if (user != null) {
-      if (user is DogWalker) {
-        if (!user.walkerVerified) {
-          widgets.add(SelectUserTypePage());
-          widgets.add(FinishSignUpDogWalkerPage());
-        } else {
-          widgets.add(HomeScreenPage());
-        }
-      } else if (user is DogOwner) {
-        if (!user.verified) {
-          widgets.add(SelectUserTypePage());
-          widgets.add(FinishSignUpDogOwnerPage());
-        } else {
-          widgets.add(HomeScreenPage());
-        }
-      } else {
+    Store.instance.user = user;
+    if (user is DogWalker) {
+      if (!user.walkerVerified) {
         widgets.add(SelectUserTypePage());
+        widgets.add(FinishSignUpDogWalkerPage());
+      } else {
+        widgets.add(HomeScreenPage());
+      }
+    } else if (user is DogOwner) {
+      if (!user.verified) {
+        widgets.add(SelectUserTypePage());
+        widgets.add(FinishSignUpDogOwnerPage());
+      } else {
+        widgets.add(HomeScreenPage());
       }
     } else {
-      widgets.add(LogInPage());
+      widgets.add(SelectUserTypePage());
     }
 
     Navigator.pushReplacement(
