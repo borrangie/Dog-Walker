@@ -1,8 +1,32 @@
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 abstract class UserInfoFactory {
+  static Widget generateAvatar(DogOwner user, onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Center(
+        child: CircularProfileAvatar(
+          user?.photoUrl,
+          radius: 60.0,
+          borderWidth: 0,
+          backgroundColor: Colors.blueAccent,
+          initialsText: Text(
+            (user.name.substring(0, 1) + user.surname.substring(0, 1)).toUpperCase(),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 60.0
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   static Container generateDogOwnerSetUp(nameController, surnameController, phoneController) {
     return _generate(
       _generateDogOwnerWidgets(
