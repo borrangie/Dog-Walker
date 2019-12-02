@@ -3,28 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 abstract class UserInfoFactory {
-  static Container generateDogOwnerSetUp(context, nameController, surnameController, dateTimeController, onDateSet, phoneController) {
+  static Container generateDogOwnerSetUp(nameController, surnameController, phoneController) {
     return _generate(
       _generateDogOwnerWidgets(
-        context,
         nameController,
         surnameController,
-        dateTimeController,
-        onDateSet,
         phoneController,
         enabled: true
       )
     );
   }
 
-  static Container generateDogOwner(context, nameController, surnameController, dateTimeController, onDateSet, phoneController) {
+  static Container generateDogOwner(nameController, surnameController, phoneController) {
     return _generate(
       _generateDogOwnerWidgets(
-        context,
         nameController,
         surnameController,
-        dateTimeController,
-        onDateSet,
         phoneController
       )
     );
@@ -86,7 +80,7 @@ abstract class UserInfoFactory {
     );
   }
 
-  static List<Widget> _generateDogOwnerWidgets(context, nameController, surnameController, dateTimeController, onDateSet, phoneController, {enabled: false}) {
+  static List<Widget> _generateDogOwnerWidgets(nameController, surnameController, phoneController, {enabled: false}) {
     return [
       TextFactory.generateTextField(
           nameController,
@@ -108,20 +102,6 @@ abstract class UserInfoFactory {
           FontAwesomeIcons.user,
           color: Colors.red,
         ),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      TextFactory.generateTextFieldDatetime(
-        context,
-        dateTimeController,
-        "Fecha de nacimiento",
-        enabled: enabled,
-        icon: Icon(
-          FontAwesomeIcons.calendarAlt,
-          color: Colors.red,
-        ),
-        onDateSet: onDateSet
       ),
       SizedBox(
         height: 10,
@@ -148,9 +128,23 @@ abstract class UserInfoFactory {
       dniController,
       {enabled: false}
       ) {
-    List<Widget> widgets = _generateDogOwnerWidgets(context, nameController, surnameController, dateTimeController, onDateSet, phoneController, enabled: enabled);
+    List<Widget> widgets = _generateDogOwnerWidgets(nameController, surnameController, phoneController, enabled: enabled);
 
     widgets.addAll([
+      SizedBox(
+        height: 10,
+      ),
+      TextFactory.generateTextFieldDatetime(
+          context,
+          dateTimeController,
+          "Fecha de nacimiento",
+          enabled: enabled,
+          icon: Icon(
+            FontAwesomeIcons.calendarAlt,
+            color: Colors.red,
+          ),
+          onDateSet: onDateSet
+      ),
       SizedBox(
         height: 10,
       ),
