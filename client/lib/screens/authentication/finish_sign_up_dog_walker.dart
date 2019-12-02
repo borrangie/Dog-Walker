@@ -21,8 +21,8 @@ class _FinishSignUpDogWalkerPageState extends FinishSignUpDogOwnerPageState {
   }
 
   @override
-  void saveToDB() {
-    super.saveToDB();
+  Future<bool> saveToDB() async {
+    return super.saveToDB();
   }
 
   @override

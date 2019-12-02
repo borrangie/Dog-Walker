@@ -3,6 +3,7 @@ import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:dogwalker2/screens/components/toast_factory.dart';
 import 'package:dogwalker2/screens/components/user_info_factory.dart';
+import 'package:dogwalker2/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -44,7 +45,7 @@ class FinishSignUpDogOwnerPageState extends State<FinishSignUpDogOwnerPage> {
                   children: <Widget>[
                     Align(
                       alignment: Alignment.topLeft,
-                      child: TextFactory.generateText("Complete registro", size: 26.0, weight: FontWeight.bold),
+                      child: TextFactory.generateText("Completar registro", size: 26.0, weight: FontWeight.bold),
                     ),
                     userWidget,
                     SizedBox(
@@ -59,15 +60,25 @@ class FinishSignUpDogOwnerPageState extends State<FinishSignUpDogOwnerPage> {
     );
   }
 
-  void _continue() {
+  void _continue() async {
     if (hasEmptyFields()) {
       ToastFactory.showError("Hay campos faltantes.");
     } else {
-      saveToDB();
+      if (await saveToDB()) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return HomeScreenPage();
+          })
+        );
+      } else {
+        ToastFactory.showError("Error completando registro.");
+      }
     }
   }
 
-  void saveToDB() {
+  Future<bool> saveToDB() async {
+    return true;
 
 //      try {
 //        await FirebaseRepository.signIn(mail, password);
