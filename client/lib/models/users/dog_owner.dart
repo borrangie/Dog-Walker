@@ -7,14 +7,12 @@ class DogOwner extends User {
   String _name;
   String _surname;
   String _email;
-  Address _address;
-  DateTime _birthday;
   String _phone;
   double _ratingAvg;
   bool _verified;
   List<Dog> _dogs;
 
-  DogOwner(id, this._name, this._surname, this._email, this._address, this._birthday, this._phone, this._ratingAvg, this._verified) : super(id);
+  DogOwner(id, this._name, this._surname, this._email, this._phone, this._ratingAvg, this._verified) : super(id);
 
   bool get verified => _verified;
 
@@ -35,10 +33,6 @@ class DogOwner extends User {
   }
 
   String get phone => _phone;
-
-  DateTime get birthday => _birthday;
-
-  Address get address => _address;
 
   String get surname => _surname;
 

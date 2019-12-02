@@ -27,16 +27,6 @@ abstract class FirebaseRepository {
       var userDocument = await _firestore.collection(collectionUsers).document(currentUser.uid).get();
       if (userDocument.exists) {
         Map claims = (await currentUser.getIdToken(refresh: true)).claims;
-        Address address;
-
-        if (userDocument.data["address"] != null) {
-          address = new Address(
-              userDocument.data["address"]["department_numer"],
-              userDocument.data["address"]["description"],
-              userDocument.data["address"]["number"],
-              userDocument.data["address"]["location"]
-          );
-        }
 
         var rawRating = userDocument.data["rating_avg"];
         double rating = rawRating is int ? rawRating.toDouble() : (rawRating as double);
@@ -46,11 +36,10 @@ abstract class FirebaseRepository {
               userDocument.data["name"],
               userDocument.data["surname"],
               userDocument.data["email"],
-              address,
-              userDocument.data["birthday"],
               userDocument.data["phone"],
               rating,
               claims["verified"],
+              userDocument.data["birthday"],
               userDocument.data["dni"],
               claims["walker_verified"]
           );
@@ -60,8 +49,6 @@ abstract class FirebaseRepository {
               userDocument.data["name"],
               userDocument.data["surname"],
               userDocument.data["email"],
-              address,
-              userDocument.data["birthday"],
               userDocument.data["phone"],
               rating,
               claims["verified"]
@@ -113,13 +100,24 @@ abstract class FirebaseRepository {
     _auth.signOut();
   }
 
-  static Future<void> setAccountType(int type) async {
+  static Future<void> setAccountType(int type, DogOwner user) async {
     if (type != typeDogOwner || type != typeDogWalker)
       return;
 
+    Map data = {
+      "name": user.name,
+      "surname": user.surname,
+      "phone": user.phone,
+    };
+    if (user is DogWalker) {
+      data["dni"] = user.dni;
+      data["birthday"] = user.birthday;
+    }
+
     await _cloudFunctions.getHttpsCallable(functionName: "setAccountType").call({
       "userId": (await _auth.currentUser()).uid,
-      "type": type
+      "type": type,
+      "data": data
     });
   }
 
