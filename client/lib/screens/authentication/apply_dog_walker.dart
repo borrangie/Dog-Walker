@@ -1,19 +1,21 @@
+import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
+import 'package:dogwalker2/resources/store.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:dogwalker2/screens/components/toast_factory.dart';
 import 'package:dogwalker2/screens/components/user_info_factory.dart';
-import 'package:dogwalker2/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class FinishSignUpDogWalkerPage extends StatefulWidget {
+class ApplyDogWalkerPage extends StatefulWidget {
   @override
-  FinishSignUpDogWalkerPageState createState() => FinishSignUpDogWalkerPageState();
+  ApplyDogWalkerPageState createState() => ApplyDogWalkerPageState();
 }
 
-class FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
+class ApplyDogWalkerPageState extends State<ApplyDogWalkerPage> {
+  DogOwner user = Store.instance.user;
   TextEditingController nameController = new TextEditingController();
   TextEditingController surnameController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
@@ -23,12 +25,15 @@ class FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = user.name;
+    surnameController.text = user.surname;
+    phoneController.text = user.phone;
     dateTimeController.text = _formatDateTime(dateTime);
 
     return buildAll(
         context,
         "Tengo perros",
-        UserInfoFactory.generateDogWalkerSetUp(context, nameController, surnameController, dateTimeController, (DateTime date) {
+        UserInfoFactory.generateDogWalkerApply(context, nameController, surnameController, dateTimeController, (DateTime date) {
           dateTimeController.text = _formatDateTime(date);
           dateTime = date;
         }, phoneController, dniController)
@@ -73,12 +78,8 @@ class FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
       ToastFactory.showError("Hay campos faltantes.");
     } else {
       if (await saveToDB()) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return HomeScreenPage();
-            })
-        );
+        Store.instance.user = await FirebaseRepository.getCurrentUser();
+        Navigator.pop(context);
       } else {
         ToastFactory.showError("Error completando registro.");
       }
@@ -87,9 +88,7 @@ class FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
 
   Future<bool> saveToDB() async {
     try {
-      return await FirebaseRepository.setUpAccount(FirebaseRepository.typeDogWalker, {
-        "name": nameController.text,
-        "surname": surnameController.text,
+      return await FirebaseRepository.setDogWalker({
         "phone": phoneController.text,
         "dni": dniController.text,
         "birthday": dateTime
@@ -101,12 +100,10 @@ class FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
   }
 
   bool hasEmptyFields() {
-    String name = nameController.text = nameController.text.trim();
-    String surname = surnameController.text = surnameController.text.trim();
     String phone = phoneController.text = phoneController.text.trim();
     String dni = dniController.text = dniController.text.trim();
 
-    return name.isEmpty || surname.isEmpty || phone.isEmpty || dni.isEmpty || dateTime == null;
+    return phone.isEmpty || dni.isEmpty || dateTime == null;
   }
 
   String _formatDateTime(DateTime date) {

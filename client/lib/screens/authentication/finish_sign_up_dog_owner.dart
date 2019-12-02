@@ -1,4 +1,3 @@
-import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
