@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class ButtonFactory {
-  static IconButton generateIcon(IconData icon, Color color, Function onPressed) {
+  static IconButton generateIcon(IconData icon, Function onPressed, {Color color: Colors.black}) {
     return IconButton(
       icon: Icon(
         icon,
