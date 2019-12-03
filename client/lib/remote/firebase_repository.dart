@@ -45,7 +45,7 @@ abstract class FirebaseRepository {
               userDocument.data["phone"],
               rating,
               claims["verified"],
-              userDocument.data["birthday"],
+              _getDateTime(userDocument.data["birthday"]),
               userDocument.data["dni"],
               claims["walker_verified"]
           );
@@ -153,17 +153,19 @@ abstract class FirebaseRepository {
         var height = data["height"];
         if (height is int) height = height.toDouble();
 
-        dogs.add(Dog(
-          documentSnapshot.documentID,
-          data["name"],
-          data["breed"],
-          weight,
-          height,
-          data["info"],
-          data["birthday"],
-          data["genre"],
-          data["castrado"]
-        ));
+        var dog = Dog(
+            documentSnapshot.documentID,
+            data["name"],
+            data["breed"],
+            weight,
+            height,
+            data["info"],
+            _getDateTime(data["birthday"]),
+            data["genre"],
+            data["castrado"]
+        );
+
+        dogs.add(dog);
       }
     }
 
@@ -181,7 +183,11 @@ abstract class FirebaseRepository {
       "genre": rawData["genre"],
       "castrado": rawData["castrado"]
     };
-    DocumentReference documentReference = await _firestore.collection(collectionsDogs).add(data);
+    DocumentReference documentReference = await _firestore
+        .collection(collectionUsers)
+        .document(Store.instance.user.id)
+        .collection(collectionsDogs)
+        .add(data);
     return Dog(
       documentReference.documentID,
       data["name"],
@@ -207,5 +213,9 @@ abstract class FirebaseRepository {
     return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setPhoneNumber").call({
       "phone": phone,
     }), "result");
+  }
+
+  static DateTime _getDateTime(Timestamp timestamp) {
+    return DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
   }
 }

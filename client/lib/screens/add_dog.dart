@@ -1,5 +1,4 @@
 import 'package:dogwalker2/models/users/dog.dart';
-import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
@@ -246,11 +245,8 @@ class _AddDogPageState extends State<AddDogPage> {
       if (dog == null) {
         ToastFactory.showError("Error creando perro. Intente luego");
       } else {
-        ToastFactory.showError("Guardado.");
-        Navigator.push(context,
-          MaterialPageRoute(builder: (context) {
-            return DogsPage();
-         }));
+        ToastFactory.showInfo("Guardado.");
+        Navigator.pop(context);
       }
     } else {
       ToastFactory.showError("Por favor, complete todos los campos");

@@ -9,9 +9,6 @@ class Dog extends DBObject {
   DateTime birthday;
   int genre;
   bool castrado;
-//  Image picture;
-  double ratingAvg;
-//  List<Rating> ratings;
 
   Dog(String id, this.name, this.breed, this.weight, this.height, this.info, this.birthday, this.genre, this.castrado) : super(id);
 }

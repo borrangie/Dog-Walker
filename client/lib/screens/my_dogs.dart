@@ -1,8 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dogwalker2/models/users/dog.dart';
 import 'package:dogwalker2/models/users/dog_owner.dart';
+import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/resources/store.dart';
 import 'package:dogwalker2/screens/add_dog.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
+import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -78,19 +80,19 @@ class _DogsPageState extends State<DogsPage> {
             ),
           ),
           Expanded(
-            child: StreamBuilder(
-              stream: Firestore.instance.collection('d').where('i', isEqualTo: user.id).snapshots(),
+            child: FutureBuilder(
+              future: FirebaseRepository.getDogs(),
               builder: (context, snapshot) {
                 if(!snapshot.hasData){
                   return Center(
                     child: Text('Cargando...', style: TextStyle(color: Colors.red, fontSize: 20),),
                   );
-                }else{
+                } else {
                   return ListView.builder(
                     itemExtent: 190,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index)=>
-                      _listItem(snapshot.data.documents[index], context),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) =>
+                      _listItem(snapshot.data[index], context),
                   );
                 }
               }
@@ -115,10 +117,9 @@ class _DogsPageState extends State<DogsPage> {
   }
 }
 
-Widget _listItem(DocumentSnapshot doc, BuildContext context) {
-  Timestamp d = doc['e']; 
-  DateTime date = new DateTime.fromMillisecondsSinceEpoch(d.seconds * 1000);
-  int years = DateTime.now().year - date.year;
+Widget _listItem(Dog dog, BuildContext context) {
+  DateTime currentDateTime = DateTime.now();
+
   return Padding(
     padding: EdgeInsets.only(left: 15.0, top: 15.0),
     child: Stack(
@@ -126,7 +127,6 @@ Widget _listItem(DocumentSnapshot doc, BuildContext context) {
         Container(
           height: 170.0,
           width: MediaQuery.of(context).size.width,
-          
         ),
         Positioned(
           left: 15.0,
@@ -168,33 +168,27 @@ Widget _listItem(DocumentSnapshot doc, BuildContext context) {
                     children: <Widget>[
                       Icon(FontAwesomeIcons.weightHanging, color: Color(0xFFF75A4C), size: 15.0),
                       SizedBox(width: 10.0),
-                      Text(
-                        doc['p'].toString(),
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12.0,
-                            color: Colors.grey),
+                      TextFactory.generateText(
+                          dog.weight.toString() + 'kg',
+                          size: 12.0,
+                          color: Colors.grey
                       ),
                       SizedBox(width: 25.0),
                       Icon(FontAwesomeIcons.ruler, color: Color(0xFFF75A4C), size: 15.0),
                       SizedBox(width: 15.0),
-                      Text(
-                        doc['a'].toString() + 'cm',
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12.0,
-                            color: Colors.grey),
+                      TextFactory.generateText(
+                          dog.height.toString() + 'cm',
+                          size: 12.0,
+                          color: Colors.grey
                       ),
                       SizedBox(width: 25.0),
                       Icon(FontAwesomeIcons.gift,
                           color: Color(0xFFF75A4C), size: 15.0),
                       SizedBox(width: 5.0),
-                      Text(
-                        years.toString()+' años',
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12.0,
-                            color: Colors.grey),
+                      TextFactory.generateText(
+                        (DateTime.now().year - dog.birthday.year).toString() + ' años',
+                        size: 12.0,
+                        color: Colors.grey
                       )
                     ],
                   ),
@@ -208,11 +202,6 @@ Widget _listItem(DocumentSnapshot doc, BuildContext context) {
             borderRadius: BorderRadius.circular(10.0),
             color: Colors.white,
             border: Border.all(color: Color(0xFFF9EFEB), width: 8),
-            // boxShadow: [
-            //         BoxShadow(
-            //             color: Colors.grey.withOpacity(0.3),
-            //             spreadRadius: 3.0,
-            //             blurRadius: 3.0)]
           ),
           child: Padding(
             padding: EdgeInsets.all(8.0),
@@ -230,39 +219,30 @@ Widget _listItem(DocumentSnapshot doc, BuildContext context) {
                     borderRadius: BorderRadius.circular(7),
                   ),
                 ),
-
-                // Image.asset(imgPath, fit: BoxFit.cover,),
                 SizedBox(width: 10.0),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(height: 10.0),
-                    Text(
-                      doc['n'],
-                      style: TextStyle(
-                          color: Color(0xFF563734),
-                          fontFamily: 'Montserrat',
-                          fontSize: 15.0),
+                    TextFactory.generateText(
+                        dog.name,
+                        size: 15.0,
+                        color: Colors.black
                     ),
                     SizedBox(height: 5.0),
                     Container(
                       width: 175.0,
-                      child: Text(
-                        doc['ca'],
-                        style: TextStyle(
-                            color: Color(0xFFB2A9A9),
-                            fontFamily: 'Montserrat',
-                            fontSize: 11.0),
+                      child: TextFactory.generateText(
+                          dog.info + "\n" + (dog.castrado ? "C" : "No c") + "astrado",
+                          size: 12.0,
+                          color: Colors.black54
                       ),
                     ),
-                    SizedBox(height: 10.0),
-                    Text(
-                      doc['r'],
-                      style: TextStyle(
-                          color: Color(0xFFF76053),
-                          fontFamily: 'Montserrat',
-                          fontSize: 15.0),
-                    )
+                    TextFactory.generateText(
+                        dog.breed,
+                        size: 15.0,
+                        color: Colors.redAccent
+                    ),
                   ],
                 )
               ],
