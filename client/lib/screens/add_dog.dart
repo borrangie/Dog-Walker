@@ -1,5 +1,9 @@
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
+import 'package:dogwalker2/screens/components/app_bar_factory.dart';
+import 'package:dogwalker2/screens/components/button_factory.dart';
+import 'package:dogwalker2/screens/components/text_factory.dart';
+import 'package:dogwalker2/screens/components/user_info_factory.dart';
 import 'package:dogwalker2/screens/my_dogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,41 +16,24 @@ class AddDogPage extends StatefulWidget {
 }
 
 class _AddDogPageState extends State<AddDogPage> {
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController razaController = new TextEditingController();
+  TextEditingController infoController = new TextEditingController();
+  TextEditingController weightController = new TextEditingController();
+  TextEditingController heightController = new TextEditingController();
+  TextEditingController dateTimeController = new TextEditingController();
+
+  var _radioValue;
   DateTime date;
-var _radioValue;
-
-TextEditingController nameController = new TextEditingController();
-TextEditingController razaController = new TextEditingController();
-TextEditingController infoController = new TextEditingController();
-TextEditingController weightController = new TextEditingController();
-TextEditingController heightController = new TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
-
-    
-    // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.red,
-          elevation: 0,
-          automaticallyImplyLeading: true,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return DogsPage();
-              }));
-              //Navigator.pop(context);
-            },
-          )),
+      appBar: AppBarFactory.generate(context, "", color: Colors.red, buttonColor: Colors.white),
       body: ListView(
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
         children: <Widget>[
+//          UserInfoFactory.generateAvatar(null, () {}),
           Container(
             height: 180,
             width: double.infinity,
@@ -67,133 +54,70 @@ TextEditingController heightController = new TextEditingController();
               ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(top: 55, left: 20, right: 20),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesomeIcons.paw,
-                        color: Colors.red,
-                      ),
-                      labelText: 'NOMBRE',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: razaController,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesomeIcons.dog,
-                        color: Colors.red,
-                      ),
-                      labelText: 'RAZA',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: weightController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesomeIcons.weightHanging,
-                        color: Colors.red,
-                      ),
-                      labelText: 'PESO',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: heightController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesomeIcons.ruler,
-                        color: Colors.red,
-                      ),
-                      labelText: 'ALTURA',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: infoController,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        FontAwesomeIcons.infoCircle,
-                        color: Colors.red,
-                      ),
-                      labelText: 'CARACTERISTICAS',
-                      labelStyle: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                ]),
+          TextFactory.generateTextField(
+              nameController,
+              "Nombre",
+              icon: Icon(
+                FontAwesomeIcons.paw,
+                color: Colors.red,
+              )
           ),
           SizedBox(
             height: 20,
           ),
-          FlatButton(
-            onPressed: () {
-              DatePicker.showDatePicker(context,
-                  showTitleActions: true,
-                  minTime: DateTime(1900, 1, 1),
-                  maxTime: DateTime.now(),
-                  onChanged: (date) {}, onConfirm: (date) {
-                setState(() {
-                  this.date = date;
-                });
-              }, currentTime: DateTime.now(), locale: LocaleType.es);
-            },
-            child: _getDateFormated(),
+          TextFactory.generateTextField(
+              razaController,
+              "Raza",
+              icon: Icon(
+                FontAwesomeIcons.dog,
+                color: Colors.red,
+              )
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextFactory.generateTextFieldNumeric(
+              weightController,
+              "Peso (en kgs)",
+              icon: Icon(
+                FontAwesomeIcons.weightHanging,
+                color: Colors.red,
+              )
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextFactory.generateTextFieldNumeric(
+              heightController,
+              "Altura (en cms)",
+              icon: Icon(
+                FontAwesomeIcons.ruler,
+                color: Colors.red,
+              )
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextFactory.generateTextFieldNumeric(
+              infoController,
+              "Caracteristicas",
+              icon: Icon(
+                FontAwesomeIcons.infoCircle,
+                color: Colors.red,
+              )
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextFactory.generateTextFieldDatetime(
+            context,
+            dateTimeController,
+            "Fecha de nacimiento",
+            onDateSet: () {},
+            icon: Icon(
+              FontAwesomeIcons.calendarAlt,
+              color: Colors.red,
+            )
           ),
           SizedBox(
             height: 20,
@@ -209,32 +133,17 @@ TextEditingController heightController = new TextEditingController();
                 color: Colors.red,
               ),
               SizedBox(width: 15,),
-              Text(
-                'GENERO',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              TextFactory.generateText("Genero", color: Colors.grey, weight: FontWeight.bold, size: 18),
               Radio(
                 value: 0,
                 groupValue: _radioValue,
               ),
-              Text(
-                'El',
-                style: new TextStyle(fontSize: 16.0),
-              ),
+              TextFactory.generateText("El"),
               new Radio(
                 value: 1,
                 groupValue: _radioValue,
               ),
-              new Text(
-                'Ella',
-                style: new TextStyle(
-                  fontSize: 16.0,
-                ),
-              ),
+              TextFactory.generateText("Ella"),
             ],
           ),
           SizedBox(
@@ -282,43 +191,17 @@ TextEditingController heightController = new TextEditingController();
           SizedBox(
             height: 30,
           ),
-          FlatButton(
-            onPressed: () {
-              _saveDog();
-              Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return DogsPage();
-                    }));
-            },
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.red, width: 3),
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Center(
-                child: Text(
-                  'Guardar',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 25,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 40,
-          ),
+          ButtonFactory.generateOutline("GUARDAR", () {
+            _saveDog();
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return DogsPage();
+                }));
+          }),
         ],
       ),
     );
   }
-
-
 
   _getDateFormated() {
     if (date != null) {
@@ -333,10 +216,6 @@ TextEditingController heightController = new TextEditingController();
           children: <Widget>[
             SizedBox(
               width: 5,
-            ),
-            Icon(
-              FontAwesomeIcons.calendarAlt,
-              color: Colors.red,
             ),
             SizedBox(
               width: 15,
@@ -389,12 +268,11 @@ TextEditingController heightController = new TextEditingController();
   }
 
   _saveDog() async{
-    String name = nameController.text;
-    String raza = razaController.text;
-    String weight = weightController.text;
-    String height = heightController.text;
-    String info = infoController.text;
-    
+    String name = nameController.text = nameController.text.trim();
+    String raza = razaController.text = razaController.text.trim();
+    String weight = weightController.text = weightController.text.trim();
+    String height = heightController.text = heightController.text.trim();
+    String info = infoController.text = infoController.text.trim();
 
     if(name.isNotEmpty && raza.isNotEmpty && weight.isNotEmpty && height.isNotEmpty && info.isNotEmpty && date!=null){
       double w = double.parse(weight);

@@ -57,7 +57,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
         buttonColor: Colors.white
       ),
       body: ListView(
-        padding: EdgeInsets.only(left: 20, right: 20),
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
         children: <Widget>[
           _generateCard(),
           Container(
