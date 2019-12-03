@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
 abstract class ButtonFactory {
+  static IconButton generateIcon(IconData icon, Color color, Function onPressed) {
+    return IconButton(
+      icon: Icon(
+        icon,
+        color: color,
+      ),
+      onPressed: onPressed,
+    );
+  }
+
   static Container generate(String text, GestureTapCallback tapCallback) {
     return Container(
       height: 45,
