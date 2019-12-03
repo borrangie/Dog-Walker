@@ -41,7 +41,7 @@ abstract class FirebaseRepository {
               currentUser.uid,
               userDocument.data["name"],
               userDocument.data["surname"],
-              userDocument.data["email"],
+              userDocument.data["mail"],
               userDocument.data["phone"],
               rating,
               claims["verified"],
@@ -54,7 +54,7 @@ abstract class FirebaseRepository {
               currentUser.uid,
               userDocument.data["name"],
               userDocument.data["surname"],
-              userDocument.data["email"],
+              userDocument.data["mail"],
               userDocument.data["phone"],
               rating,
               claims["verified"]

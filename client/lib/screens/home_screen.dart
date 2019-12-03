@@ -34,7 +34,7 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
     if(user?.name == null){
       return Text('Usuario');
     }else{
-      return Text("${user?.name}");
+      return Text("${user?.name} ${user?.surname}");
     }
   }
 
@@ -42,7 +42,7 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
   Widget build(BuildContext context) {
     var userAccountsDrawerHeader = UserAccountsDrawerHeader(
               accountName: _textName(),
-              accountEmail: Text("${user?.name}"),
+              accountEmail: Text("${user?.email}"),
               currentAccountPicture: CircleAvatar(
                 // TODO
 //                backgroundImage: NetworkImage("${user?.photoUrl}"),
