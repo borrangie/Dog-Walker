@@ -23,13 +23,13 @@ class FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
 
   @override
   Widget build(BuildContext context) {
-    dateTimeController.text = _formatDateTime(dateTime);
+    dateTimeController.text = TextFactory.formatDate(dateTime);
 
     return buildAll(
         context,
         "Tengo perros",
         UserInfoFactory.generateDogWalkerSetUp(context, nameController, surnameController, dateTimeController, (DateTime date) {
-          dateTimeController.text = _formatDateTime(date);
+          dateTimeController.text = TextFactory.formatDate(date);
           dateTime = date;
         }, phoneController, dniController)
     );
@@ -107,9 +107,5 @@ class FinishSignUpDogWalkerPageState extends State<FinishSignUpDogWalkerPage> {
     String dni = dniController.text = dniController.text.trim();
 
     return name.isEmpty || surname.isEmpty || phone.isEmpty || dni.isEmpty || dateTime == null;
-  }
-
-  String _formatDateTime(DateTime date) {
-    return date.year.toString() + "/" + date.month.toString() + "/" + date.day.toString();
   }
 }

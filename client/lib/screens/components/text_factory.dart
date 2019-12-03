@@ -53,6 +53,10 @@ abstract class TextFactory {
     );
   }
 
+  static String formatDate(DateTime date) {
+    return date.year.toString() + "/" + date.month.toString() + "/" + date.day.toString();
+  }
+
   static TextField _generateTextField(controller, text, TextInputType textInputType, enabled, icon, {obscureText: false, color}) {
     return TextField(
       enableInteractiveSelection: enabled,
