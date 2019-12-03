@@ -10,10 +10,10 @@ abstract class AppBarFactory {
         color,
         ButtonFactory.generateIcon(
             Icons.arrow_back_ios,
-            buttonColor,
             () {
               Navigator.pop(context);
-            }
+            },
+            color: buttonColor,
         )
     );
   }
@@ -25,8 +25,8 @@ abstract class AppBarFactory {
         color,
         ButtonFactory.generateIcon(
           Icons.menu,
-          buttonColor,
-          onPressed
+          onPressed,
+          color: buttonColor,
         )
     );
   }
