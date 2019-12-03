@@ -1,11 +1,6 @@
-
-
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/resources/store.dart';
-import 'package:dogwalker2/screens/components/app_bar_factory.dart';
-import 'package:dogwalker2/screens/components/button_factory.dart';
-import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:dogwalker2/screens/my_dogs.dart';
 import 'package:dogwalker2/screens/user_info_page.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +8,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'authentication/login_screen.dart';
 
-class HomeScreenPage extends StatefulWidget {
+class HomeScreenPage2 extends StatefulWidget {
   @override
-  _HomeScreenPageState createState() => _HomeScreenPageState();
+  _HomeScreenPage2State createState() => _HomeScreenPage2State();
 }
 
-class _HomeScreenPageState extends State<HomeScreenPage> {
+class _HomeScreenPage2State extends State<HomeScreenPage2> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   DogOwner user;
@@ -49,6 +44,7 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
       accountName: _textName(),
       accountEmail: Text("${user?.email}"),
       currentAccountPicture: CircleAvatar(
+        // TODO
 //                backgroundImage: NetworkImage("${user?.photoUrl}"),
         backgroundImage: NetworkImage(""),
       ),
@@ -56,137 +52,226 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
         color: Colors.red,
       ),
     );
-    Drawer drawer = Drawer(
-      child: ListView(
-        children: <Widget>[
-          userAccountsDrawerHeader,
-          InkWell(
-            onTap: () {
-            },
-            child: ListTile(
-              title: Text('Inicio'),
-              leading: Icon(
-                FontAwesomeIcons.home,
-                color: Colors.red,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                    return UserInfoPage();
-                  }));
-            },
-            child: ListTile(
-              title: Text('Mi Perfil'),
-              leading: Icon(
-                Icons.person,
-                color: Colors.red,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                    return DogsPage();
-                  }));
-            },
-            child: ListTile(
-              title: Text('Mis Perros'),
-              leading: Icon(
-                FontAwesomeIcons.dog,
-                color: Colors.red,
-              ),
-            ),
-          ),
-          Divider(
-            color: Colors.grey,
-          ),
-          InkWell(
-            onTap: () {},
-            child: ListTile(
-              title: Text('Configuración'),
-              leading: Icon(
-                Icons.settings,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: ListTile(
-              title: Text('About Us'),
-              leading: Icon(
-                Icons.help,
-                color: Colors.blue,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              logout();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                    return LogInPage();
-                  }));
-            },
-            child: ListTile(
-              title: Text('Log Out'),
-              leading: Icon(
-                FontAwesomeIcons.signOutAlt,
-                color: Colors.blue,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
 
     return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBarFactory.generateBack(
-          context,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              ButtonFactory.generateIcon
-              Container(
+      key: _scaffoldKey,
+      body: ListView(
+        children: <Widget>[
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 15, right: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                IconButton(
+                  onPressed: () => _scaffoldKey.currentState.openDrawer(),
+                  icon: Icon(Icons.menu),
+                  color: Colors.black,
+                ),
+                Container(
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(7),
                       image: DecorationImage(
                           image: AssetImage('assets/images/dwlogo.png'),
-                          fit: BoxFit.cover)
-                  )
-              ),
-            ],
+                          fit: BoxFit.cover)),
+                ),
+              ],
+            ),
           ),
-          buttonType: AppBarFactory.buttonTypeDrawer,
-          buttonColor: Colors.black,
-          onPressed: () => _scaffoldKey.currentState.openDrawer()
-        ),
-        body: ListView(
-          padding: EdgeInsets.only(top: 10),
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 30.0,
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Dar un',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 50.0,
                   ),
-                  TextFactory.generateText("Busca un Paseo", size: 30.0, color: Colors.red, weight: FontWeight.bold),
-                  TextFactory.generateText("Busca paseadores en tu zona", size: 18.0, weight: FontWeight.bold),
-                ],
+                  textAlign: TextAlign.left,
+                ),
+                Text('Paseo',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                      fontSize: 50.0,
+                    )),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  'Paseadores en tu zona',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 7.0,
+          ),
+          Container(
+            height: 250,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: <Widget>[
+                _buildListItem('assets/images/nd.jpeg', 'Nico', '20', '4.5'),
+                _buildListItem('assets/images/m.jpeg', 'Marc', '25', '4.9'),
+                _buildListItem('assets/images/nb.jpeg', 'NicoB', '20', '4.2'),
+                _buildListItem('assets/images/a.jpeg', 'Angie', '15', '4.0'),
+                _buildListItem('assets/images/g.jpeg', 'Gabi', '30', '3.5'),
+              ],
+            ),
+          ),
+          SizedBox(height: 20.0),
+          Padding(
+              padding: EdgeInsets.only(left: 20.0),
+              child: Text('Todos los paseadores',
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17.0))),
+          SizedBox(height: 20.0),
+          _listItem(
+              'assets/images/nd.jpeg',
+              'Nicolas Dankiewicz',
+              'Amante de los perros y de los animales, muy respetuoso y cumplidor con el trabajo.',
+              '\$20.0',
+              4,
+              12,
+              '2-3per',
+              context),
+          SizedBox(height: 10.0),
+          _listItem(
+              'assets/images/nb.jpeg',
+              'Nicolas Britos',
+              'Muy buen paseador de perros, transmite mucho cariño y es muy cumplidor con los horarios.',
+              '\$20.0',
+              4,
+              14,
+              '2-3per',
+              context),
+          SizedBox(height: 20.0)
+        ],
+      ),
+      bottomNavigationBar: Container(
+        height: 70.0,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(50.0),
+                topRight: Radius.circular(50.0)),
+            color: Colors.red),
+        padding: EdgeInsets.only(left: 40.0, right: 40.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Icon(FontAwesomeIcons.home, color: Colors.white),
+            Icon(FontAwesomeIcons.search, color: Colors.white),
+            Icon(FontAwesomeIcons.map, color: Colors.white),
+            Icon(FontAwesomeIcons.user, color: Colors.white)
+          ],
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            userAccountsDrawerHeader,
+            InkWell(
+              onTap: () {
+
+              },
+              child: ListTile(
+                title: Text('Inicio'),
+                leading: Icon(
+                  FontAwesomeIcons.home,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                      return UserInfoPage();
+                    }));
+              },
+              child: ListTile(
+                title: Text('Mi Perfil'),
+                leading: Icon(
+                  Icons.person,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                      return DogsPage();
+                    }));
+              },
+              child: ListTile(
+                title: Text('Mis Perros'),
+                leading: Icon(
+                  FontAwesomeIcons.dog,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            Divider(
+              color: Colors.grey,
+            ),
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                title: Text('Configuración'),
+                leading: Icon(
+                  Icons.settings,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                title: Text('About Us'),
+                leading: Icon(
+                  Icons.help,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                logout();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                      return LogInPage();
+                    }));
+              },
+              child: ListTile(
+                title: Text('Log Out'),
+                leading: Icon(
+                  FontAwesomeIcons.signOutAlt,
+                  color: Colors.blue,
+                ),
               ),
             ),
           ],
         ),
-        drawer: drawer
+      ),
     );
   }
 }
@@ -473,4 +558,3 @@ Widget _listItem(String imgPath, String foodName, String desc, String price,
 logout() {
   FirebaseRepository.logout();
 }
-
