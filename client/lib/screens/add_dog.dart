@@ -29,7 +29,7 @@ class _AddDogPageState extends State<AddDogPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFactory.generate(context, "", color: Colors.red, buttonColor: Colors.white),
+      appBar: AppBarFactory.generateBack(context, "", color: Colors.red, buttonColor: Colors.white),
       body: ListView(
         padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
         children: <Widget>[

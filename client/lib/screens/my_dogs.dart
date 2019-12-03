@@ -26,7 +26,7 @@ class _DogsPageState extends State<DogsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFactory.generate(context, "", color: Colors.red, buttonColor: Colors.white),
+      appBar: AppBarFactory.generateBack(context, "", color: Colors.red, buttonColor: Colors.white),
       body: Column(
         children: <Widget>[
           Container(

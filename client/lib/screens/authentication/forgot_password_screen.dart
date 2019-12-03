@@ -23,7 +23,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: false,
-        appBar: AppBarFactory.generate(context, "Olvido su contraseña?"),
+        appBar: AppBarFactory.generateBack(context, "Olvido su contraseña?"),
         body: SingleChildScrollView(
           reverse: true,
           child: Padding(
