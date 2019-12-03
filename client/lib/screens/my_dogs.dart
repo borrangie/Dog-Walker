@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogwalker2/models/users/dog_owner.dart';
-import 'package:dogwalker2/remote/firebase_repository.dart';
+import 'package:dogwalker2/resources/store.dart';
 import 'package:dogwalker2/screens/add_dog.dart';
+import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'home_screen.dart';
 
 class DogsPage extends StatefulWidget {
   @override
@@ -19,35 +18,13 @@ class _DogsPageState extends State<DogsPage> {
   @override
   void initState() {
     super.initState();
-    initUser();
-  }
-
-  initUser() async {
-    user = await FirebaseRepository.getCurrentUser();
-    setState(() {});
+    user = Store.instance.user;
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.red,
-          elevation: 0,
-          automaticallyImplyLeading: true,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return HomeScreenPage();
-              }));
-              //Navigator.pop(context);
-            },
-          )),
+      appBar: AppBarFactory.generate(context, "", color: Colors.red, buttonColor: Colors.white),
       body: Column(
         children: <Widget>[
           Container(
@@ -108,7 +85,6 @@ class _DogsPageState extends State<DogsPage> {
                   return Center(
                     child: Text('Cargando...', style: TextStyle(color: Colors.red, fontSize: 20),),
                   );
-                  
                 }else{
                   return ListView.builder(
                     itemExtent: 190,
@@ -120,19 +96,19 @@ class _DogsPageState extends State<DogsPage> {
               }
             ),
           ),
-          
-          
-         
         ],
       ),
       floatingActionButton: FloatingActionButton(
       onPressed: () {
         Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return AddDogPage();
-                    }));
+          MaterialPageRoute(builder: (context) {
+          return AddDogPage();
+        }));
       },
-      child: Icon(FontAwesomeIcons.plus),
+      child: Icon(
+        FontAwesomeIcons.plus,
+        color: Colors.white,
+      ),
       backgroundColor: Colors.red,
     ),
     );

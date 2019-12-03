@@ -1,7 +1,7 @@
 import 'package:dogwalker2/models/users/user.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 
-import 'dogs/dog.dart';
+import 'dog.dart';
 
 class DogOwner extends User {
   String _name;

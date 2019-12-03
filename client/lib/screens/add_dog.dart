@@ -1,13 +1,13 @@
+import 'package:dogwalker2/models/users/dog.dart';
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
-import 'package:dogwalker2/screens/components/user_info_factory.dart';
+import 'package:dogwalker2/screens/components/toast_factory.dart';
 import 'package:dogwalker2/screens/my_dogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AddDogPage extends StatefulWidget {
@@ -23,8 +23,9 @@ class _AddDogPageState extends State<AddDogPage> {
   TextEditingController heightController = new TextEditingController();
   TextEditingController dateTimeController = new TextEditingController();
 
-  var _radioValue;
-  DateTime date;
+  int _genreRadio;
+  int _castradoRadio;
+  DateTime dateTime;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +114,10 @@ class _AddDogPageState extends State<AddDogPage> {
             context,
             dateTimeController,
             "Fecha de nacimiento",
-            onDateSet: () {},
+            onDateSet: (DateTime date) {
+              dateTimeController.text = TextFactory.formatDate(date);
+              dateTime = date;
+            },
             icon: Icon(
               FontAwesomeIcons.calendarAlt,
               color: Colors.red,
@@ -125,9 +129,6 @@ class _AddDogPageState extends State<AddDogPage> {
           new Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              SizedBox(
-                width: 22,
-              ),
               Icon(
                 FontAwesomeIcons.venusMars,
                 color: Colors.red,
@@ -136,12 +137,24 @@ class _AddDogPageState extends State<AddDogPage> {
               TextFactory.generateText("Genero", color: Colors.grey, weight: FontWeight.bold, size: 18),
               Radio(
                 value: 0,
-                groupValue: _radioValue,
+                groupValue: _genreRadio,
+                activeColor: Colors.red,
+                onChanged: (newValue) {
+                  setState(() {
+                    _genreRadio = newValue;
+                  });
+                },
               ),
               TextFactory.generateText("El"),
               new Radio(
                 value: 1,
-                groupValue: _radioValue,
+                groupValue: _genreRadio,
+                activeColor: Colors.red,
+                onChanged: (newValue) {
+                  setState(() {
+                    _genreRadio = newValue;
+                  });
+                },
               ),
               TextFactory.generateText("Ella"),
             ],
@@ -152,9 +165,6 @@ class _AddDogPageState extends State<AddDogPage> {
           new Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              SizedBox(
-                width: 22,
-              ),
               Icon(
                 FontAwesomeIcons.minusCircle,
                 color: Colors.red,
@@ -170,7 +180,13 @@ class _AddDogPageState extends State<AddDogPage> {
               ),
               Radio(
                 value: 0,
-                groupValue: _radioValue,
+                groupValue: _castradoRadio,
+                activeColor: Colors.red,
+                onChanged: (newValue) {
+                  setState(() {
+                    _castradoRadio = newValue;
+                  });
+                },
               ),
               Text(
                 'Si',
@@ -178,7 +194,13 @@ class _AddDogPageState extends State<AddDogPage> {
               ),
               new Radio(
                 value: 1,
-                groupValue: _radioValue,
+                groupValue: _castradoRadio,
+                activeColor: Colors.red,
+                onChanged: (newValue) {
+                  setState(() {
+                    _castradoRadio = newValue;
+                  });
+                },
               ),
               new Text(
                 'No',
@@ -193,95 +215,45 @@ class _AddDogPageState extends State<AddDogPage> {
           ),
           ButtonFactory.generateOutline("GUARDAR", () {
             _saveDog();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-                  return DogsPage();
-                }));
           }),
         ],
       ),
     );
   }
 
-  _getDateFormated() {
-    if (date != null) {
-      return Container(
-        width: double.infinity,
-        height: 50,
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: 5,
-            ),
-            SizedBox(
-              width: 15,
-            ),
-            Text(
-              date.day.toString() +
-                  '/' +
-                  date.month.toString() +
-                  '/' +
-                  date.year.toString(),
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
-      );
-    } else {
-      return Container(
-        width: double.infinity,
-        height: 50,
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                width: 5,
-              ),
-              Icon(
-                FontAwesomeIcons.calendarAlt,
-                color: Colors.red,
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Text(
-                'CUMPLEAÑOS',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            ],
-          ),
-        ),
-      );
-    }
-  }
-
-  _saveDog() async{
+  _saveDog() async {
     String name = nameController.text = nameController.text.trim();
     String raza = razaController.text = razaController.text.trim();
     String weight = weightController.text = weightController.text.trim();
     String height = heightController.text = heightController.text.trim();
     String info = infoController.text = infoController.text.trim();
 
-    if(name.isNotEmpty && raza.isNotEmpty && weight.isNotEmpty && height.isNotEmpty && info.isNotEmpty && date!=null){
+    if(name.isNotEmpty && raza.isNotEmpty && weight.isNotEmpty && height.isNotEmpty && info.isNotEmpty && dateTime!=null && _genreRadio != null && _castradoRadio != null){
       double w = double.parse(weight);
       double h = double.parse(height);
-      DogOwner user = await FirebaseRepository.getCurrentUser();
-      Map<String, dynamic> dogData = {'n'.toString():name, 'r'.toString():raza, 'p'.toString():w, 'a'.toString():h, 'ca'.toString():info, 'c'.toString():true, 'f'.toString():"", 's'.toString():true, 'e'.toString(): date,'i'.toString(): user.id};
-      FirebaseRepository.addDog(dogData);
-    }else{
-      print('Complete the info of your dog'); 
+      Map dogData = {
+        "name": name,
+        "breed": raza,
+        "weight": w,
+        "height": h,
+        "info": info,
+        "birthday": dateTime,
+        "genre": _genreRadio,
+        "castrado": _castradoRadio == 0 ? true : false
+      };
+
+      Dog dog = await FirebaseRepository.addDog(dogData);
+      if (dog == null) {
+        ToastFactory.showError("Error creando perro. Intente luego");
+      } else {
+        ToastFactory.showError("Guardado.");
+        Navigator.push(context,
+          MaterialPageRoute(builder: (context) {
+            return DogsPage();
+         }));
+      }
+    } else {
+      ToastFactory.showError("Por favor, complete todos los campos");
     }
   }
 }

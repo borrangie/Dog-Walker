@@ -28,13 +28,13 @@ class ApplyDogWalkerPageState extends State<ApplyDogWalkerPage> {
     nameController.text = user.name;
     surnameController.text = user.surname;
     phoneController.text = user.phone;
-    dateTimeController.text = _formatDateTime(dateTime);
+    dateTimeController.text = TextFactory.formatDate(dateTime);
 
     return buildAll(
         context,
         "Tengo perros",
         UserInfoFactory.generateDogWalkerApply(context, nameController, surnameController, dateTimeController, (DateTime date) {
-          dateTimeController.text = _formatDateTime(date);
+          dateTimeController.text = TextFactory.formatDate(date);
           dateTime = date;
         }, phoneController, dniController)
     );
@@ -104,9 +104,5 @@ class ApplyDogWalkerPageState extends State<ApplyDogWalkerPage> {
     String dni = dniController.text = dniController.text.trim();
 
     return phone.isEmpty || dni.isEmpty || dateTime == null;
-  }
-
-  String _formatDateTime(DateTime date) {
-    return date.year.toString() + "/" + date.month.toString() + "/" + date.day.toString();
   }
 }
