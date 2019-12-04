@@ -97,7 +97,7 @@ class _AddDogPageState extends State<AddDogPage> {
           SizedBox(
             height: 20,
           ),
-          TextFactory.generateTextFieldNumeric(
+          TextFactory.generateTextField(
               infoController,
               "Caracteristicas",
               icon: Icon(
