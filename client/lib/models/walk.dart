@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dogwalker2/models/db_object.dart';
-import 'package:dogwalker2/models/users/dog.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
 
 class Walk extends DBObject {

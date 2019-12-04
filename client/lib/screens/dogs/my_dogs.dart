@@ -2,12 +2,13 @@ import 'package:dogwalker2/models/users/dog.dart';
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/resources/store.dart';
-import 'package:dogwalker2/screens/add_dog.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'add_dog.dart';
 
 class DogsPage extends StatefulWidget {
   @override
@@ -118,8 +119,6 @@ class _DogsPageState extends State<DogsPage> {
 }
 
 Widget _listItem(Dog dog, BuildContext context) {
-  DateTime currentDateTime = DateTime.now();
-
   return Padding(
     padding: EdgeInsets.only(left: 15.0, top: 15.0),
     child: Stack(
