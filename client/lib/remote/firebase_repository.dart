@@ -4,6 +4,7 @@ import 'package:dogwalker2/models/users/dog.dart';
 import 'package:dogwalker2/models/users/dog_owner.dart';
 import 'package:dogwalker2/models/users/dog_walker.dart';
 import 'package:dogwalker2/models/users/user.dart';
+import 'package:dogwalker2/models/walk.dart';
 import 'package:dogwalker2/resources/store.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -66,6 +67,26 @@ abstract class FirebaseRepository {
     }
 
     return user;
+  }
+
+  static Future<DogWalker> getDogWalker(String userId) async {
+    var userDocument = await _firestore.collection(collectionUsers).document(userId).get();
+    if (userDocument.exists) {
+        return new DogWalker(
+            userDocument.documentID,
+            userDocument.data["name"],
+            userDocument.data["surname"],
+            userDocument.data["mail"],
+            "",
+            0.0,
+            true,
+            _getDateTime(userDocument.data["birthday"]),
+            "",
+            true
+        );
+    }
+
+    return null;
   }
 
   static Future<AuthResult> signUp(String mail, String password) async {
@@ -201,18 +222,79 @@ abstract class FirebaseRepository {
     );
   }
 
+  static Future<bool> setPhoneNumber(String phone) async {
+    return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setPhoneNumber").call({
+      "phone": phone,
+    }), "result");
+  }
+
+  static Future<List<Walk>> getWalks() async {
+    List<Walk> walks = [];
+    QuerySnapshot querySnapshot = await _firestore
+        .collection(collectionWalks)
+        .getDocuments();
+
+    for (var documentSnapshot in querySnapshot.documents) {
+      var data = documentSnapshot.data;
+
+      var cost = data["cost_hour"];
+      if (cost is int) cost = cost.toDouble();
+
+      DateTime dateTime = _getDateTime(data["day"]);
+      var walk = Walk(
+        documentSnapshot.documentID,
+        data["address"],
+        cost,
+        dateTime,
+        data["max_dogs"],
+        data["hours"],
+        await getDogWalker(data["walker"]),
+        (data["dogs"] as List).length
+      );
+
+      walks.add(walk);
+    }
+
+    return walks;
+  }
+
+  static Future<bool> hireWalk(Walk walk, Dog dog) async {
+    try {
+      DocumentSnapshot documentSnapshot = await _firestore
+          .collection(collectionWalks)
+          .document(walk.id)
+          .get();
+
+      List dogs = [];
+      for (var savedDog in (documentSnapshot.data["dogs"] as List)) {
+        dogs.add(savedDog);
+      }
+      dogs.add({
+        "user": Store.instance.user.id,
+        "dog": dog.id
+      });
+
+      await _firestore
+          .collection(collectionWalks)
+          .document(walk.id)
+          .setData(
+          {
+            "dogs": dogs
+          },
+          merge: true);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   static bool _parseOutput(HttpsCallableResult result, String key) {
     print(result.data);
     if (result == null || result.data == null || result.data["error"]) {
       return false;
     }
     return result.data["data"][key];
-  }
-
-  static Future<bool> setPhoneNumber(String phone) async {
-    return _parseOutput(await _cloudFunctions.getHttpsCallable(functionName: "setPhoneNumber").call({
-      "phone": phone,
-    }), "result");
   }
 
   static DateTime _getDateTime(Timestamp timestamp) {

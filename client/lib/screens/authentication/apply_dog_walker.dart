@@ -44,7 +44,7 @@ class ApplyDogWalkerPageState extends State<ApplyDogWalkerPage> {
     return Container(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
-        appBar: AppBarFactory.generate(context, titleText),
+        appBar: AppBarFactory.generateBack(context, titleText),
         body: SingleChildScrollView(
             reverse: true,
             child: Padding(

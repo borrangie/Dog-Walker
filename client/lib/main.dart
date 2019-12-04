@@ -6,9 +6,8 @@ import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_owner.dart'
 import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_walker.dart';
 import 'package:dogwalker2/screens/authentication/login_screen.dart';
 import 'package:dogwalker2/screens/authentication/select_user_type.dart';
+import 'package:dogwalker2/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
-
-import 'screens/home_screen.dart';
 
 void main() => runApp(AppWrapper());
 

@@ -4,7 +4,6 @@ import 'package:dogwalker2/screens/components/app_bar_factory.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:dogwalker2/screens/components/toast_factory.dart';
-import 'package:dogwalker2/screens/my_dogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,7 +28,7 @@ class _AddDogPageState extends State<AddDogPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFactory.generate(context, "", color: Colors.red, buttonColor: Colors.white),
+      appBar: AppBarFactory.generateBack(context, "", color: Colors.red, buttonColor: Colors.white),
       body: ListView(
         padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
         children: <Widget>[

@@ -49,7 +49,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     }
 
     return Scaffold(
-      appBar: AppBarFactory.generate(
+      appBar: AppBarFactory.generateBack(
         context,
         "Mi perfil",
         color: Colors.red,

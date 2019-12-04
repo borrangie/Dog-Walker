@@ -4,7 +4,7 @@ import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:dogwalker2/screens/components/toast_factory.dart';
 import 'package:dogwalker2/screens/components/user_info_factory.dart';
-import 'package:dogwalker2/screens/home_screen.dart';
+import 'package:dogwalker2/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -34,7 +34,7 @@ class FinishSignUpDogOwnerPageState extends State<FinishSignUpDogOwnerPage> {
     return Container(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
-        appBar: AppBarFactory.generate(context, titleText),
+        appBar: AppBarFactory.generateBack(context, titleText),
         body: SingleChildScrollView(
             reverse: true,
             child: Padding(

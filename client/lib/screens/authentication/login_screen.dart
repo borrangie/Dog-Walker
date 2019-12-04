@@ -12,7 +12,7 @@ import 'package:dogwalker2/screens/components/button_factory.dart';
 import 'package:dogwalker2/screens/components/logo_text_factory.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
 import 'package:dogwalker2/screens/components/toast_factory.dart';
-import 'package:dogwalker2/screens/home_screen.dart';
+import 'package:dogwalker2/screens/home/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

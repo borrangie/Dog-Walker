@@ -19,7 +19,7 @@ class _SelectUserTypePageState extends State<SelectUserTypePage> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: false,
-        appBar: AppBarFactory.generate(context, "Tipo de Cuenta"),
+        appBar: AppBarFactory.generateBack(context, "Tipo de Cuenta"),
         body: SingleChildScrollView(
             reverse: true,
             child: Padding(

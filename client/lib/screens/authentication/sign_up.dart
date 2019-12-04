@@ -25,7 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: false,
-        appBar: AppBarFactory.generate(context, "Registrarse"),
+        appBar: AppBarFactory.generateBack(context, "Registrarse"),
         body: SingleChildScrollView(
           reverse: true,
           child: Padding(
