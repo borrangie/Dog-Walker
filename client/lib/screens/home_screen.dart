@@ -1,6 +1,7 @@
 
 
 import 'package:dogwalker2/models/users/dog_owner.dart';
+import 'package:dogwalker2/models/walk.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/resources/store.dart';
 import 'package:dogwalker2/screens/components/app_bar_factory.dart';
@@ -10,6 +11,7 @@ import 'package:dogwalker2/screens/my_dogs.dart';
 import 'package:dogwalker2/screens/user_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'authentication/login_screen.dart';
 
@@ -21,19 +23,8 @@ class HomeScreenPage extends StatefulWidget {
 class _HomeScreenPageState extends State<HomeScreenPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  DogOwner user;
-
-  @override
-  void initState() {
-    super.initState();
-    initUser();
-  }
-
-  initUser() async {
-    user = Store.instance.user;
-    user = await FirebaseRepository.getCurrentUser();
-    setState(() {});
-  }
+  DogOwner user = Store.instance.user;
+  TextEditingController dateTimeController = new TextEditingController();
 
   Widget _textName(){
     if(user?.name == null){
@@ -126,11 +117,12 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
           ),
           InkWell(
             onTap: () {
-              logout();
+              FirebaseRepository.logout();
+              Store.instance.user = null;
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                    return LogInPage();
-                  }));
+              MaterialPageRoute(builder: (context) {
+                return LogInPage();
+              }));
             },
             child: ListTile(
               title: Text('Log Out'),
@@ -146,12 +138,12 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
 
     return Scaffold(
         key: _scaffoldKey,
-        appBar: AppBarFactory.generateBack(
+        appBar: AppBarFactory.generateDrawer(
           context,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              ButtonFactory.generateIcon
+            TextFactory.generateText("Busca un paseo", size: 20.0),
               Container(
                   height: 40,
                   width: 40,
@@ -164,25 +156,54 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
               ),
             ],
           ),
-          buttonType: AppBarFactory.buttonTypeDrawer,
           buttonColor: Colors.black,
           onPressed: () => _scaffoldKey.currentState.openDrawer()
         ),
         body: ListView(
-          padding: EdgeInsets.only(top: 10),
+          padding: EdgeInsets.only(top: 10, left: 10, right: 10),
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  TextFactory.generateText("Busca un Paseo", size: 30.0, color: Colors.red, weight: FontWeight.bold),
-                  TextFactory.generateText("Busca paseadores en tu zona", size: 18.0, weight: FontWeight.bold),
-                ],
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  children: <Widget>[
+                    ButtonFactory.generateIcon(Icons.today, () {}),
+                    TextFactory.generateText("Selecciona una fecha", color: Colors.grey)
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    ButtonFactory.generateIcon(Icons.watch_later, () {}),
+                    TextFactory.generateText("Selecciona una hora", color: Colors.grey)
+                  ],
+                ),
+                Divider(),
+                SizedBox(
+                  height: 10,
+                ),
+                FutureBuilder(
+                  future: FirebaseRepository.getWalks(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          TextFactory.generateText("No se encontraron resultados", size: 18.0),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFactory.generateText("Reduce los filtros o prueba en otro momento", size: 16.0)],
+                      );
+                    } else {
+                      print(snapshot.data);
+                      return _buildListWalks(context, snapshot.data);
+                    }
+                  },
+                )
+              ],
             ),
           ],
         ),
@@ -191,286 +212,57 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
   }
 }
 
-Widget _buildListItem(String imgPath, String name, String price, String rate) {
-  return InkWell(
-    onTap: () {},
-    child: Padding(
-      padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-      child: Container(
-        height: 200,
-        width: 200,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 6,
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 5),
-          ],
-        ),
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 175,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color.fromRGBO(255, 64, 0, 0.5),
-                      Color.fromRGBO(255, 0, 43, 0.5)
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  )),
-            ),
-            Hero(
-              tag: imgPath,
-              child: Container(
-                height: 175,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(imgPath),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10))),
-              ),
-            ),
-            Positioned(
-              top: 160,
-              right: 20,
-              child: Material(
-                elevation: 2.0,
-                borderRadius: BorderRadius.circular(15),
-                child: Container(
-                  height: 30,
-                  width: 30,
-                  child: Center(
-                    child: Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                      size: 18,
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 190,
-              left: 10,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(name,
-                      style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                          fontSize: 14)),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Container(
-                    width: 175,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              rate,
-                              style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Colors.grey,
-                                  fontSize: 12.0),
-                            ),
-                            SizedBox(width: 3.0),
-                            Icon(Icons.star, color: Colors.green, size: 14.0),
-                            Icon(Icons.star, color: Colors.green, size: 14.0),
-                            Icon(Icons.star, color: Colors.green, size: 14.0),
-                            Icon(Icons.star, color: Colors.green, size: 14.0),
-                            Icon(Icons.star, color: Colors.green, size: 14.0),
-                          ],
-                        ),
-                        Text(price,
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                                fontSize: 16.0)),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    ),
+Widget _buildListWalks(BuildContext context, List<Walk> walks) {
+  List<Widget> widgets = [];
+  for (var walk in walks) {
+    widgets.add(_buildListWalk(context, walk));
+  }
+
+  return Column(
+    children: widgets,
   );
 }
 
-Widget _listItem(String imgPath, String foodName, String desc, String price,
-    int likes, int calCount, String serving, BuildContext context) {
-  return Padding(
-    padding: EdgeInsets.only(left: 15.0, top: 15.0),
-    child: Stack(
+Widget _buildListWalk(BuildContext context, Walk walk) {
+  return Card(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(
-          height: 170.0,
-          width: MediaQuery.of(context).size.width,
-        ),
-        Positioned(
-          left: 15.0,
-          top: 30.0,
-          child: Container(
-            height: 125.0,
-            width: MediaQuery.of(context).size.width - 15.0,
-            decoration: BoxDecoration(
-                color: Color(0xFFF9EFEB),
-                borderRadius: BorderRadius.circular(5.0),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 3.0,
-                      blurRadius: 3.0)
-                ]),
-            // child: Text('Helloworld'),
-          ),
-        ),
-        Positioned(
-            left: 95.0,
-            top: 64.0,
-            child: Container(
-              height: 105.0,
-              width: MediaQuery.of(context).size.width - 15.0,
-              decoration: BoxDecoration(
-                  color: Color(0xFFF9EFEB),
-                  borderRadius: BorderRadius.circular(5.0),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 3.0,
-                        blurRadius: 3.0)
-                  ]),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 10.0, left: 10.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.star, color: Color(0xFFF75A4C), size: 15.0),
-                      SizedBox(width: 5.0),
-                      Text(
-                        likes.toString(),
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12.0,
-                            color: Colors.grey),
-                      ),
-                      SizedBox(width: 25.0),
-                      Icon(Icons.people, color: Color(0xFFF75A4C), size: 15.0),
-                      SizedBox(width: 5.0),
-                      Text(
-                        calCount.toString() + 'cal',
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12.0,
-                            color: Colors.grey),
-                      ),
-                      SizedBox(width: 25.0),
-                      Icon(Icons.play_circle_outline,
-                          color: Color(0xFFF75A4C), size: 15.0),
-                      SizedBox(width: 5.0),
-                      Text(
-                        serving,
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12.0,
-                            color: Colors.grey),
-                      )
-                    ],
-                  ),
-                ),
+        ListTile(
+          leading: Icon(Icons.account_circle, size: 50, color: Colors.red,),
+          title: Row(
+            children: <Widget>[
+              TextFactory.generateText(
+                  "\$" + walk.cost.toString() + "/h",
+                  size: 20.0
               ),
-            )),
-        Container(
-          height: 125.0,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            color: Colors.white,
+              TextFactory.generateText(
+                  " - "
+                      + walk.dayOfWeek
+                      + " - "
+                      + DateFormat("HH:mm").format(walk.day)
+                      + " - "
+                      + DateFormat("HH:mm").format(walk.day.add(Duration(hours: walk.hours))),
+                  size: 18.0
+              ),
+            ],
           ),
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(imgPath),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                ),
-
-                // Image.asset(imgPath, fit: BoxFit.cover,),
-                SizedBox(width: 10.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 10.0),
-                    Text(
-                      foodName,
-                      style: TextStyle(
-                          color: Color(0xFF563734),
-                          fontFamily: 'Montserrat',
-                          fontSize: 15.0),
-                    ),
-                    SizedBox(height: 5.0),
-                    Container(
-                      width: 175.0,
-                      child: Text(
-                        desc,
-                        style: TextStyle(
-                            color: Color(0xFFB2A9A9),
-                            fontFamily: 'Montserrat',
-                            fontSize: 11.0),
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Text(
-                      price.toString(),
-                      style: TextStyle(
-                          color: Color(0xFFF76053),
-                          fontFamily: 'Montserrat',
-                          fontSize: 15.0),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-        )
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextFactory.generateText(
+                walk.dogWalker.name + " " + walk.dogWalker.surname + "",
+                color: Colors.grey
+              ),
+              TextFactory.generateText(
+                (walk.maxDogs - walk.dogsQuantity).toString()
+                    + " cupos disponibles",
+                color: Colors.grey
+              ),
+            ],
+          )
+        ),
       ],
     ),
   );
 }
-
-logout() {
-  FirebaseRepository.logout();
-}
-

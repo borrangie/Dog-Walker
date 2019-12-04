@@ -7,6 +7,7 @@ import 'package:dogwalker2/screens/authentication/finish_sign_up_dog_walker.dart
 import 'package:dogwalker2/screens/authentication/login_screen.dart';
 import 'package:dogwalker2/screens/authentication/select_user_type.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'screens/home_screen.dart';
 
