@@ -1,7 +1,9 @@
 import 'package:dogwalker2/models/walk.dart';
 import 'package:dogwalker2/remote/firebase_repository.dart';
 import 'package:dogwalker2/screens/components/button_factory.dart';
+import 'package:dogwalker2/screens/components/walk_factory.dart';
 import 'package:dogwalker2/screens/components/text_factory.dart';
+import 'package:dogwalker2/screens/home/new_hire_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -38,8 +40,21 @@ class SearchScreenWidget extends StatelessWidget {
               future: FirebaseRepository.getWalks(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(
-                    child: TextFactory.generateText("Cargando...", size: 24.0, weight: FontWeight.bold, color: Colors.red),
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CircularProgressIndicator(backgroundColor: Colors.red),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFactory.generateText("Cargando...", size: 18.0),
+                    ],
                   );
                 } else {
                   if ((snapshot.data as List).isEmpty) {
@@ -76,46 +91,10 @@ class SearchScreenWidget extends StatelessWidget {
   }
 
   Widget _buildListWalk(BuildContext context, Walk walk) {
-    return Card(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-              leading: Icon(Icons.account_circle, size: 50, color: Colors.red,),
-              title: Row(
-                children: <Widget>[
-                  TextFactory.generateText(
-                      "\$" + walk.cost.toString() + "/h",
-                      size: 20.0
-                  ),
-                  TextFactory.generateText(
-                      " - "
-                          + walk.dayOfWeek
-                          + " - "
-                          + DateFormat("HH:mm").format(walk.day)
-                          + " - "
-                          + DateFormat("HH:mm").format(walk.day.add(Duration(hours: walk.hours))),
-                      size: 18.0
-                  ),
-                ],
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFactory.generateText(
-                      walk.dogWalker.name + " " + walk.dogWalker.surname + "",
-                      color: Colors.grey
-                  ),
-                  TextFactory.generateText(
-                      (walk.maxDogs - walk.dogsQuantity).toString()
-                          + " cupos disponibles",
-                      color: Colors.grey
-                  ),
-                ],
-              )
-          ),
-        ],
-      ),
-    );
+    return WalkFactory.generateCard(context, walk, onTap: () {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return NewHirePage(walk);
+      }));
+    });
   }
 }

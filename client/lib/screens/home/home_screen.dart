@@ -21,7 +21,6 @@ class HomeScreenPage extends StatefulWidget {
 class _HomeScreenPageState extends State<HomeScreenPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  TextEditingController dateTimeController = new TextEditingController();
   DogOwner user = Store.instance.user;
   int _navBarIndex = 0;
 
@@ -156,7 +155,7 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
               ),
             ],
           ),
-          buttonColor: Colors.black,
+          buttonColor: Colors.red,
           onPressed: () => _scaffoldKey.currentState.openDrawer()
         ),
         bottomNavigationBar: BottomNavigationBar(
