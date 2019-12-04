@@ -258,6 +258,37 @@ abstract class FirebaseRepository {
     return walks;
   }
 
+  static Future<bool> hireWalk(Walk walk, Dog dog) async {
+    try {
+      DocumentSnapshot documentSnapshot = await _firestore
+          .collection(collectionWalks)
+          .document(walk.id)
+          .get();
+
+      List dogs = [];
+      for (var savedDog in (documentSnapshot.data["dogs"] as List)) {
+        dogs.add(savedDog);
+      }
+      dogs.add({
+        "user": Store.instance.user.id,
+        "dog": dog.id
+      });
+
+      await _firestore
+          .collection(collectionWalks)
+          .document(walk.id)
+          .setData(
+          {
+            "dogs": dogs
+          },
+          merge: true);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   static bool _parseOutput(HttpsCallableResult result, String key) {
     print(result.data);
     if (result == null || result.data == null || result.data["error"]) {
