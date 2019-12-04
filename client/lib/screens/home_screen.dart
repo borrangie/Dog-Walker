@@ -143,7 +143,7 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-            TextFactory.generateText("Busca un paseo", size: 20.0),
+            TextFactory.generateText("Buscar un paseo", size: 20.0),
               Container(
                   height: 40,
                   width: 40,
